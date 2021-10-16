@@ -146,14 +146,6 @@
                                     <div class="col-sm-8">.................</div>
                                 </div><hr>
                                 <div class="row px-4 py-3">
-                                    <div class="col-sm-4">................</div>
-                                    <div class="col-sm-8">.................</div>
-                                </div><hr>
-                                <div class="row px-4 py-3">
-                                    <div class="col-sm-4">................</div>
-                                    <div class="col-sm-8">.................</div>
-                                </div><hr>
-                                <div class="row px-4 py-3">
                                     <div class="col-sm-4">
                                         <span>--/--/----</span>
                                         <span>--:--</span>
