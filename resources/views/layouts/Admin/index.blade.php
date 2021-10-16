@@ -154,7 +154,7 @@
                             <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{route('admin_packages')}}"
                                 aria-expanded="false">
                                 <i class="fa fa-table" aria-hidden="true"></i>
-                                <span class="hide-menu">Packages</span>
+                                <span class="hide-menu">Shipments</span>
                             </a>
                         </li>
                         <li class="sidebar-item">

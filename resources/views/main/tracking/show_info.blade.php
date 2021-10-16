@@ -27,7 +27,7 @@
                                     </div>
                                     <div class="col-md-12">
                                         @if ($tracking[0]->current_location == $f[0]->capital)
-                                            <span>Package is on process:</span>
+                                            <span>Parcel is on process:</span>
                                         @endif
                                         @if ($tracking[0]->current_location == $t[0]->capital)
                                             <span>Delivered on</span>
@@ -66,7 +66,7 @@
                                             <p>{{$package[0]->customer->name}}</p>
                                         @endif
                                         @if ($tracking[0]->current_location != $f[0]->capital && $tracking[0]->current_location != $t[0]->capital)
-                                            <span>Received By:</span>
+                                            <span>Confirmed By:</span>
                                             <p>Agent</p>
                                         @endif
                                     </div>
