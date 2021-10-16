@@ -18,7 +18,7 @@ class PackageController extends Controller
     {
         $customer = session('customer');
 
-        $packages = Package::where('customer_id', '=', $customer->id)->get();
+        $packages = Package::where('customer_id', '=', $customer->id)->orderBy('created_at', 'desc')->get();
 
         return view('main.package.index', compact('packages'));
     }
@@ -105,7 +105,7 @@ class PackageController extends Controller
     public function show_add_item($id)
     {
         $package = Package::find($id);
-        $items = Item::where('package_id', '=', $id)->get();
+        $items = Item::where('package_id', '=', $id)->orderBy('created_at', 'desc')->get();
 
         return view('main.package.add_item', compact('package', 'items'));
     }
@@ -157,7 +157,12 @@ class PackageController extends Controller
                 $tracking = Tracking::create([
                     'package_id' => $id,
                     'current_location' => $r[0]->capital,
+                    'a_d' => 1,
                 ]);
+                Tracking::where('id', '=', $tracking->id)->update([
+                    'a_d' => 1
+                ]);
+
                 if ($tracking) {
                     $data = [
                         'subject' => 'Package Receipt',
@@ -172,7 +177,7 @@ class PackageController extends Controller
                         $message->subject($data['subject']);
                     });
 
-                    return back()->with('success', 'Package Has been Activated, Receipt is sent to your Email');
+                    return back()->with('success', 'Package Has been Activated, Receipt is sent to Email');
                 } else {
                     return back()->with('error', 'Fail to Add Tracker.');
                 }

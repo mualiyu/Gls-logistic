@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,8 +25,8 @@ Route::post('/customer_logout', [\App\Http\Controllers\CustomerAuthController::c
 
 
 Route::get('/packages', [\App\Http\Controllers\PackageController::class, 'index'])->name('main_show_packages')->middleware('customerAuth');
-Route::get('/package/add', [\App\Http\Controllers\PackageController::class, 'show'])->name('main_show_add_package');
-Route::post('/package/add', [\App\Http\Controllers\PackageController::class, 'create'])->name('main_create_package');
+Route::get('/package/add', [\App\Http\Controllers\PackageController::class, 'show'])->name('main_show_add_package')->middleware('customerAuth');
+Route::post('/package/add', [\App\Http\Controllers\PackageController::class, 'create'])->name('main_create_package')->middleware('customerAuth');
 Route::post('/package/{id}/activate', [\App\Http\Controllers\PackageController::class, 'activate_package'])->name('main_activate_package')->middleware('customerAuth');
 Route::get('/package/get_to_region', [\App\Http\Controllers\PackageController::class, 'get_to_region'])->name('main_get_to_region');
 
@@ -36,3 +37,24 @@ Route::post('/package/item/add', [\App\Http\Controllers\PackageController::class
 // Tracking
 Route::get('/track', [\App\Http\Controllers\TrackingController::class, 'index'])->name('main_show_track_index');
 Route::post('/track', [\App\Http\Controllers\TrackingController::class, 'get_track'])->name('main_get_track_info');
+
+
+
+// 
+// Admin Routes
+// 
+
+Auth::routes();
+// home
+Route::get('admin', [App\Http\Controllers\HomeController::class, 'index'])->name('admin_home');
+// package
+Route::get('admin/packages', [App\Http\Controllers\Admin\AdminPackageController::class, 'index'])->name('admin_packages');
+Route::get('admin/package/{id}', [App\Http\Controllers\Admin\AdminPackageController::class, 'show_info'])->name('admin_package_info');
+Route::get('admin/packages/search', [App\Http\Controllers\Admin\AdminPackageController::class, 'search_package'])->name('admin_package_search');
+Route::post('admin/package/{id}/activate', [\App\Http\Controllers\Admin\AdminPackageController::class, 'activate_package'])->name('admin_activate_package');
+// customers
+Route::get('admin/customers', [App\Http\Controllers\Admin\AdminCustomerController::class, 'index'])->name('admin_customers');
+// tracking
+Route::get('admin/track', [App\Http\Controllers\Admin\AdminTrackController::class, 'index'])->name('admin_trackings');
+Route::post('admin/track', [App\Http\Controllers\Admin\AdminTrackController::class, 'track'])->name('admin_track_package');
+Route::post('admin/track/confirm', [App\Http\Controllers\Admin\AdminTrackController::class, 'confirm_tracking'])->name('admin_confirm_track_package');

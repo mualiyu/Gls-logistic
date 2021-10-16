@@ -1,83 +1,189 @@
 @extends('layouts.main.index')
 
 @section('content')
-    <!-- Header Start -->
-    <div class="jumbotron jumbotron-fluid mb-2">
-        <div class="container text-center py-1">
-            <h1 class="text-white display-3">Track</h1>
-            <div class="d-inline-flex align-items-center text-white">
-                <p class="m-0"><a class="text-white" href="">Home</a></p>
-                <i class="fa fa-circle px-3"></i>
-                <p class="m-0">Tracking</p>
-		<i class="fa fa-circle px-3"></i>
-                <p class="m-0">info</p>
+    <!-- Contact Start -->
+    <section style="">
+        <div class="container" >
+            <div class="container">
+            <h4 class="text-primary text-uppercase font-weight-bold">Package Info</h4> 
+                <div class="row">
+                    <div class="col-lg-8 pb-4 pb-lg-0">
+                        {{-- <div class="bg-primary text-dark text-center p-4">
+                            <h4 class="m-0"><i class="fa fa-map-marker-alt text-white mr-2"></i>{{$tracking[0]->current_location}}</h4>
+                        </div>
+                        <iframe style="width: 100%; height: 470px;"
+                            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCpSikij-kMiF0hTxXQn9Vu4B2v2WxkR_E&q={{$tracking[0]->current_location}},+cameroon"
+                            frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe> --}}
+                        <div class="card">
+                            <?php 
+                            $f = \App\Models\Region::where('code', '=', $package[0]->from)->get();
+				            $t = \App\Models\Region::where('code', '=', $package[0]->to)->get();
+                            ?>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <span>Your Shipment</span>
+                                        <p>{{$package[0]->tracking_id}}</p>
+                                    </div>
+                                    <div class="col-md-12">
+                                        @if ($tracking[0]->current_location == $f[0]->capital)
+                                            <span>Package is on process:</span>
+                                        @endif
+                                        @if ($tracking[0]->current_location == $t[0]->capital)
+                                            <span>Delivered on</span>
+                                            <p>{{$tracking[0]->created_at}}</p>
+                                        @endif
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        @if ($tracking[0]->current_location == $f[0]->capital)
+                                            <span>Currently At:</span>
+                                            <p>{{$tracking[0]->current_location}}</p>
+                                        @endif
+                                        @if ($tracking[0]->current_location == $t[0]->capital)
+                                            <span>Delivered To</span>
+                                            <p>{{$tracking[0]->current_location}}</p>
+                                        @endif
+                                    </div>
+                                    <div class="col-sm-6">
+                                        @if ($tracking[0]->current_location == $f[0]->capital)
+                                            <span>Received By :</span>
+                                            <p>Nill</p>
+                                        @endif
+                                        @if ($tracking[0]->current_location == $t[0]->capital)
+                                            <span>Received By:</span>
+                                            <p>{{$package[0]->customer->name}}</p>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <a href="" class="text-primary"  data-toggle="modal" data-target="#videoModal" >View Details</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="col-lg-4">
+                        {{-- <h1 class="mb-4">Contact For Any Queries</h1> --}}
+                        <div class="card">
+                            <div class="card-header">
+                                <h6 class="text-primary text-uppercase font-weight-bold">Track Another parcel</h6>
+                            </div>
+                            <div class="card-body">
+                                @include('layouts.flash')
+                                <form action="{{route('main_get_track_info')}}" method="POST">
+                                        @csrf
+                                        <div class="input-group">
+                                            <input type="text" name="track" value="{{old('track')}}" class="form-control border-dark" style="padding: ;" placeholder="Tracking Number">
+                                            <div class="input-group-append border-dark">
+                                                <button class="btn btn-primary ">Track</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    @error('track')
+                                        <p class="help-block text-danger">{{$message}}</p>
+                                    @enderror
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
             </div>
         </div>
-    </div>
-    <!-- Header End -->
+        {{-- modal Details --}}
+        <div class="modal fade " id="videoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog  modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-body px-4 py-3">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>        
+                        <!-- 16:9 aspect ratio -->
+                        <div class="row justify-centent-center px-4 py-3">
+                            <h5>Shipment Progress</h5>
+                        </div>
+                        
+                        <div class="row border-dark" style="border:black 1px solid; overflow-y:scroll; height:500px;">
+                            <div class="col-md-11 px-3">
+                                {{-- if sipment is not delivered  show this--}}
+                                @if ($tracking[0]->current_location == $f[0]->capital)
+                                <div class="row px-4 py-3" style="margin: 0;">
+                                    <div style="margin: 0;" class="col-sm-4">
+                                        <?php 
+                                        $time = explode(' ', $tracking[0]->created_at);
+                                        $d = explode('-', $time[0]);
+                                        $day = $d[2].'/'.$d[1].'/'.$d[0];
+                                        $h = explode(':', $time[1]);
+                                        $hour = $h[0].':'.$h[1];
+                                      ?>
+                                        <span>{{$day}}</span>
+                                        <span>{{$hour}}</span>
+                                    </div>
+                                    <div style="margin: 0;" class="col-sm-8">
+                                        <p style="margin: 0;"><b>{{$tracking[0]->a_d==1 ? 'Departed From: ':''}}{{$tracking[0]->a_d==2 ? 'Arrived At: ':''}}</b></p>
+                                        <p style="margin: 0;">{{$tracking[0]->current_location}}</p>
+                                    </div>
+                                </div><hr>
+                                <div class="row px-4 py-3">
+                                    <div class="col-sm-4">................</div>
+                                    <div class="col-sm-8">.................</div>
+                                </div><hr>
+                                <div class="row px-4 py-3">
+                                    <div class="col-sm-4">................</div>
+                                    <div class="col-sm-8">.................</div>
+                                </div><hr>
+                                <div class="row px-4 py-3">
+                                    <div class="col-sm-4">................</div>
+                                    <div class="col-sm-8">.................</div>
+                                </div><hr>
+                                <div class="row px-4 py-3">
+                                    <div class="col-sm-4">
+                                        <span>--/--/----</span>
+                                        <span>--:--</span>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <p style="margin: 0;">Final Destination:</b></p>
+                                        <p style="margin: 0;">{{$t[0]->capital}}</p>
+                                    </div>
+                                </div><hr>
+                                @endif
 
+                                @if ($tracking[0]->current_location == $t[0]->capital)
+                                    @foreach ($tracking as $t)
+                                     <?php 
+                                        $time = explode(' ', $t->created_at);
+                                        $d = explode('-', $time[0]);
+                                        $day = $d[2].'/'.$d[1].'/'.$d[0];
+                                        $h = explode(':', $time[1]);
+                                        $hour = $h[0].':'.$h[1];
+                                      ?>
+                                        <div class="row px-4 py-3" style="margin: 0;">
+                                            <div style="margin: 0;" class="col-sm-4">
+                                                <span>{{$day}}</span>
+                                                <span>{{$hour}}</span>
+                                            </div>
+                                            <div style="margin: 0;" class="col-sm-8">
+                                                <p style="margin: 0;"><b>{{$t->a_d==1 ? 'Departed From: ':''}}{{$t->a_d==2 ? 'Arrived At: ':''}}</b></p>
+                                                <p style="margin: 0;">{{$t->current_location}}</p>
+                                            </div>
+                                        </div><hr>
+                                    @endforeach
+                                @endif
 
-     <!-- Contact Start -->
-    <div class="container-fluid py-5">
-        <div class="container">
-		<h4 class="text-primary text-uppercase font-weight-bold">Package Info</h4> 
-            <div class="row">
-                <div class="col-lg-5 pb-4 pb-lg-0">
-                    <div class="bg-primary text-dark text-center p-4">
-                        <h4 class="m-0"><i class="fa fa-map-marker-alt text-white mr-2"></i>{{$tracking[0]->current_location}}</h4>
-                    </div>
-                    <iframe style="width: 100%; height: 470px;"
-		    	src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCpSikij-kMiF0hTxXQn9Vu4B2v2WxkR_E&q={{$tracking[0]->current_location}},+cameroon"
-                        {{-- src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3001156.4288297426!2d-78.01371936852176!3d42.72876761954724!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4ccc4bf0f123a5a9%3A0xddcfc6c1de189567!2sNew%20York%2C%20USA!5e0!3m2!1sen!2sbd!4v1603794290143!5m2!1sen!2sbd" --}}
-                        frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
-                </div>
-                <div class="col-lg-7">
-                    <h6 class="text-primary text-uppercase font-weight-bold">Package Tracking Infomation</h6>
-                    {{-- <h1 class="mb-4">Contact For Any Queries</h1> --}}
-                    <div class="contact-form bg-secondary" style="padding: 30px;">
-                        <div id="success"></div>
-                        <h5>Package with tracking number : {{$package[0]->tracking_id}}</h5>
-			<br>
-			<p>Package Details: </p>
-			<div class="row">
-				<div class="col-md-10">
-					<div class="row">
-						<div class="col-sm-4" style="border-right: 1px black solid;">
-                            <span style="float: right;"><b>Customer</b></span><br>
-							<span style="float: right;"><b>Items</b></span><br>
-							<span style="float: right;"><b>From</b></span><br>
-							<span style="float: right;"><b>To</b></span><br>
-						</div>
-						<div class="col-sm-8">
-                            <span style="float: left;">{{$package[0]->customer->name}}</span><br>
-							<span style="float: left;">
-								@if (count($package[0]->items) > 2)
-								    {{$package[0]->items[0]->name}}, {{$package[0]->items[1]->name}}, And Others
-								@else
-								@foreach ($package[0]->items as $item)
-								{{$item->name}}, 
-								@endforeach
-								@endif
-							</span><br>
-							<span style="float: left;">{{$package[0]->address_from}}</span><br>
-							<span style="float: left;">{{$package[0]->address_to}}</span><br>
-						</div>
-					</div>
-				</div>
-			</div><br>
-			<p>Package Current location: {{$tracking[0]->current_location}}</p>
+                            </div>
+                        </div>
+                        <div class="row justify-content-center">
+                            <button type="button" class=" btn btn-warning" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">Close</span>
+                        </button> 
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- Contact End -->
-@endsection
-
-@section('script')
-<script>
-   $(document).ready(function() {
-
-   })
-</script>
+    </section>
 @endsection
