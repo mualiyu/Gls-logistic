@@ -379,7 +379,7 @@ textarea:focus {
     height: 60px;
     color: #ffffff;
     border: none;
-    border-left: 3px solid #1c8314;
+    border-left: 3px solid rgb(4, 31, 80) rgb(9, 50, 124);
     border-radius: 0;
     padding: 0 30px;
     font-size: 16px;
@@ -388,7 +388,7 @@ textarea:focus {
     -webkit-transition-duration: 500ms;
     transition-duration: 500ms;
     text-transform: capitalize;
-    background-color: #40ba37;
+    background-color: rgb(15, 57, 134);
 }
 .delicious-btn.active,
 .delicious-btn:hover,
@@ -396,34 +396,34 @@ textarea:focus {
     font-size: 16px;
     font-weight: 600;
     color: #ffffff;
-    background-color: #1c8314;
-    border-color: #40ba37;
+    background-color: rgb(4, 31, 80);
+    border-color: rgb(4, 31, 80);
 }
 .delicious-btn.btn-2 {
-    background-color: #1c8314;
-    border-color: #40ba37;
+    background-color: rgb(4, 31, 80);
+    border-color: rgb(4, 31, 80);
 }
 .delicious-btn.btn-2.active,
 .delicious-btn.btn-2:hover,
 .delicious-btn.btn-2:focus {
-    background-color: #40ba37;
-    border-color: #1c8314;
+    background-color: rgb(4, 31, 80);
+    border-color: rgb(4, 31, 80);
 }
 .delicious-btn.btn-3 {
-    background-color: #474747;
-    border-color: #1c8314;
+    background-color: rgb(4, 31, 80);
+    border-color: rgb(4, 31, 80);
 }
 .delicious-btn.btn-3.active,
 .delicious-btn.btn-3:hover,
 .delicious-btn.btn-3:focus {
-    background-color: #40ba37;
-    border-color: #1c8314;
+    background-color: rgb(4, 31, 80);
+    border-color: rgb(4, 31, 80);
 }
 .delicious-btn.btn-4 {
     background-color: transparent;
-    border: 3px solid #40ba37;
+    border: 3px solid rgb(4, 31, 80);
     line-height: 53px;
-    color: #40ba37;
+    color: rgb(4, 31, 80);
 }
 @media only screen and (max-width: 767px) {
     .delicious-btn.btn-4 {
@@ -436,7 +436,7 @@ textarea:focus {
 .delicious-btn.btn-4:focus {
     line-height: 53px;
     color: #ffffff;
-    background-color: #40ba37;
+    background-color: rgb(4, 31, 80);
 }
 @media only screen and (max-width: 767px) {
     .delicious-btn.btn-4.active,
