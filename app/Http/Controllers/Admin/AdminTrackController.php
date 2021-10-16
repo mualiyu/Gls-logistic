@@ -72,12 +72,16 @@ class AdminTrackController extends Controller
                 'content' => 'Your Package has been confirm  by ' . Auth::user()->name . ' At ' . $request->au_location . ' \n And your tracking number is ' . $tracking->package->tracking_id . '',
             ];
 
-            Mail::send('main.email.receipt', $data, function ($message) use ($data) {
-                $message->from('info@gls.com', 'GLS');
-                $message->sender('info@gls.com', 'GLS');
-                $message->to($data['email']);
-                $message->subject($data['subject']);
-            });
+            try {
+                Mail::send('main.email.receipt', $data, function ($message) use ($data) {
+                    $message->from('info@gls.com', 'GLS');
+                    $message->sender('info@gls.com', 'GLS');
+                    $message->to($data['email']);
+                    $message->subject($data['subject']);
+                });
+            } catch (\Throwable $th) {
+                return back()->with('success', 'Package Has been confirm at ' . $request->au_location . ', Update is Not sent to customer Email');
+            }
 
             return back()->with('success', 'Package Has been confirm at ' . $request->au_location . ', Update is sent to customer Email');
         } else {

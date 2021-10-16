@@ -164,18 +164,23 @@ class PackageController extends Controller
                 ]);
 
                 if ($tracking) {
+
                     $data = [
                         'subject' => 'Package Receipt',
                         'email' => $customer->email,
                         'content' => 'Your Package has been Activated successfully \n And your tracking number is ' . $tracking->package->tracking_id . '',
                     ];
 
-                    Mail::send('main.email.receipt', $data, function ($message) use ($data) {
-                        $message->from('info@gls.com', 'GLS');
-                        $message->sender('info@gls.com', 'GLS');
-                        $message->to($data['email']);
-                        $message->subject($data['subject']);
-                    });
+                    try {
+                        Mail::send('main.email.receipt', $data, function ($message) use ($data) {
+                            $message->from('info@gls.com', 'GLS');
+                            $message->sender('info@gls.com', 'GLS');
+                            $message->to($data['email']);
+                            $message->subject($data['subject']);
+                        });
+                    } catch (\Throwable $th) {
+                        return back()->with('success', 'Package Has been Activated, Receipt is Not sent to Email');
+                    }
 
                     return back()->with('success', 'Package Has been Activated, Receipt is sent to Email');
                 } else {
