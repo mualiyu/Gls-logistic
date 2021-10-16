@@ -52,34 +52,6 @@
     <!-- ##### Header Area Start ##### -->
     <header class="header-area">
 
-        <!-- Top Header Area -->
-        {{-- <div class="top-header-area">
-            <div class="container h-100">
-                <div class="row h-100 align-items-center justify-content-between">
-                    <!-- Breaking News -->
-                    <div class="col-12 col-sm-6">
-                        <div class="breaking-news">
-                            <div id="breakingNewsTicker" class="ticker">
-                                <ul>
-                                    <li><a href="#">Hello World!</a></li>
-                                    <li><a href="#">Welcome to Gls - Logistic company.</a></li>
-                                    <li><a href="#">Enjoy your Self!</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Top Social Info -->
-                    <div class="col-12 col-sm-6">
-                        <div class="top-social-info text-right">
-                            <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                            <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                            <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
 
         <!-- Navbar Area -->
         <div class="delicious-main-menu">

@@ -33,6 +33,11 @@
                                             <span>Delivered on</span>
                                             <p>{{$tracking[0]->created_at}}</p>
                                         @endif
+                                        @if ($tracking[0]->current_location != $f[0]->capital && $tracking[0]->current_location != $t[0]->capital)
+                                            <span>Package is on process</span> &
+                                            <span>Currently At:</span>
+                                            <p>{{$tracking[0]->current_location}}</p>
+                                        @endif
                                     </div>
                                 </div>
                                 <hr>
@@ -46,6 +51,10 @@
                                             <span>Delivered To</span>
                                             <p>{{$tracking[0]->current_location}}</p>
                                         @endif
+                                        @if ($tracking[0]->current_location != $f[0]->capital && $tracking[0]->current_location != $t[0]->capital)
+                                            <span>{{$tracking[0]->a_d==1 ? 'Departed From: ':''}}{{$tracking[0]->a_d==2 ? 'Arrived At: ':''}}:</span>
+                                            <p>{{$tracking[0]->current_location}}</p>
+                                        @endif
                                     </div>
                                     <div class="col-sm-6">
                                         @if ($tracking[0]->current_location == $f[0]->capital)
@@ -55,6 +64,10 @@
                                         @if ($tracking[0]->current_location == $t[0]->capital)
                                             <span>Received By:</span>
                                             <p>{{$package[0]->customer->name}}</p>
+                                        @endif
+                                        @if ($tracking[0]->current_location != $f[0]->capital && $tracking[0]->current_location != $t[0]->capital)
+                                            <span>Received By:</span>
+                                            <p>Agent</p>
                                         @endif
                                     </div>
                                 </div>
@@ -109,7 +122,7 @@
                         
                         <div class="row border-dark" style="border:black 1px solid; overflow-y:scroll; height:500px;">
                             <div class="col-md-11 px-3">
-                                {{-- if sipment is not delivered  show this--}}
+                                {{-- if sipment is not departed  show this--}}
                                 @if ($tracking[0]->current_location == $f[0]->capital)
                                 <div class="row px-4 py-3" style="margin: 0;">
                                     <div style="margin: 0;" class="col-sm-4">
@@ -152,6 +165,8 @@
                                 </div><hr>
                                 @endif
 
+                                {{-- if sipment Has Arrived  show this--}}
+                                @if ($package[0]->status == 2)    
                                 @if ($tracking[0]->current_location == $t[0]->capital)
                                     @foreach ($tracking as $t)
                                      <?php 
@@ -172,6 +187,32 @@
                                             </div>
                                         </div><hr>
                                     @endforeach
+                                @endif
+                                @endif
+
+
+                                {{-- if sipment is on process  show this--}}
+                                @if ($tracking[0]->current_location != $f[0]->capital && $tracking[0]->current_location != $t[0]->capital)
+                                    @foreach ($tracking as $t)
+                                     <?php 
+                                        $time = explode(' ', $t->created_at);
+                                        $d = explode('-', $time[0]);
+                                        $day = $d[2].'/'.$d[1].'/'.$d[0];
+                                        $h = explode(':', $time[1]);
+                                        $hour = $h[0].':'.$h[1];
+                                      ?>
+                                        <div class="row px-4 py-3" style="margin: 0;">
+                                            <div style="margin: 0;" class="col-sm-4">
+                                                <span>{{$day}}</span>
+                                                <span>{{$hour}}</span>
+                                            </div>
+                                            <div style="margin: 0;" class="col-sm-8">
+                                                <p style="margin: 0;"><b>{{$t->a_d==1 ? 'Departed From: ':''}}{{$t->a_d==2 ? 'Arrived At: ':''}}</b></p>
+                                                <p style="margin: 0;">{{$t->current_location}}</p>
+                                            </div>
+                                        </div><hr>
+                                    @endforeach
+                                    
                                 @endif
 
                             </div>
