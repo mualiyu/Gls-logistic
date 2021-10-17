@@ -151,6 +151,7 @@
                                     <li><a href="{{route('main_signin')}}">Login</a></li>
                                     <li><a href="{{route('main_signup')}}">Register</a></li>
                                     @endif
+                                    <li><a href="{{route('admin_home')}}">Admin</a></li>
                                 </ul>
 
                                 <!-- Newsletter Form -->
