@@ -38,29 +38,52 @@
     </section>
     <!-- ##### Hero Area End ##### -->
 
+    <br>
 
     <!-- ##### Quote Subscribe Area Start ##### -->
-    <br>
-    {{-- <section class="quote-subscribe-adds">
-        <div class="container">
-            <div class="row align-items-end">
-                <!-- Quote -->
+    <section class="quote-subscribe-adds" style="">
+        <div class="container-fluid">
+            <div class="row align-items-center">
                 <div class="col-12 col-lg-4">
-                    <div class="quote-area text-center">
-                        <span>"</span>
-                        <h4>Nothing is better than going home to family and eating good food and relaxing</h4>
-                        <p>John Smith</p>
-                        <div class="date-comments d-flex justify-content-between">
-                            <div class="date">January 04, 2018</div>
-                            <div class="comments">2 Comments</div>
+                    <a href="">
+                        <div class="card">
+                            <div class="card-body">
+                                <img src="{{asset('main2/img/air.jpg')}}" alt="" style="height: 200px; width:100%; position: relative;"><br>
+                                <br><h5>AIR FREIGHT</h5>
+                                <p>High level of security and reduced risk of theft and damage.Shipping by air offers the advantage of a high level of security</p>
+                                <button class="btn btn-primary">Open</button>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
 
+                <div class="col-12 col-lg-4">
+                    <a href="">
+                        <div class="card">
+                            <div class="card-body">
+                                <img src="{{asset('main2/img/sea.jpeg')}}" alt="" style="height: 200px; width:100%; position: relative;"><br>
+                                <br><h5>SEA FREIGHT</h5>
+                                <p>Heavy and bulky items of shipment can be transported with ease through ocean freight without incurring enormous costs in transportation, as ocean freight rates are cheap.</p>
+                                <button class="btn btn-primary">Open</button>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-12 col-lg-4">
+                    <a href="">
+                        <div class="card">
+                            <div class="card-body">
+                                <img src="{{asset('main2/img/land.png')}}" alt="" style="height: 200px; width:100%; position: relative;"><br>
+                                <br><h5>SURFACE FREIGHT</h5>
+                                <p>Road transport is best applicable for transporting goods to and from remote areas that are not connected by other means like rail, air or water transports</p>
+                                <button class="btn btn-primary">Open</button>
+                            </div>
+                        </div>
+                    </a>
+                </div>
             </div>
         </div>
-    </section> --}}
-    <!-- ##### Quote Subscribe Area End ##### -->
-
+    </section>
 
 @endsection

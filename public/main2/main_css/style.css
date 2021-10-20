@@ -713,8 +713,8 @@ textarea:focus {
 .hero-area {
     position: relative;
     z-index: 1;
-    margin-left: 4%;
-    margin-right: 4%;
+    margin-left: 0;
+    margin-right: 0;
 }
 
 .hero-slides {
