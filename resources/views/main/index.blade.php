@@ -45,7 +45,7 @@
         <div class="container-fluid">
             <div class="row align-items-center">
                 <div class="col-12 col-lg-4">
-                    <a href="">
+                    <a href="{{route('main_show_add_package')}}">
                         <div class="card">
                             <div class="card-body">
                                 <img src="{{asset('main2/img/air.jpg')}}" alt="" style="height: 200px; width:100%; position: relative;"><br>
@@ -58,7 +58,7 @@
                 </div>
 
                 <div class="col-12 col-lg-4">
-                    <a href="">
+                    <a href="{{route('main_show_add_package')}}">
                         <div class="card">
                             <div class="card-body">
                                 <img src="{{asset('main2/img/sea.jpeg')}}" alt="" style="height: 200px; width:100%; position: relative;"><br>
@@ -71,7 +71,7 @@
                 </div>
 
                 <div class="col-12 col-lg-4">
-                    <a href="">
+                    <a href="{{route('main_show_add_package')}}">
                         <div class="card">
                             <div class="card-body">
                                 <img src="{{asset('main2/img/land.png')}}" alt="" style="height: 200px; width:100%; position: relative;"><br>
