@@ -7,7 +7,7 @@
     <section class="hero-area" style="background:#d7d7d8;">
         <div class="hero-slides owl-carousel">
             <!-- Single Hero Slide -->
-            <div class="single-hero-slide bg-img h-110" style="background-image: url(main2/img/core-img/header.jpg);">
+            <div class="single-hero-slide bg-img h-110" style="background-image: url(main2/img/bg1.jpg);">
                 <div class="container h-100">
                     <div class="row h-100 align-items-center">
                         <div class="col-12 col-md-9 col-lg-7 col-xl-6">
