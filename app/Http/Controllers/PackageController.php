@@ -54,7 +54,7 @@ class PackageController extends Controller
                 'address_to' => $request->to_address,
                 'tracking_id' => $tracking_id,
                 'adjusted_amount' => 0,
-                'total_amount' => 100000,
+                'total_amount' => 0,
                 'status' => 0,
             ]);
             if ($package) {
@@ -119,11 +119,14 @@ class PackageController extends Controller
             'height' => ['required'],
             'width' => ['required'],
             'weight' => ['required'],
+            'amount' => ['required']
         ]);
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
+
+        $p = Package::find($request->p_id);
 
         $item = Item::create([
             'package_id' => $request->p_id,
@@ -136,6 +139,11 @@ class PackageController extends Controller
         ]);
 
         if ($item) {
+            $a = $request->amount * 100;
+            $amount = $p->total_amount + $a;
+            $p->update([
+                "total_amount" => $amount,
+            ]);
             return redirect()->route('main_show_add_item', ['id' => $request->p_id]);
         } else {
             return back()->with('error', 'Item not created, try again');

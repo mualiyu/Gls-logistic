@@ -31,7 +31,7 @@
 						<h6 class="font-weight-bold mb-4">Items</h6>
 					    </div>
 					    <div class="col-sm-6">
-						<h5 class="text-primary mb-2" >NGN <span data-toggle="counter-up">{{$package->total_amount/100}}</span></h5>
+						<h5 class="text-primary mb-2" >FCFA <span data-toggle="counter-up">{{$package->total_amount/100}}</span></h5>
 						<h6 class="font-weight-bold ">Amount</h6>
 					    </div>
 					</div>
@@ -83,7 +83,7 @@
 				    <div class="col-lg-5">
 					<div class="bg-primary py-5 px-4 px-sm-5">
 					    <h3 class="font-weight-bold mb-4">ADD ITEM</h3>
-					    <form class="py-5" method="POST" action="{{route('main_add_item_to_package')}}">
+					    <form class="" method="POST" action="{{route('main_add_item_to_package')}}">
 						    @csrf
 						    <input type="hidden" name="p_id" value="{{$package->id}}">
 						<div class="form-group">
@@ -133,6 +133,13 @@
 								    @enderror
 								    </div>
 							</div>
+						</div>
+
+						<div class="form-group">
+						    <input type="number" name="amount" value="{{old('amount')}}" class="form-control border-0 p-4" placeholder="Amount (FCFA)" required="required" />
+						    @error('amount')
+						    <p class="help-block text-danger">{{$message}}</p>
+						    @enderror
 						</div>
 						    <button class="btn btn-dark btn-block border-0 py-3" type="submit">Add Item</button>
 						</div>
