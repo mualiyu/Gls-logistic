@@ -67,7 +67,7 @@ class PdfController extends Controller
                 if (count($packages) > 0) {
                     $pdf = PDF::loadView('main.pdf.search_package', compact('packages', 'months', 'from', 'to'))->setPaper('a4');
 
-                    return $pdf->stream('main.pdf.search_package');
+                    return $pdf->stream('MATERIEL-' . now() . '.pdf');
                     // return view('main.package.searched', compact('packages', 'from', 'to', 'months'));
                 } else {
                     return back()->with('error', 'No Shipments Within selected range. Try Again!');
@@ -84,7 +84,7 @@ class PdfController extends Controller
                 if (count($packages) > 0) {
                     $pdf = PDF::loadView('main.pdf.search_package', compact('packages', 'months', 'from', 'to'))->setPaper('a4');
 
-                    return $pdf->stream('main.pdf.search_package');
+                    return $pdf->stream('MATERIEL-' . now() . '.pdf');
                     // return view('main.package.searched', compact('packages', 'from', 'to', 'months'));
                 } else {
                     return back()->with('error', 'No Shipments Within selected range. Try Again!');
@@ -101,7 +101,7 @@ class PdfController extends Controller
                 if (count($packages) > 0) {
                     $pdf = PDF::loadView('main.pdf.search_package', compact('packages', 'months', 'from', 'to'))->setPaper('a4');
 
-                    return $pdf->stream('main.pdf.search_package');
+                    return $pdf->stream('MATERIEL-' . now() . '.pdf');
                     // return view('main.package.searched', compact('packages', 'from', 'to', 'months'));
                 } else {
                     return back()->with('error', 'No Shipments Within selected range. Try Again!');
@@ -118,7 +118,7 @@ class PdfController extends Controller
                 if (count($packages) > 0) {
                     $pdf = PDF::loadView('main.pdf.search_package', compact('packages', 'months', 'from', 'to'))->setPaper('a4');
 
-                    return $pdf->stream('main.pdf.search_package');
+                    return $pdf->stream('MATERIEL-' . now() . '.pdf');
                     // return view('main.package.searched', compact('packages', 'from', 'to', 'months'));
                 } else {
                     return back()->with('error', 'No Shipments Within selected range. Try Again!');
