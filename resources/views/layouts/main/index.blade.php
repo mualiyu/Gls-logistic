@@ -20,7 +20,24 @@
     <!-- main_css Stylesheet -->
     <link rel="stylesheet" href="{{asset('main2/main_css/style.css')}}">
 
+    <style>
+        #back {
+    text-decoration: none;
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: rgb(238, 238, 238);
+}
 
+#back:hover {
+    background-color: rgb(184, 179, 179);
+    color: black;
+}
+
+.prev {
+    background-color: #f1f1f1;
+    color: black;
+}
+    </style>
 
 </head>
 
