@@ -20,6 +20,7 @@ class PdfController extends Controller
         $validator = Validator::make($request->all(), [
             'from' => ['required'],
             'to' => ['required'],
+            'type' => ['required'],
         ]);
 
         if ($validator->fails()) {
@@ -55,20 +56,76 @@ class PdfController extends Controller
             'December',
         );
 
-        // return $request->from;
 
-        $packages = Package::where('customer_id', '=', $customer->id)->whereBetween('created_at', [$request->from . ' 00:00:00', $request->to . ' 23:59:59'])->get();
 
-        if ($packages) {
+        // if type selected is all
+        if ($request->type == 'all') {
+            $packages = Package::where('customer_id', '=', $customer->id)->whereBetween('created_at', [$request->from . ' 00:00:00', $request->to . ' 23:59:59'])->get();
 
-            if (count($packages) > 0) {
-                $pdf = PDF::loadView('main.pdf.search_package', compact('packages', 'months', 'from', 'to'))->setPaper('a4');
+            if ($packages) {
 
-                return $pdf->stream('main.pdf.search_package');
-                // return view('main.package.searched', compact('packages', 'from', 'to', 'months'));
-            } else {
-                return back()->with('error', 'No Shipments Within selected range. Try Again!');
+                if (count($packages) > 0) {
+                    $pdf = PDF::loadView('main.pdf.search_package', compact('packages', 'months', 'from', 'to'))->setPaper('a4');
+
+                    return $pdf->stream('main.pdf.search_package');
+                    // return view('main.package.searched', compact('packages', 'from', 'to', 'months'));
+                } else {
+                    return back()->with('error', 'No Shipments Within selected range. Try Again!');
+                }
             }
         }
+
+        // if type selected is not shipped
+        if ($request->type == 'not_shipped') {
+            $packages = Package::where(['customer_id' => $customer->id, 'status' => '0'])->whereBetween('created_at', [$request->from . ' 00:00:00', $request->to . ' 23:59:59'])->get();
+
+            if ($packages) {
+
+                if (count($packages) > 0) {
+                    $pdf = PDF::loadView('main.pdf.search_package', compact('packages', 'months', 'from', 'to'))->setPaper('a4');
+
+                    return $pdf->stream('main.pdf.search_package');
+                    // return view('main.package.searched', compact('packages', 'from', 'to', 'months'));
+                } else {
+                    return back()->with('error', 'No Shipments Within selected range. Try Again!');
+                }
+            }
+        }
+
+        // if type selected is shipped
+        if ($request->type == 'shipped') {
+            $packages = Package::where(['customer_id' => $customer->id, 'status' => '1'])->whereBetween('created_at', [$request->from . ' 00:00:00', $request->to . ' 23:59:59'])->get();
+
+            if ($packages) {
+
+                if (count($packages) > 0) {
+                    $pdf = PDF::loadView('main.pdf.search_package', compact('packages', 'months', 'from', 'to'))->setPaper('a4');
+
+                    return $pdf->stream('main.pdf.search_package');
+                    // return view('main.package.searched', compact('packages', 'from', 'to', 'months'));
+                } else {
+                    return back()->with('error', 'No Shipments Within selected range. Try Again!');
+                }
+            }
+        }
+
+        // if type selected is Delivered
+        if ($request->type == 'delivered') {
+            $packages = Package::where(['customer_id' => $customer->id, 'status' => '2'])->whereBetween('created_at', [$request->from . ' 00:00:00', $request->to . ' 23:59:59'])->get();
+
+            if ($packages) {
+
+                if (count($packages) > 0) {
+                    $pdf = PDF::loadView('main.pdf.search_package', compact('packages', 'months', 'from', 'to'))->setPaper('a4');
+
+                    return $pdf->stream('main.pdf.search_package');
+                    // return view('main.package.searched', compact('packages', 'from', 'to', 'months'));
+                } else {
+                    return back()->with('error', 'No Shipments Within selected range. Try Again!');
+                }
+            }
+        }
+
+        return back()->with('error', 'No Shipments. Try Again!');
     }
 }

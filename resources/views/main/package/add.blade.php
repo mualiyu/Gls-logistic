@@ -5,6 +5,7 @@
 
     <!-- package Start -->
         <div class="container">
+            <a onclick="window.history.back()" id="back" class="pre">&laquo; Previous</a><br><br>
             @include('layouts.flash')
             <div class="row justify-content-center">
                 <div class="col-lg-11">

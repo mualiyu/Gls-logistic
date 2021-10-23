@@ -206,6 +206,7 @@ class PackageController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'date_range' => ['required'],
+            'type' => ['required'],
         ]);
 
         if ($validator->fails()) {
@@ -220,7 +221,8 @@ class PackageController extends Controller
         $from = $f[2] . '-' . $f[0] . '-' . $f[1];
         $t = explode('/', $d[1]);
         $to = $t[2] . '-' . $t[0] . '-' . $t[1];
-        // return $from;
+
+        $type = $request->type;
 
         $months = array(
             '',
@@ -238,15 +240,59 @@ class PackageController extends Controller
             'December',
         );
 
-        $packages = Package::where('customer_id', '=', $customer->id)->whereBetween('created_at', [$from . ' 00:00:00', $to . ' 23:59:59'])->get();
+        // When All is selected
+        if ($request->type == 'all') {
+            $packages = Package::where('customer_id', '=', $customer->id)->whereBetween('created_at', [$from . ' 00:00:00', $to . ' 23:59:59'])->get();
 
-        if ($packages) {
+            if ($packages) {
 
-            if (count($packages) > 0) {
-                return view('main.package.searched', compact('packages', 'from', 'to', 'months'));
-            } else {
-                return back()->with('error', 'No Shipments Within selected range. Try Again!');
+                if (count($packages) > 0) {
+                    return view('main.package.searched', compact('packages', 'from', 'to', 'months', 'type'));
+                } else {
+                    return back()->with('error', 'No Shipments Within selected range or in All. Try Again!');
+                }
             }
         }
+        // When Not shipped is selected
+        if ($request->type == 'not_shipped') {
+            $packages = Package::where(['customer_id' => $customer->id, 'status' => '0'])->whereBetween('created_at', [$from . ' 00:00:00', $to . ' 23:59:59'])->get();
+
+            if ($packages) {
+
+                if (count($packages) > 0) {
+                    return view('main.package.searched', compact('packages', 'from', 'to', 'months', 'type'));
+                } else {
+                    return back()->with('error', 'No Shipments Within selected range or In Not shipped category. Try Again!');
+                }
+            }
+        }
+        // When Shipped is selected
+        if ($request->type == 'shipped') {
+            $packages = Package::where(['customer_id' => $customer->id, 'status' => '1'])->whereBetween('created_at', [$from . ' 00:00:00', $to . ' 23:59:59'])->get();
+
+            if ($packages) {
+
+                if (count($packages) > 0) {
+                    return view('main.package.searched', compact('packages', 'from', 'to', 'months', 'type'));
+                } else {
+                    return back()->with('error', 'No Shipments Within selected range or In shipped category. Try Again!');
+                }
+            }
+        }
+        // When Delivered is selected
+        if ($request->type == 'delivered') {
+            $packages = Package::where(['customer_id' => $customer->id, 'status' => '2'])->whereBetween('created_at', [$from . ' 00:00:00', $to . ' 23:59:59'])->get();
+
+            if ($packages) {
+
+                if (count($packages) > 0) {
+                    return view('main.package.searched', compact('packages', 'from', 'to', 'months', 'type'));
+                } else {
+                    return back()->with('error', 'No Shipments Within selected range or In delivered category. Try Again!');
+                }
+            }
+        }
+
+        return back()->with('error', 'No Shipments found for this category. Try Again!');
     }
 }

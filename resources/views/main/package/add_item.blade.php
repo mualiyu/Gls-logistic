@@ -5,6 +5,7 @@
     <!-- Package Start -->
     <div class="container y py-2">
         <div class="container">
+		<a onclick="window.history.back()" id="back" class="pre">&laquo; Previous</a><br><br>
 		@include('layouts.flash')
 		<div class="card">
 			<div class="card-body">

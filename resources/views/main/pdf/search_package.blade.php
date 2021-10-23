@@ -33,7 +33,7 @@
 			
 		</div>
 		<div class="colsm-10" style="margin-left: 35px;">
-				<h2 style="text-decoration: underline;">GLOBE LINE SERVICES SARL</h2>
+				<h2 style="text-decoration: underline; color:rgb(15,53,125);">GLOBE LINE SERVICES SARL</h2>
 				<P>COMEMERCE GENERAL - NEGOCE - TRANSPORT - SERVICES</P>
 		</div>
 	</div>
@@ -75,10 +75,12 @@
 							<th>Arrivee</th>
 							<th>N B.L</th>
 							<th>B.L ORG</th>
-							<th >Nature </th>
+							<th>Nature </th>
 							<th>Poids</th>
-							<th colspan="2">Prix. U &nbsp; Depart</th>
-							<th colspan="2">Arrivee &nbsp; Cout HT</th>
+							<th>Prix. U </th>
+							<th>Depart</th>
+							<th>Arrivee </th>
+							<th>Cout HT</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -89,12 +91,12 @@
 							<td>{{$f[0]->state}}</td>
 							<td>{{$t[0]->state}}</td>
 							<td>{{$p->tracking_id}}</td>
-							<td> -- </td>
+							<td> --- </td>
 							<td>{{$p->items[0]->description ?? "No Description"}}</td>
 							<td>{{$p->items[0]->weight ?? "No Weight"}}KG</td>
 							<td>{{$p->total_amount/100}}</td>
-							<td>27/12/21</td>
-							<td>28/12/21</td>
+							<td>{{$p->trackings[0]->created_at ?? '---'}}</td>
+							<td>{{$p->trackings[count($p->trackings)-1]->created_at ?? "---"}}</td>
 							<td>{{$p->total_amount/100}}</td>
 						</tr>
 						@endforeach

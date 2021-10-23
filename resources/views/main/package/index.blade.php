@@ -5,6 +5,7 @@
     <!-- package Start -->
     <div class="container">
         {{-- <div class="container"> --}}
+	<a onclick="window.history.back()" id="back" class="pre">&laquo; Previous</a><br> <br>
             @include('layouts.flash')
 	    <div class="row justify-content-center py-2 px-2">
 		    <div class="col">
@@ -14,16 +15,34 @@
 				      
                                   <form class="form-material" method="GET" action="{{route('main_search_package')}}">
 					@csrf
-                                      <div class="form-group form-default">
-                                          {{-- <input type="text" name="name" value="{{old('name')}}" class="form-control" required=""> --}}
-                                          <label class="float-label" style="color: blue;">Chooce Range <small>(from - to)</small></label>
-					  <input name="date_range" value="{{old('date_range')}}" required class="form-control" id="range" type="text" >
-                                          <span class="form-bar"></span>
-					  <p class="" id="small"></p>
-                                          @error('date_range')
-                                                <Span style="color: red;">{{$message}}</Span>
-                                          @enderror
-                                      </div>
+					<div class="row">
+						<div class="col col-md-6 col-sm-12">
+							<div class="form-group form-default">
+							    {{-- <input type="text" name="name" value="{{old('name')}}" class="form-control" required=""> --}}
+							    <label class="float-label" style="color: blue;">Chooce Range <small>(from - to)</small></label>
+							    <input name="date_range" value="{{old('date_range')}}" required class="form-control" id="range" type="text" >
+							    <span class="form-bar"></span>
+							    <p class="" id="small"></p>
+							    @error('date_range')
+								  <Span style="color: red;">{{$message}}</Span>
+							    @enderror
+							</div>
+						</div>
+						<div class="col col-md-6 col-sm-12">
+							<div class="form-group form-default">
+								<label class="float-label" style="color: blue;">Select Category</label>
+								<select name="type" class="form-control" required>
+									<option value="all">All</option>
+									<option value="not_shipped">Not Shipped</option>
+									<option value="shipped">Shipped</option>
+									<option value="delivered">Delivered</option>
+								</select>
+							    @error('type')
+								  <Span style="color: red;">{{$message}}</Span>
+							    @enderror
+							</div>
+						</div>
+					</div>
                                       <div class="form-group form-default justify-content-center">
                                           <input type="submit" class="btn btn-primary" id="load"  value="Search" style="float: ;" id="">
                                       </div>

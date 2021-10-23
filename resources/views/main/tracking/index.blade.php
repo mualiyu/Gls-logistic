@@ -4,6 +4,7 @@
 @section("content")
     <section class="" style="margin-bottom:50px; ">
         <div class="container">
+            <a onclick="window.history.back()" id="back" class="pre">&laquo; Previous</a><br><br>
             <div class="row justify-content-center">    
                 <!-- Top Catagory Area -->
                 <div class="col-md-12 col-sm-1o px-2 py-5" ">

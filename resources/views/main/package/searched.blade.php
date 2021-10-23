@@ -5,6 +5,7 @@
     <!-- package Start -->
     <div class="container">
         {{-- <div class="container"> --}}
+	    <a onclick="window.history.back()" id="back" class="pre">&laquo; Previous</a><br><br>
             @include('layouts.flash')
 	    <div class="row">
 		    <div class="col">
@@ -62,6 +63,7 @@
 				@csrf
 				<input type="hidden" name="from" value="{{$from}}">
 				<input type="hidden" name="to" value="{{$to}}">
+				<input type="hidden" name="type" value="{{$type}}">
 				<button type="submit" class="btn btn-primary" style="float: right">Export As PDF</button>
 				</form>
 			</div>   

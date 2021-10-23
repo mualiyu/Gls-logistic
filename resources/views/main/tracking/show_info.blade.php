@@ -5,6 +5,7 @@
     <section style="">
         <div class="container" >
             <div class="container">
+                <a onclick="window.history.back()" id="back" class="pre">&laquo; Previous</a><br><br>
             <h4 class="text-primary text-uppercase font-weight-bold">Package Info</h4> 
                 <div class="row">
                     <div class="col-lg-8 pb-4 pb-lg-0">
