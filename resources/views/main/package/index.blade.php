@@ -79,7 +79,7 @@
 							echo '<button class="btn btn-primary disabled" disabled>Deliverd</button>';
 						}
 					      ?>
-					<p style="margin:0"><b>Customer:</b> Muktar usman</p>
+					<p style="margin:0"><b>Customer:</b> {{$p->customer->name}}</p>
 					<p style="margin:0"><b>Total Amount:</b> {{$p->total_amount}}</p>
 					<p style="margin:0"><b>Items:</b> 
 						@if (count($p->items) > 0)
