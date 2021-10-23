@@ -90,8 +90,8 @@
 							<td>{{$t[0]->state}}</td>
 							<td>{{$p->tracking_id}}</td>
 							<td> -- </td>
-							<td>{{$p->items[0]->description}}</td>
-							<td>{{$p->items[0]->weight}}KG</td>
+							<td>{{$p->items[0]->description ?? "No Description"}}</td>
+							<td>{{$p->items[0]->weight ?? "No Weight"}}KG</td>
 							<td>{{$p->total_amount/100}}</td>
 							<td>27/12/21</td>
 							<td>28/12/21</td>
