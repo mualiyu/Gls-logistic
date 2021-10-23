@@ -29,6 +29,7 @@ Route::get('/package/add', [\App\Http\Controllers\PackageController::class, 'sho
 Route::post('/package/add', [\App\Http\Controllers\PackageController::class, 'create'])->name('main_create_package')->middleware('customerAuth');
 Route::post('/package/{id}/activate', [\App\Http\Controllers\PackageController::class, 'activate_package'])->name('main_activate_package')->middleware('customerAuth');
 Route::get('/package/get_to_region', [\App\Http\Controllers\PackageController::class, 'get_to_region'])->name('main_get_to_region');
+Route::get('/package/search', [\App\Http\Controllers\PackageController::class, 'search_package'])->name('main_search_package')->middleware('customerAuth');
 
 // show Add item to package
 Route::get('/package/{id}/item/add', [\App\Http\Controllers\PackageController::class, 'show_add_item'])->name('main_show_add_item')->middleware('customerAuth');
@@ -37,6 +38,14 @@ Route::post('/package/item/add', [\App\Http\Controllers\PackageController::class
 // Tracking
 Route::get('/track', [\App\Http\Controllers\TrackingController::class, 'index'])->name('main_show_track_index');
 Route::post('/track', [\App\Http\Controllers\TrackingController::class, 'get_track'])->name('main_get_track_info');
+
+
+
+// 
+// PDF ROUTE
+// 
+Route::get('/pdf/search/shipment', [\App\Http\Controllers\PdfController::class, 'main_shipments_search'])->name('main_pdf_shipments_search');
+
 
 
 

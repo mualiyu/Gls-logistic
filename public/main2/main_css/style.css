@@ -348,7 +348,7 @@ textarea:focus {
 
 /* ScrollUp */
 #scrollUp {
-    background-color: #40ba37;
+    background-color: rgb(18, 56, 128);
     border-radius: 0;
     bottom: 60px;
     box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.3);
@@ -581,7 +581,7 @@ textarea:focus {
     position: relative;
     width: 100%;
     z-index: 100;
-    height: 145px;
+    height: 100px;
 }
 .ui_info {
     display: none;

@@ -201,4 +201,52 @@ class PackageController extends Controller
             return back()->with('error', 'You cannot activate empty package, Make sure you add Item to the package before activating.');
         }
     }
+
+    public function search_package(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'date_range' => ['required'],
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator);
+        }
+
+        $customer = session('customer');
+
+        $d = explode(' - ', $request->date_range);
+
+        $f = explode('/', $d[0]);
+        $from = $f[2] . '-' . $f[0] . '-' . $f[1];
+        $t = explode('/', $d[1]);
+        $to = $t[2] . '-' . $t[0] . '-' . $t[1];
+        // return $from;
+
+        $months = array(
+            '',
+            'January',
+            'February',
+            'March',
+            'April',
+            'May',
+            'June',
+            'July ',
+            'August',
+            'September',
+            'October',
+            'November',
+            'December',
+        );
+
+        $packages = Package::where('customer_id', '=', $customer->id)->whereBetween('created_at', [$from . ' 00:00:00', $to . ' 23:59:59'])->get();
+
+        if ($packages) {
+
+            if (count($packages) > 0) {
+                return view('main.package.searched', compact('packages', 'from', 'to', 'months'));
+            } else {
+                return back()->with('error', 'No Shipments Within selected range. Try Again!');
+            }
+        }
+    }
 }

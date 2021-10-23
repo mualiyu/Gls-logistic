@@ -6,11 +6,37 @@
     <div class="container">
         {{-- <div class="container"> --}}
             @include('layouts.flash')
+	    <div class="row justify-content-center py-2 px-2">
+		    <div class="col">
+			    <div class="card  py-4 px-3">
+			<div class="card-block">
+				      <h5 class="text-primary text-uppercase font-weight-bold">Search Shipments</h5>
+				      
+                                  <form class="form-material" method="GET" action="{{route('main_search_package')}}">
+					@csrf
+                                      <div class="form-group form-default">
+                                          {{-- <input type="text" name="name" value="{{old('name')}}" class="form-control" required=""> --}}
+                                          <label class="float-label" style="color: blue;">Chooce Range <small>(from - to)</small></label>
+					  <input name="date_range" value="{{old('date_range')}}" required class="form-control" id="range" type="text" >
+                                          <span class="form-bar"></span>
+					  <p class="" id="small"></p>
+                                          @error('date_range')
+                                                <Span style="color: red;">{{$message}}</Span>
+                                          @enderror
+                                      </div>
+                                      <div class="form-group form-default justify-content-center">
+                                          <input type="submit" class="btn btn-primary" id="load"  value="Search" style="float: ;" id="">
+                                      </div>
+                                  </form>
+                              </div>
+                            </div>
+		    </div>
+	    </div>
             <div class="row lustify-content-center">
                 <div class="col">
 		   <div class="card">
 			<div class="card-header">
-				<h4 class="text-primary text-uppercase font-weight-bold">Shipments list</h4>
+				<h5 class="text-primary text-uppercase font-weight-bold">Shipments list</h5>
 			</div>   
 			
 			    <div class="card-body">
@@ -74,9 +100,36 @@
 @endsection
 
 @section('script')
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 <script>
-   $(document).ready(function() {
+$(function() {
 
-   })
+    var start = moment().subtract(29, 'days');
+    var end = moment();
+
+    function cb(start, end) {
+        $('#small').html(start.format('D MMMM, YYYY') + ' - ' + end.format('D MMMM, YYYY'));
+    }
+
+    $('input[name="date_range"]' || ' ').daterangepicker({
+        startDate: start,
+        endDate: end,
+        ranges: {
+           'Today': [moment(), moment()],
+           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+           'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+           'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+           'This Month': [moment().startOf('month'), moment().endOf('month')],
+           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        }
+    }, cb);
+
+
+    cb(start, end);
+
+});
 </script>
+
 @endsection
