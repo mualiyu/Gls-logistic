@@ -85,7 +85,7 @@
 							echo '<button class="btn btn-primary disabled" disabled>Deliverd</button>';
 						}
 					      ?>
-					      <a href="{{route('main_show_add_item', ['id' => $p->id])}}" class="btn btn-primary" style="float: right" disabled>Open</a>
+					      <a href="{{route('main_show_add_item', ['id' => $p->id])}}" class="btn btn-primary" style="float: right">Open</a>
 					<p style="margin:0"><b>Customer:</b> {{$p->customer->name}}</p>
 					<p style="margin:0"><b>Total Amount:</b> {{$p->total_amount}}</p>
 					<p style="margin:0"><b>Items:</b> 
