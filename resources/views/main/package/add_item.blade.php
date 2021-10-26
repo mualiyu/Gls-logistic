@@ -25,7 +25,7 @@
 					    @endif
 					<h6 class="text-primary text-uppercase font-weight-bold">Package</h6>
 					<h5 class="mb-4">Tracking ID:  {{$package->tracking_id}}</h5>
-					{{-- <p class="mb-4">Dolores lorem lorem ipsum sit et ipsum. Sadip sea amet diam dolore sed et. Sit rebum labore sit sit ut vero no sit. Et elitr stet dolor sed sit et sed ipsum et kasd ut. Erat duo eos et erat sed diam duo</p> --}}
+					
 					<div class="row">
 					    <div class="col-sm-6">
 						<h5 class="text-primary mb-2" data-toggle="counter-up">{{count($items)}}</h5>
@@ -39,13 +39,11 @@
 					<div class="row">
 					    <div class="col-sm-6">
 						    <label class="text-primary" for="from">From: </label>
-						    <?php $region_from = \App\Models\Region::where('code', '=', $package->from)->get(); ?>
-						    <span id="from">{{$package->address_from}}, {{$region_from[0]->state}}</span>
+						    <span id="from">{{$package->address_from}}, {{$package->from}}</span>
 					    </div>
 					    <div class="col-sm-6">
 						    <label class="text-primary" for="to">To: </label>
-						    <?php $region_to = \App\Models\Region::where('code', '=', $package->to)->get(); ?>
-						    <span id="to">{{$package->address_from}}, {{$region_to[0]->state}}</span>
+						    <span id="to">{{$package->address_from}}, {{$package->to}}</span>
 					    </div>
 					</div>
 					<br>

@@ -85,11 +85,9 @@
 					</thead>
 					<tbody>
 						@foreach ($packages as $p)
-						<?php $f = \App\Models\Region::where('code', '=', $p->from)->get(); ?>
-						<?php $t = \App\Models\Region::where('code', '=', $p->to)->get(); ?>    
 						<tr>
-							<td>{{$f[0]->state}}</td>
-							<td>{{$t[0]->state}}</td>
+							<td>{{$p->from}}</td>
+							<td>{{$p->to}}</td>
 							<td>{{$p->tracking_id}}</td>
 							<td> --- </td>
 							<td>{{$p->items[0]->description ?? "No Description"}}</td>

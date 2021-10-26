@@ -67,13 +67,14 @@ class PdfController extends Controller
                 if (count($packages) > 0) {
                     $pdf = PDF::loadView('main.pdf.search_package', compact('packages', 'months', 'from', 'to'))->setPaper('a4');
 
-                    return $pdf->stream('MATERIEL-' . now() . '.pdf');
+                    return $pdf->stream('Facture-all-' . now() . '.pdf');
                     // return view('main.package.searched', compact('packages', 'from', 'to', 'months'));
                 } else {
                     return back()->with('error', 'No Shipments Within selected range. Try Again!');
                 }
             }
         }
+
 
         // if type selected is not shipped
         if ($request->type == 'not_shipped') {
@@ -84,13 +85,14 @@ class PdfController extends Controller
                 if (count($packages) > 0) {
                     $pdf = PDF::loadView('main.pdf.search_package', compact('packages', 'months', 'from', 'to'))->setPaper('a4');
 
-                    return $pdf->stream('MATERIEL-' . now() . '.pdf');
+                    return $pdf->stream('Facture_not_shipped-' . now() . '.pdf');
                     // return view('main.package.searched', compact('packages', 'from', 'to', 'months'));
                 } else {
                     return back()->with('error', 'No Shipments Within selected range. Try Again!');
                 }
             }
         }
+
 
         // if type selected is shipped
         if ($request->type == 'shipped') {
@@ -101,13 +103,14 @@ class PdfController extends Controller
                 if (count($packages) > 0) {
                     $pdf = PDF::loadView('main.pdf.search_package', compact('packages', 'months', 'from', 'to'))->setPaper('a4');
 
-                    return $pdf->stream('MATERIEL-' . now() . '.pdf');
+                    return $pdf->stream('Facture-shipped-' . now() . '.pdf');
                     // return view('main.package.searched', compact('packages', 'from', 'to', 'months'));
                 } else {
                     return back()->with('error', 'No Shipments Within selected range. Try Again!');
                 }
             }
         }
+
 
         // if type selected is Delivered
         if ($request->type == 'delivered') {
@@ -118,7 +121,7 @@ class PdfController extends Controller
                 if (count($packages) > 0) {
                     $pdf = PDF::loadView('main.pdf.search_package', compact('packages', 'months', 'from', 'to'))->setPaper('a4');
 
-                    return $pdf->stream('MATERIEL-' . now() . '.pdf');
+                    return $pdf->stream('Facture-delivered-' . now() . '.pdf');
                     // return view('main.package.searched', compact('packages', 'from', 'to', 'months'));
                 } else {
                     return back()->with('error', 'No Shipments Within selected range. Try Again!');

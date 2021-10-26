@@ -88,7 +88,7 @@ class PackageController extends Controller
                     //     . $row->id . '" id="cus[' . $i . ']"><label class="form-check-label" for="cus[' . $i . ']">'
                     //     . $row->name . ' - ' . $row->email . ' - ' . $row->phone .
                     //     '</label></div></li>';
-                    $output .= '<option value="' . $row->region->code . '">' . $row->region->state . '</option>';
+                    $output .= '<option value="' . $row->region->state . '">' . $row->region->state . '</option>';
                     $i++;
                 }
 
@@ -119,7 +119,7 @@ class PackageController extends Controller
             'height' => ['required'],
             'width' => ['required'],
             'weight' => ['required'],
-            'amount' => ['required']
+            'amount' => ['required'],
         ]);
 
         if ($validator->fails()) {
@@ -160,11 +160,10 @@ class PackageController extends Controller
             ]);
 
             if ($package) {
-                $r = Region::where('code', '=', $p->from)->get();
                 $customer = session('customer');
                 $tracking = Tracking::create([
                     'package_id' => $id,
-                    'current_location' => $r[0]->capital,
+                    'current_location' => $p->from,
                     'a_d' => 1,
                 ]);
                 Tracking::where('id', '=', $tracking->id)->update([

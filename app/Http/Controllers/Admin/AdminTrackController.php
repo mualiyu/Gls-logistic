@@ -69,7 +69,7 @@ class AdminTrackController extends Controller
             $data = [
                 'subject' => 'Package Receipt',
                 'email' => $package->customer->email,
-                'content' => 'Your Package has been confirm  by ' . Auth::user()->name . ' At ' . $request->au_location . ' \n And your tracking number is ' . $tracking->package->tracking_id . '',
+                'content' => 'Your Shipment has ' . $request->a_d == 1 ? "arrived at" : "Dispatched from" . ' ' . $request->au_location . ' \n And your tracking number is ' . $tracking->package->tracking_id . '',
             ];
 
             try {

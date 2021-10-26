@@ -73,8 +73,7 @@
 				@if (count($packages) > 0)    
 				<?php $k = count($packages);?>
 				@foreach ($packages as $p)
-				<?php $f = \App\Models\Region::where('code', '=', $p->from)->get(); ?>
-				<?php $t = \App\Models\Region::where('code', '=', $p->to)->get(); ?>
+
 				<a href="{{route('main_show_add_item', ['id' => $p->id])}}" class="list-group-item list-group-item-action border-dark">
 					<span style="float: right">#{{$k}}</span>
 					<h5>{{$p->tracking_id}}</h5> 
@@ -103,11 +102,11 @@
 					<div class="row" style="margin:0">
 						<div class="col-md-6">
 							<p style="margin:0"><b>From:</b></p>
-							<p style="margin:0">{{$p->address_from}}, {{$f[0]->state}}</p>
+							<p style="margin:0">{{$p->address_from}}, {{$p->from}}</p>
 						</div>
 						<div class="col-md-6">
 							<p style="margin:0"><b>To:</b></p>
-							<p style="margin:0">{{$p->address_to}}, {{$t[0]->state}}</p>
+							<p style="margin:0">{{$p->address_to}}, {{$p->to}}</p>
 						</div>
 					</div>
 					<p style="margin:0"><b>Created At: {{$p->created_at}}</b> </p>
@@ -116,7 +115,7 @@
 				<?php $k--; ?>
 				@endforeach
 				@else
-				<a href="" class="list-group-item list-group-item-action border-dark"> No Parcel collections</a>
+				<a href="" class="list-group-item list-group-item-action border-dark"> No Shipment collections</a>
 				@endif
 				</div>
 			    </div>

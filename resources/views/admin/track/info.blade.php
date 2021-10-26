@@ -37,7 +37,7 @@
 								{{-- Show approve button (departure or arival) --}}
 								@if ($package->status == 1) 
 								@if (Auth::user()->unit_location)
-									@if (Auth::user()->unit_location == $tracking[0]->current_location)
+									@if (Auth::user()->unit_location == $tracking[0]->current_location && $tracking[0]->a_d!=1)
 									    <form action="{{route('admin_confirm_track_package')}}" method="POST">
 									    @csrf
 									    <input type="hidden" value="{{Auth::user()->unit_location}}" name="au_location">
@@ -46,7 +46,8 @@
 		
 									    <button type="submit" class="btn btn-warning" style="float: right; backgroud:blue;">Confirm Departure from {{Auth::user()->unit_location}}</button>
 									    </form>
-									@else
+									@endif
+									@if(Auth::user()->unit_location != $tracking[0]->current_location && $tracking[0]->a_d==1)
 									    <form action="{{route('admin_confirm_track_package')}}" method="POST">
 									    @csrf
 									    <input type="hidden" value="{{Auth::user()->unit_location}}" name="au_location">
@@ -119,8 +120,7 @@
 						<div class="form-group mb-4">
                                     		    <label for="example-email" class="col-md-12 p-0">From: </label>
                                     		    <div class="col-md-12 border-bottom p-0">
-								<?php $r_f = \App\Models\Region::where('code', '=', $package->from)->get(); ?>
-                                    		       <span class="form-control px-5 border-0"> {{$package->address_from}}, {{$r_f[0]->capital}} </span>
+                                    		       <span class="form-control px-5 border-0"> {{$package->address_from}}, {{$package->from}} </span>
                                     		    </div>
                                     		</div>
 					    </div>
@@ -128,8 +128,7 @@
 						<div class="form-group mb-4">
                                     		    <label for="example-email" class="col-md-12 p-0">To: </label>
                                     		    <div class="col-md-12 border-bottom p-0">
-								<?php $r_t = \App\Models\Region::where('code', '=', $package->to)->get(); ?>
-                                    		        <span class="form-control px-5 border-0"> {{$package->address_to}}, {{$r_t[0]->capital}}</span>
+                                    		        <span class="form-control px-5 border-0"> {{$package->address_to}}, {{$package->to}}</span>
                                     		    </div>
                                     		</div>
 					    </div>
@@ -153,7 +152,7 @@
                                         <div class="col-md-12 border-bottom px-4">
 						<span class="form-control px-5 border-0">
 						    <a href="" class="btn btn-primary" style="float: right" onclick="$('#update').css('display', 'block');">Update Tracking location</a>
-						    {{$package->trackings[0]->current_location}}
+						    {{$package->trackings[count($package->trackings)-1]->current_location}}
 						</span>
                                         </div>
                                     </div>

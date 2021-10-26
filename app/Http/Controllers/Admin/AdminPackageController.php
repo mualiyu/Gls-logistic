@@ -108,17 +108,18 @@ class AdminPackageController extends Controller
             ]);
 
             if ($package) {
-                $r = Region::where('code', '=', $p->from)->get();
+                // $r = Region::where('code', '=', $p->from)->get();
                 $customer = $p->customer;
                 $tracking = Tracking::create([
                     'package_id' => $id,
-                    'current_location' => $r[0]->capital,
+                    'current_location' => $p->from,
+                    'a_d' => 1,
                 ]);
                 if ($tracking) {
                     $data = [
                         'subject' => 'Package Receipt',
                         'email' => $customer->email,
-                        'content' => 'Your Package has been Activated successfully and your tracking number is ' . $tracking->package->tracking_id . '',
+                        'content' => 'Your shipments has been Activated successfully and your tracking number is ' . $tracking->package->tracking_id . '',
                     ];
 
                     try {

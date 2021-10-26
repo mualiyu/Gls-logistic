@@ -10,16 +10,13 @@
                 <div class="row">
                     <div class="col-lg-8 pb-4 pb-lg-0">
                         {{-- <div class="bg-primary text-dark text-center p-4">
-                            <h4 class="m-0"><i class="fa fa-map-marker-alt text-white mr-2"></i>{{$tracking[0]->current_location}}</h4>
+                            <h4 class="m-0"><i class="fa fa-map-marker-alt text-white mr-2"></i>{{$tracking[count($tracking)-1]->current_location}}</h4>
                         </div>
                         <iframe style="width: 100%; height: 470px;"
-                            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCpSikij-kMiF0hTxXQn9Vu4B2v2WxkR_E&q={{$tracking[0]->current_location}},+cameroon"
+                            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCpSikij-kMiF0hTxXQn9Vu4B2v2WxkR_E&q={{$tracking[count($tracking)-1]->current_location}},+cameroon"
                             frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe> --}}
                         <div class="card">
-                            <?php 
-                            $f = \App\Models\Region::where('code', '=', $package[0]->from)->get();
-				            $t = \App\Models\Region::where('code', '=', $package[0]->to)->get();
-                            ?>
+                            
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-12">
@@ -27,46 +24,46 @@
                                         <p>{{$package[0]->tracking_id}}</p>
                                     </div>
                                     <div class="col-md-12">
-                                        @if ($tracking[0]->current_location == $f[0]->capital)
+                                        @if ($tracking[count($tracking)-1]->current_location == $package[0]->from)
                                             <span>Parcel is on process:</span>
                                         @endif
-                                        @if ($tracking[0]->current_location == $t[0]->capital)
+                                        @if ($tracking[count($tracking)-1]->current_location == $package[0]->to)
                                             <span>Delivered on</span>
-                                            <p>{{$tracking[0]->created_at}}</p>
+                                            <p>{{$tracking[count($tracking)-1]->created_at}}</p>
                                         @endif
-                                        @if ($tracking[0]->current_location != $f[0]->capital && $tracking[0]->current_location != $t[0]->capital)
+                                        @if ($tracking[count($tracking)-1]->current_location != $package[0]->from && $tracking[count($tracking)-1]->current_location != $package[0]->to)
                                             <span>Package is on process</span> &
                                             <span>Currently At:</span>
-                                            <p>{{$tracking[0]->current_location}}</p>
+                                            <p>{{$tracking[count($tracking)-1]->current_location}}</p>
                                         @endif
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        @if ($tracking[0]->current_location == $f[0]->capital)
+                                        @if ($tracking[count($tracking)-1]->current_location == $package[0]->from)
                                             <span>Currently At:</span>
-                                            <p>{{$tracking[0]->current_location}}</p>
+                                            <p>{{$tracking[count($tracking)-1]->current_location}}</p>
                                         @endif
-                                        @if ($tracking[0]->current_location == $t[0]->capital)
+                                        @if ($tracking[count($tracking)-1]->current_location == $package[0]->to)
                                             <span>Delivered To</span>
-                                            <p>{{$tracking[0]->current_location}}</p>
+                                            <p>{{$tracking[count($tracking)-1]->current_location}}</p>
                                         @endif
-                                        @if ($tracking[0]->current_location != $f[0]->capital && $tracking[0]->current_location != $t[0]->capital)
-                                            <span>{{$tracking[0]->a_d==1 ? 'Departed From: ':''}}{{$tracking[0]->a_d==2 ? 'Arrived At: ':''}}:</span>
-                                            <p>{{$tracking[0]->current_location}}</p>
+                                        @if ($tracking[count($tracking)-1]->current_location != $package[0]->from && $tracking[count($tracking)-1]->current_location != $package[0]->to)
+                                            <span>{{$tracking[count($tracking)-1]->a_d==1 ? 'Departed From: ':''}}{{$tracking[count($tracking)-1]->a_d==2 ? 'Arrived At: ':''}}:</span>
+                                            <p>{{$tracking[count($tracking)-1]->current_location}}</p>
                                         @endif
                                     </div>
                                     <div class="col-sm-6">
-                                        @if ($tracking[0]->current_location == $f[0]->capital)
+                                        @if ($tracking[count($tracking)-1]->current_location == $package[0]->from)
                                             <span>Received By :</span>
                                             <p>Nill</p>
                                         @endif
-                                        @if ($tracking[0]->current_location == $t[0]->capital)
+                                        @if ($tracking[count($tracking)-1]->current_location == $package[0]->to)
                                             <span>Received By:</span>
                                             <p>{{$package[0]->customer->name}}</p>
                                         @endif
-                                        @if ($tracking[0]->current_location != $f[0]->capital && $tracking[0]->current_location != $t[0]->capital)
+                                        @if ($tracking[count($tracking)-1]->current_location != $package[0]->from && $tracking[count($tracking)-1]->current_location != $package[0]->to)
                                             <span>Confirmed By:</span>
                                             <p>Agent</p>
                                         @endif
@@ -104,6 +101,19 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="bg-primary text-dark text-center p-3">
+                                    <h4 class="m-0"><i class="fa fa-map-marker-alt text-white mr-2"></i>{{$tracking[count($tracking)-1]->current_location}}</h4>
+                                </div>
+                                <iframe style="width: 100%; height: 250px;"
+                                    src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCpSikij-kMiF0hTxXQn9Vu4B2v2WxkR_E&q={{$tracking[count($tracking)-1]->current_location}},+cameroon"
+                                    frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
                 
             </div>
@@ -124,21 +134,21 @@
                         <div class="row border-dark" style="border:black 1px solid; overflow-y:scroll; height:500px;">
                             <div class="col-md-11 px-3">
                                 {{-- if sipment is not departed  show this--}}
-                                @if ($tracking[0]->current_location == $f[0]->capital)
+                                @if ($tracking[count($tracking)-1]->current_location == $package[0]->from)
                                 <div class="row px-4 py-3" style="margin: 0;">
                                     <div style="margin: 0;" class="col-sm-4">
                                         <?php 
-                                        $time = explode(' ', $tracking[0]->created_at);
+                                        $time = explode(' ', $tracking[count($tracking)-1]->created_at);
                                         $d = explode('-', $time[0]);
                                         $day = $d[2].'/'.$d[1].'/'.$d[0];
                                         $h = explode(':', $time[1]);
                                         $hour = $h[0].':'.$h[1];
                                       ?>
-                                        <span>{{$day}}</span>
+                                        <span>{{$day}}</span><br>
                                         <span>{{$hour}}</span>
                                     </div>
                                     <div style="margin: 0;" class="col-sm-8">
-                                        <p style="margin: 0;"><b>{{$tracking[0]->a_d==1 ? 'Currently At: ':''}}{{$tracking[0]->a_d==2 ? 'Arrived At: ':''}}</b></p>
+                                        <p style="margin: 0;"><b>{{$tracking[count($tracking)-1]->a_d==1 ? 'Currently At: ':''}}{{$tracking[count($tracking)-1]->a_d==2 ? 'Arrived At: ':''}}</b></p>
                                         <p style="margin: 0;">{{$tracking[0]->current_location}}</p>
                                     </div>
                                 </div><hr>
@@ -153,14 +163,14 @@
                                     </div>
                                     <div class="col-sm-8">
                                         <p style="margin: 0;">Final Destination:</b></p>
-                                        <p style="margin: 0;">{{$t[0]->capital}}</p>
+                                        <p style="margin: 0;">{{$package[0]->to}}</p>
                                     </div>
                                 </div><hr>
                                 @endif
 
                                 {{-- if sipment Has Arrived  show this--}}
                                 @if ($package[0]->status == 2)    
-                                @if ($tracking[0]->current_location == $t[0]->capital)
+                                {{-- @if ($tracking[0]->current_location == $package[0]->to) --}}
                                     @foreach ($tracking as $t)
                                      <?php 
                                         $time = explode(' ', $t->created_at);
@@ -171,7 +181,7 @@
                                       ?>
                                         <div class="row px-4 py-3" style="margin: 0;">
                                             <div style="margin: 0;" class="col-sm-4">
-                                                <span>{{$day}}</span>
+                                                <span>{{$day}}</span><br>
                                                 <span>{{$hour}}</span>
                                             </div>
                                             <div style="margin: 0;" class="col-sm-8">
@@ -180,12 +190,12 @@
                                             </div>
                                         </div><hr>
                                     @endforeach
-                                @endif
+                                {{-- @endif --}}
                                 @endif
 
 
                                 {{-- if sipment is on process  show this--}}
-                                @if ($tracking[0]->current_location != $f[0]->capital && $tracking[0]->current_location != $t[0]->capital)
+                                @if ($tracking[count($tracking)-1]->current_location != $package[0]->from && $tracking[count($tracking)-1]->current_location != $package[0]->to)
                                     @foreach ($tracking as $t)
                                      <?php 
                                         $time = explode(' ', $t->created_at);
@@ -196,7 +206,7 @@
                                       ?>
                                         <div class="row px-4 py-3" style="margin: 0;">
                                             <div style="margin: 0;" class="col-sm-4">
-                                                <span>{{$day}}</span>
+                                                <span>{{$day}}</span><br>
                                                 <span>{{$hour}}</span>
                                             </div>
                                             <div style="margin: 0;" class="col-sm-8">

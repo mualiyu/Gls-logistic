@@ -24,7 +24,7 @@
                                     <option value="">Select__</option>
                                     <?php $regions = \App\Models\Region::all(); ?>
                                     @foreach ($regions as $r)
-                                        <option value="{{$r->code}}">{{$r->state}}</option>
+                                        <option value="{{$r->state}}">{{$r->state}}</option>
                                     @endforeach
                                 </select>
                                     @error('from')
@@ -49,7 +49,7 @@
                                     <option value="">Select__</option>
                                     <?php $regions = \App\Models\Region::all(); ?>
                                     @foreach ($regions as $r)
-                                        <option value="{{$r->code}}">{{$r->state}}</option>
+                                        <option value="{{$r->state}}">{{$r->state}}</option>
                                     @endforeach
                                 </select>
                                     @error('to')
