@@ -90,12 +90,12 @@
 
 				<div href="{{route('main_show_add_item', ['id' => $p->id])}}" class="list-group-item list-group-item-action border-dark">
 					<span style="float: right">#{{$k}}</span>
-					<a href=""  style="color: blue;" onclick="event.preventDefault(); document.getElementById('track-form').submit();">
+					<a href=""  style="color: blue;" onclick="event.preventDefault(); document.getElementById('track-form[{{$k}}]').submit();">
 						<h5 style="color: blue;">
 						{{$p->tracking_id}}
 						</h5> 
 					</a>
-					<form action="{{route('main_get_track_info')}}" id="track-form" method="POST" class="d-none">
+					<form action="{{route('main_get_track_info')}}" id="track-form[{{$k}}]" method="POST" class="d-none">
                                 	    @csrf
                                 	        <input type="hidden" name="track" value="{{$p->tracking_id}}">  
                                 	</form> 
