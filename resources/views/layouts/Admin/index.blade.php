@@ -171,6 +171,15 @@
                                 <span class="hide-menu">Trackings</span>
                             </a>
                         </li>
+                        @if (Auth::user() && Auth::user()->p==1)   
+                        <li class="sidebar-item">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('register') }}"
+                                aria-expanded="false">
+                                <i class="fa fa-globe" aria-hidden="true"></i>
+                                <span class="hide-menu">Register User</span>
+                            </a>
+                        </li>
+                        @endif
                     </ul>
 
                 </nav>

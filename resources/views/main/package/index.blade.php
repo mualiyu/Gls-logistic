@@ -63,9 +63,17 @@
 				@if (count($packages) > 0)    
 				<?php $k = count($packages);?>
 				@foreach ($packages as $p)
-				<a href="{{route('main_show_add_item', ['id' => $p->id])}}" class="list-group-item list-group-item-action border-dark">
+				<div class="list-group-item list-group-item-action border-dark">
 					<span style="float: right">#{{$k}}</span>
-					<h5>{{$p->tracking_id}}</h5> 
+					<a href=""  style="color: blue;" onclick="event.preventDefault(); document.getElementById('track-form').submit();">
+						<h5 style="color: blue;">
+						{{$p->tracking_id}}
+						</h5> 
+					</a>
+					<form action="{{route('main_get_track_info')}}" id="track-form" method="POST" class="d-none">
+                                	    @csrf
+                                	        <input type="hidden" name="track" value="{{$p->tracking_id}}">  
+                                	</form>   
 					<?php 
 						if ($p->status == 0) {
 							echo '<button class="btn btn-warning disabled" disabled>Not Activated</button>';
@@ -77,6 +85,7 @@
 							echo '<button class="btn btn-primary disabled" disabled>Deliverd</button>';
 						}
 					      ?>
+					      <a href="{{route('main_show_add_item', ['id' => $p->id])}}" class="btn btn-primary" style="float: right" disabled>Open</a>
 					<p style="margin:0"><b>Customer:</b> {{$p->customer->name}}</p>
 					<p style="margin:0"><b>Total Amount:</b> {{$p->total_amount}}</p>
 					<p style="margin:0"><b>Items:</b> 
@@ -100,7 +109,7 @@
 					</div>
 					<p style="margin:0"><b>Created At: {{$p->created_at}}</b> </p>
 					<hr>
-				</a>
+				</div>
 				<?php $k--; ?>
 				@endforeach
 				@else
