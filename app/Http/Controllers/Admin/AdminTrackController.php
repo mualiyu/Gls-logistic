@@ -85,7 +85,7 @@ class AdminTrackController extends Controller
                     $message->subject($data['subject']);
                 });
             } catch (\Throwable $th) {
-                return back()->with('success', 'Package Has been confirm at ' . $request->au_location . ', Update is Not sent to customer Email');
+                return back()->with('success', 'Package Has been confirm at ' . $request->au_location . ', Update is Not sent to contact Email');
             }
 
             return back()->with('success', 'Package Has been confirm at ' . $request->au_location . ', Update is sent to contact Email');
