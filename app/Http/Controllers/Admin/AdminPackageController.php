@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Ebulksms;
 use App\Models\Package;
 use App\Models\Region;
 use App\Models\Tracking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Throwable;
 
 class AdminPackageController extends Controller
 {
@@ -124,6 +126,24 @@ class AdminPackageController extends Controller
                         'content' => 'Your shipments has been Activated successfully and your tracking number is ' . $tracking->package->tracking_id . '',
                     ];
 
+                    $ebulk = new Ebulksms();
+
+                    $from = "Gls";
+                    $msg = "Your Package has been Activated successfully \n And your tracking number is " . $tracking->package->tracking_id . " \n To track your shipment flow this link: {" . url('/track') . "} ";
+                    $ss = strval($msg);
+
+                    $new = substr($p->phone, 0, 1);
+
+                    if ($new == 0) {
+                        $d = substr($p->phone, -10);
+                        $num = '234' . $d;
+                    } else {
+                        $d = substr($p->phone, -9);
+                        $num = '237' . $d;
+                    }
+                    $to = $num;
+
+                    // try sending email
                     try {
                         Mail::send('main.email.receipt', $data, function ($message) use ($data) {
                             $message->from('info@gls.com', 'GLS');
@@ -132,10 +152,17 @@ class AdminPackageController extends Controller
                             $message->subject($data['subject']);
                         });
                     } catch (\Throwable $th) {
-                        return back()->with('success', 'Package Has been Activated, But receipt is not sent to customers email');
+                        return back()->with('success', 'Package Has been Activated, But receipt is not sent to Contact email');
                     }
 
-                    return back()->with('success', 'Package Has been Activated, Receipt is sent to Email');
+                    // try sending sms to contact phone
+                    try {
+                        $ebulk->useJSON($from, $ss, $to);
+                    } catch (Throwable $th) {
+                        return back()->with('success', 'Package Has been Activated, But Receipt is sent to only contact Email and Not to contact Phone');
+                    }
+
+                    return back()->with('success', 'Package with ' . $p->tracking_id . ' tracking number Has been Activated, Receipt is sent to both Email and Phone');
                 } else {
                     return back()->with('error', 'Fail to Add Tracker.');
                 }

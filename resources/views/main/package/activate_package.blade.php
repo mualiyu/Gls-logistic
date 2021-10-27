@@ -50,22 +50,19 @@
 							</div>
 						</div>
 						<br>
-						{{-- <h6 class="text-primary text-uppercase font-weight-bold">Current Items</h6>
+						<h6 class="text-primary text-uppercase font-weight-bold">Current Items</h6>
 						<div class="row justify-content-center" style="margin:0;">
 							<div class="col-md-12">
 								<div class="list-group" style="margin:0;">
-									@if (count($items) > 0)
-									<?php $k = count($items); ?>
-									@foreach ($items as $item)
-									<a href="#" class="list-group-item list-group-item-action border-dark">
+									@if (count($package->items) > 0)
+									<?php $k = count($package->items); ?>
+									@foreach ($package->items as $item)
+									<a class="list-group-item list-group-item-action border-dark">
 										<span style="float: right">#{{$k}}</span>&nbsp;&nbsp;
-										<form action="" method="">
-											@csrf
-											<button class="btn btn-warning" style="background: red; float: right;">Delete</button>
-										</form>
-										<h5>{{$item->name}}</h5>
+										<h6>{{$item->name}}</h6>
 										<p style="margin:0"><b>Description:</b> {{$item->description}}</p>
-										<p style="margin:0"><b>Weight:</b> {{$item->weight}}g</p>
+										<p style="margin:0"><b>Weight:</b> {{$item->weight ?? "No Weight Specified in "}}gram</p>
+										<p style="margin:0"><b>Quantity:</b> {{$item->quantity ?? "1"}}</p>
 										<hr>
 									</a>
 									<?php $k--; ?>
@@ -77,7 +74,7 @@
 									@endif
 								</div>
 							</div>
-						</div> --}}
+						</div>
 					</div>
 					
 				</div>

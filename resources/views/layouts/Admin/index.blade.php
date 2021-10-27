@@ -217,7 +217,7 @@
             <!-- footer -->
             <!-- ============================================================== -->
             <footer class="footer text-center"> 2021 © <a
-                    href="https://ajisaq.com/">Ajisaq.com</a>
+                    href="https://glscam.com/">Glscam.com</a>
             </footer>
             <!-- ============================================================== -->
             <!-- End footer -->

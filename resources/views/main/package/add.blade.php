@@ -111,9 +111,9 @@
                                 <br>
 
                                 <div class="row">
-                                    {{-- <div class="col-md-12" style="text-align: center"><h6>Contact details</h6></div> --}}
+                                    <div class="col-md-12" style="text-align: center"><h6>Item details</h6></div>
                                     
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
                                         <label for="phone">Item Type:</label>
                                         <div class="input-group">
                                         <select class="form-control" name="item" id="item" required="required">
@@ -127,7 +127,39 @@
                                                 <p class="help-block text-danger">{{$message}}</p>
                                             @enderror
                                         </div>
-            
+
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="col-lx-6">
+                                            <label for="">Item Weight:</label>
+                                            <div class="input-group">
+                                            <input type="text" class="form-control" name="weight" placeholder="In Grams (Optional)"> 
+                                                @error('weight')
+                                                    <p class="help-block text-danger">{{$message}}</p>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="col-lx-6">
+                                            <label for="">Quantity:</label>
+                                            <div class="input-group">
+                                            <input type="number" class="form-control" name="quantity" placeholder="" value="1"> 
+                                                @error('quantity')
+                                                    <p class="help-block text-danger">{{$message}}</p>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <label for="phone">Description:</label>
+                                        <div class="input-group">
+                                        <textarea class="form-control px-3 py-3" name="description" id="des" required="required" placeholder="Description..."></textarea>
+                                            @error('item')
+                                                <p class="help-block text-danger">{{$message}}</p>
+                                            @enderror
+                                        </div>
                                     </div>
                                 </div>
                                 <br>

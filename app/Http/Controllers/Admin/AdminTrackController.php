@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Ebulksms;
 use App\Models\Package;
 use App\Models\Region;
 use App\Models\Tracking;
@@ -10,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Throwable;
 
 class AdminTrackController extends Controller
 {
@@ -70,12 +72,31 @@ class AdminTrackController extends Controller
         } else {
             $ff = "Dispatched from";
         }
+
         if ($tracking) {
             $data = [
                 'subject' => 'Package Receipt',
                 'email' => $package->email,
-                'content' => 'Your Shipment has ' . $ff . ' ' . $request->au_location . ' \n And your tracking number is ' . $tracking->package->tracking_id . '',
+                'content' => 'Your Shipment has ' . $ff . ' ' . $request->au_location . ' And your tracking number is ' . $tracking->package->tracking_id . '',
             ];
+
+            // ebulk sma data
+            $ebulk = new Ebulksms();
+
+            $from = "Gls";
+            $msg = "Dear " . $package->phone . " \nYour Shipment has " . $ff . " " . $request->au_location . " And your tracking number is " . $tracking->package->tracking_id . " \n  \n To track your shipment flow this link: {" . url('/track') . "} ";
+            $ss = strval($msg);
+
+            $new = substr($package->phone, 0, 1);
+
+            if ($new == 0) {
+                $d = substr($package->phone, -10);
+                $num = '234' . $d;
+            } else {
+                $d = substr($package->phone, -9);
+                $num = '237' . $d;
+            }
+            $to = $num;
 
             try {
                 Mail::send('main.email.receipt', $data, function ($message) use ($data) {
@@ -88,7 +109,14 @@ class AdminTrackController extends Controller
                 return back()->with('success', 'Package Has been confirm at ' . $request->au_location . ', Update is Not sent to contact Email');
             }
 
-            return back()->with('success', 'Package Has been confirm at ' . $request->au_location . ', Update is sent to contact Email');
+            // try sending sms to contact phone
+            try {
+                $ebulk->useJSON($from, $ss, $to);
+            } catch (Throwable $th) {
+                return back()->with('success', 'Package Has been confirm at ' . $request->au_location . ', Update is Not sent to contact phone');
+            }
+
+            return back()->with('success', 'Package with ' . $package->tracking_id . ' tracking number Has been confirm at ' . $request->au_location . ', Update is sent to contact Email and phone');
         } else {
             return back()->with('error', 'Fail to Add Tracker.');
         }

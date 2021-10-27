@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Ebulksms;
 use App\Models\Item;
 use App\Models\Journey;
 use App\Models\Package;
@@ -10,6 +11,7 @@ use App\Models\Tracking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
+use Throwable;
 
 class PackageController extends Controller
 {
@@ -38,6 +40,9 @@ class PackageController extends Controller
             'to_address' => ['required'],
             'c_info' => ['required'],
             'item' => ['required'],
+            'description' => ['required'],
+            'weight' => ['nullable'],
+            'quantity' => ['required'],
         ]);
 
         if ($validator->fails()) {
@@ -64,7 +69,7 @@ class PackageController extends Controller
                     'adjusted_amount' => 0,
                     'total_amount' => 0,
                     'status' => 0,
-                    'item_type' => $request->item,
+                    // 'item_type' => $request->item,
                 ]);
                 Package::where('id', '=', $package->id)->update([
                     'status' => 0,
@@ -90,7 +95,7 @@ class PackageController extends Controller
                     'adjusted_amount' => 0,
                     'total_amount' => 0,
                     'status' => 0,
-                    'item_type' => $request->item,
+                    // 'item_type' => $request->item,
                 ]);
                 Package::where('id', '=', $package->id)->update([
                     'status' => 0,
@@ -99,7 +104,23 @@ class PackageController extends Controller
 
 
             if ($package) {
-                return redirect()->route('main_show_activate_package', ['id' => $package->id]);
+                $item = Item::create([
+                    'package_id' => $package->id,
+                    'name' => $request->item,
+                    'description' => $request->description,
+                    'weight' => $request->weight ?? '',
+                    'quantity' => $request->quantity,
+                ]);
+                Item::where('id', '=', $item->id)->update([
+                    'weight' => $request->weight ?? '0',
+                    'quantity' => $request->quantity,
+                ]);
+                if ($item) {
+                    return redirect()->route('main_show_activate_package', ['id' => $package->id]);
+                } else {
+                    $package->destroy();
+                    return back()->with('error', 'Package Item not created, try again');
+                }
             } else {
                 return back()->with('error', 'Package not created, try again');
             }
@@ -203,6 +224,7 @@ class PackageController extends Controller
 
             if ($package) {
                 $customer = session('customer');
+
                 $tracking = Tracking::create([
                     'package_id' => $id,
                     'current_location' => $p->from,
@@ -220,6 +242,24 @@ class PackageController extends Controller
                         'content' => 'Your Package has been Activated successfully \n And your tracking number is ' . $tracking->package->tracking_id . '',
                     ];
 
+                    $ebulk = new Ebulksms();
+
+                    $from = "Gls";
+                    $msg = "Your Package has been Activated successfully \n And your tracking number is " . $tracking->package->tracking_id . " \n To track your shipment flow this link: {" . url('/track') . "} ";
+                    $ss = strval($msg);
+
+                    $new = substr($p->phone, 0, 1);
+
+                    if ($new == 0) {
+                        $d = substr($p->phone, -10);
+                        $num = '234' . $d;
+                    } else {
+                        $d = substr($p->phone, -9);
+                        $num = '237' . $d;
+                    }
+                    $to = $num;
+
+                    // try sending email to contact email
                     try {
                         Mail::send('main.email.receipt', $data, function ($message) use ($data) {
                             $message->from('info@gls.com', 'GLS');
@@ -228,10 +268,18 @@ class PackageController extends Controller
                             $message->subject($data['subject']);
                         });
                     } catch (\Throwable $th) {
-                        return back()->with('success', 'Package Has been Activated, Receipt is Not sent to Email');
+                        return back()->with('success', 'Package Has been Activated, Receipt is Not sent to contact Email');
                     }
 
-                    return back()->with('success', 'Package Has been Activated, Receipt is sent to Email');
+                    // try sending sms to contact phone
+                    try {
+                        $ebulk->useJSON($from, $ss, $to);
+                    } catch (Throwable $th) {
+                        return back()->with('success', 'Package Has been Activated, Receipt is Not sent to contact Phone');
+                    }
+
+                    // if Success is on every this
+                    return back()->with('success', 'Package Has been Activated, Receipt is sent to contact Email And Phone');
                 } else {
                     return back()->with('error', 'Fail to Add Tracker.');
                 }
