@@ -195,7 +195,7 @@
 
 
                                 {{-- if sipment is on process  show this--}}
-                                @if ($tracking[count($tracking)-1]->current_location != $package[0]->from && $tracking[count($tracking)-1]->current_location != $package[0]->to)
+                                @if ($tracking[count($tracking)-1]->current_location != $package[0]->from && $package[0]->status == 1)
                                     @foreach ($tracking as $t)
                                      <?php 
                                         $time = explode(' ', $t->created_at);

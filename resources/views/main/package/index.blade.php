@@ -85,22 +85,14 @@
 							echo '<button class="btn btn-primary disabled" disabled>Deliverd</button>';
 						}
 					      ?>
-					      <a href="{{route('main_show_add_item', ['id' => $p->id])}}" class="btn btn-primary" style="float: right">Open</a>
+					      <a href="{{route('main_show_activate_package', ['id' => $p->id])}}" class="btn btn-primary" style="float: right">Open</a>
 					<p style="margin:0"><b>Customer:</b> {{$p->customer->name}}</p>
-					<p style="margin:0"><b>Total Amount:</b> {{$p->total_amount}}</p>
-					<p style="margin:0"><b>Items:</b> 
-						@if (count($p->items) > 0)
-						@foreach($p->items as $i)
-						{{$i->name}}, 
-						@endforeach
-						@else
-						No Item
-						@endif
-					</p>
+					<p style="margin:0"><b>Total Amount:</b> {{$p->total_amount/100}}</p>
+					<p style="margin:0"><b>Item type:</b>  {{$p->item_type}}</p>
 					<div class="row" style="margin:0">
 						<div class="col-md-6">
 							<p style="margin:0"><b>From:</b></p>
-							<p style="margin:0">{{$p->address_from}}, {{$p->from}}</p>
+							<p style="margin:0"> {{$p->from}}</p>
 						</div>
 						<div class="col-md-6">
 							<p style="margin:0"><b>To:</b></p>

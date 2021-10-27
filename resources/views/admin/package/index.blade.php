@@ -54,9 +54,9 @@
                                         <tr>
                                             <th class="border-top-0">#</th>
                                             <th class="border-top-0">Tracking NO</th>
-                                            <th class="border-top-0">Items</th>
+                                            <th class="border-top-0">Item type</th>
                                             <th class="border-top-0">Total Amount</th>
-					    <th class="border-top-0">Status</th>
+					                        <th class="border-top-0">Status</th>
                                             <th class="border-top-0">Action</th>
                                         </tr>
                                     </thead>
@@ -81,9 +81,9 @@
                                         <tr>
                                             <th class="border-top-0">#</th>
                                             <th class="border-top-0">Tracking NO</th>
-                                            <th class="border-top-0">Items</th>
+                                            <th class="border-top-0">Item type</th>
                                             <th class="border-top-0">Total Amount</th>
-					    <th class="border-top-0">Status</th>
+					                        <th class="border-top-0">Status</th>
                                             <th class="border-top-0">Action</th>
                                         </tr>
                                     </thead>
@@ -93,15 +93,7 @@
                                         <tr>
                                             <td>{{$i}}</td>
                                             <td>{{$p->tracking_id}}</td>
-                                            <td>
-						    @if (count($p->items) > 2)
-							{{$p->items[0]->name}}, {{$p->items[1]->name}}, and others
-						    @else
-							@foreach ($p->items as $item)
-							    {{$item->name}}, 
-							@endforeach
-						    @endif
-					    </td>
+                                            <td>{{$p->item_type}} </td>
                                             <td>{{$p->total_amount/100}}</td>
 					    <td>
 						    @if ($p->status == 0)

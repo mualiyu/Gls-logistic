@@ -74,7 +74,7 @@ class AdminPackageController extends Controller
 
                     // output
                     $output .= '<tr> <td>' . $i . '</td> <td>' . $row->tracking_id .
-                        '</td> <td>' . $items_s . '</td><td>' . $row->total_amount / 100 .
+                        '</td> <td>' . $row->item_type . '</td><td>' . $row->total_amount / 100 .
                         '</td> <td>' . $status .
                         '</td> <td> <a href="" class="btn btn-primary">Open Package</a> </td> </tr>';
 
@@ -103,8 +103,10 @@ class AdminPackageController extends Controller
         $p = Package::find($id);
 
         if (count($p->items) > 0) {
+            $aa = $p->to_location->charges[0]->amount;
             $package = Package::where('id', '=', $id)->update([
-                'status' => 1
+                'status' => 1,
+                'total_amount' => $aa,
             ]);
 
             if ($package) {
@@ -118,7 +120,7 @@ class AdminPackageController extends Controller
                 if ($tracking) {
                     $data = [
                         'subject' => 'Package Receipt',
-                        'email' => $customer->email,
+                        'email' => $p->email,
                         'content' => 'Your shipments has been Activated successfully and your tracking number is ' . $tracking->package->tracking_id . '',
                     ];
 

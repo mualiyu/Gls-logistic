@@ -32,7 +32,7 @@ Route::get('/package/get_to_region', [\App\Http\Controllers\PackageController::c
 Route::get('/package/search', [\App\Http\Controllers\PackageController::class, 'search_package'])->name('main_search_package')->middleware('customerAuth');
 
 // show Add item to package
-Route::get('/package/{id}/item/add', [\App\Http\Controllers\PackageController::class, 'show_add_item'])->name('main_show_add_item')->middleware('customerAuth');
+Route::get('/package/{id}', [\App\Http\Controllers\PackageController::class, 'show_activate_package'])->name('main_show_activate_package')->middleware('customerAuth');
 Route::post('/package/item/add', [\App\Http\Controllers\PackageController::class, 'add_item'])->name('main_add_item_to_package')->middleware('customerAuth');
 
 // Tracking
@@ -67,3 +67,20 @@ Route::get('admin/customers', [App\Http\Controllers\Admin\AdminCustomerControlle
 Route::get('admin/track', [App\Http\Controllers\Admin\AdminTrackController::class, 'index'])->name('admin_trackings');
 Route::post('admin/track', [App\Http\Controllers\Admin\AdminTrackController::class, 'track'])->name('admin_track_package');
 Route::post('admin/track/confirm', [App\Http\Controllers\Admin\AdminTrackController::class, 'confirm_tracking'])->name('admin_confirm_track_package');
+
+
+// locations route
+Route::get('admin/locations', [App\Http\Controllers\Admin\AdminLocationController::class, 'index'])->name('admin_locations');
+Route::get('admin/locations/create', [App\Http\Controllers\Admin\AdminLocationController::class, 'create'])->name('admin_create_location');
+Route::post('admin/locations/create', [App\Http\Controllers\Admin\AdminLocationController::class, 'store'])->name('admin_store_location');
+Route::get('admin/locations/{id}', [App\Http\Controllers\Admin\AdminLocationController::class, 'show'])->name('admin_show_location');
+Route::post('admin/locations/{id}', [App\Http\Controllers\Admin\AdminLocationController::class, 'update'])->name('admin_update_location');
+Route::post('admin/locations/{id}/charge', [App\Http\Controllers\Admin\AdminLocationController::class, 'update_charge'])->name('admin_update_charge_location');
+
+
+// merchandises route
+Route::get('admin/merchandises', [App\Http\Controllers\Admin\AdminMerchandiseController::class, 'index'])->name('admin_merchandises');
+Route::get('admin/merchandises/create', [App\Http\Controllers\Admin\AdminMerchandiseController::class, 'create'])->name('admin_create_merchandise');
+Route::post('admin/merchandises/create', [App\Http\Controllers\Admin\AdminMerchandiseController::class, 'store'])->name('admin_store_merchandise');
+Route::get('admin/merchandises/{id}', [App\Http\Controllers\Admin\AdminMerchandiseController::class, 'show'])->name('admin_show_merchandise');
+Route::post('admin/merchandises/{id}', [App\Http\Controllers\Admin\AdminMerchandiseController::class, 'update'])->name('admin_update_merchandise');

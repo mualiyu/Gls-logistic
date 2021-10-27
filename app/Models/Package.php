@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Cache\Lock;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -25,6 +26,9 @@ class Package extends Model
         'tracking_id',
         'adjusted_amount',
         'total_amount',
+        'phone',
+        'email',
+        'item_type',
     ];
 
     public function customer(): BelongsTo
@@ -40,5 +44,10 @@ class Package extends Model
     public function trackings(): HasMany
     {
         return $this->hasMany(Tracking::class);
+    }
+
+    public function to_location(): BelongsTo
+    {
+        return $this->belongsTo(Location::class, 'to', 'location');
     }
 }

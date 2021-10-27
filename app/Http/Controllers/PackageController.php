@@ -30,35 +30,76 @@ class PackageController extends Controller
 
     public function create(Request $request)
     {
+        // return $request->all();
+
         $validator = Validator::make($request->all(), [
             'from' => ['required'],
             'to' => ['required'],
-            'from_address' => ['required'],
             'to_address' => ['required'],
+            'c_info' => ['required'],
+            'item' => ['required'],
         ]);
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
 
+
         // check if Customer login session is active
         if (session()->has('customer')) {
+
             $customer = session('customer');
             $tracking_id = rand(100000000000, 999999999999);
 
-            $package = Package::create([
-                'customer_id' => $customer->id,
-                'from' => $request->from,
-                'to' => $request->to,
-                'address_from' => $request->from_address,
-                'address_to' => $request->to_address,
-                'tracking_id' => $tracking_id,
-                'adjusted_amount' => 0,
-                'total_amount' => 0,
-                'status' => 0,
-            ]);
+            if ($request->c_info == 0) {
+
+                $package = Package::create([
+                    'customer_id' => $customer->id,
+                    'from' => $request->from,
+                    'to' => $request->to,
+                    'phone' => $customer->phone,
+                    'email' => $customer->email,
+                    'address_to' => $request->to_address,
+                    'tracking_id' => $tracking_id,
+                    'adjusted_amount' => 0,
+                    'total_amount' => 0,
+                    'status' => 0,
+                    'item_type' => $request->item,
+                ]);
+                Package::where('id', '=', $package->id)->update([
+                    'status' => 0,
+                ]);
+            } else {
+                $val = Validator::make($request->all(), [
+                    'phone' => ['required'],
+                    'email' => ['required'],
+                ]);
+
+                if ($val->fails()) {
+                    return back()->withErrors($val)->withInput();
+                }
+
+                $package = Package::create([
+                    'customer_id' => $customer->id,
+                    'from' => $request->from,
+                    'to' => $request->to,
+                    'phone' => $request->phone,
+                    'email' => $request->email,
+                    'address_to' => $request->to_address,
+                    'tracking_id' => $tracking_id,
+                    'adjusted_amount' => 0,
+                    'total_amount' => 0,
+                    'status' => 0,
+                    'item_type' => $request->item,
+                ]);
+                Package::where('id', '=', $package->id)->update([
+                    'status' => 0,
+                ]);
+            }
+
+
             if ($package) {
-                return redirect()->route('main_show_add_item', ['id' => $package->id]);
+                return redirect()->route('main_show_activate_package', ['id' => $package->id]);
             } else {
                 return back()->with('error', 'Package not created, try again');
             }
@@ -66,7 +107,7 @@ class PackageController extends Controller
             return redirect()->route('main_signup');
         }
 
-        return $request->all();
+        // return $request->all();
     }
 
     public function get_to_region(Request $request)
@@ -102,12 +143,11 @@ class PackageController extends Controller
         }
     }
 
-    public function show_add_item($id)
+    public function show_activate_package($id)
     {
         $package = Package::find($id);
-        $items = Item::where('package_id', '=', $id)->orderBy('created_at', 'desc')->get();
 
-        return view('main.package.add_item', compact('package', 'items'));
+        return view('main.package.activate_package', compact('package'));
     }
 
     public function add_item(Request $request)
@@ -154,9 +194,11 @@ class PackageController extends Controller
     {
         $p = Package::find($id);
 
-        if (count($p->items) > 0) {
+        if ($p) {
+            $aa = $p->to_location->charges[0]->amount;
             $package = Package::where('id', '=', $id)->update([
-                'status' => 1
+                'status' => 1,
+                'total_amount' => $aa,
             ]);
 
             if ($package) {
@@ -174,7 +216,7 @@ class PackageController extends Controller
 
                     $data = [
                         'subject' => 'Package Receipt',
-                        'email' => $customer->email,
+                        'email' => $p->email,
                         'content' => 'Your Package has been Activated successfully \n And your tracking number is ' . $tracking->package->tracking_id . '',
                     ];
 
@@ -197,7 +239,7 @@ class PackageController extends Controller
                 return back()->with('error', 'Package activation failed.');
             }
         } else {
-            return back()->with('error', 'You cannot activate empty package, Make sure you add Item to the package before activating.');
+            return back()->with('error', 'You cannot activate Non existing package.');
         }
     }
 

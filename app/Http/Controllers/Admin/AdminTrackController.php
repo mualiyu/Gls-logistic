@@ -65,11 +65,16 @@ class AdminTrackController extends Controller
             'a_d' => $request->a_d,
         ]);
 
+        if ($request->a_b == 1) {
+            $ff = "arrived at";
+        } else {
+            $ff = "Dispatched from";
+        }
         if ($tracking) {
             $data = [
                 'subject' => 'Package Receipt',
-                'email' => $package->customer->email,
-                'content' => 'Your Shipment has ' . $request->a_d == 1 ? "arrived at" : "Dispatched from" . ' ' . $request->au_location . ' \n And your tracking number is ' . $tracking->package->tracking_id . '',
+                'email' => $package->email,
+                'content' => 'Your Shipment has ' . $ff . ' ' . $request->au_location . ' \n And your tracking number is ' . $tracking->package->tracking_id . '',
             ];
 
             try {
@@ -83,7 +88,7 @@ class AdminTrackController extends Controller
                 return back()->with('success', 'Package Has been confirm at ' . $request->au_location . ', Update is Not sent to customer Email');
             }
 
-            return back()->with('success', 'Package Has been confirm at ' . $request->au_location . ', Update is sent to customer Email');
+            return back()->with('success', 'Package Has been confirm at ' . $request->au_location . ', Update is sent to contact Email');
         } else {
             return back()->with('error', 'Fail to Add Tracker.');
         }
