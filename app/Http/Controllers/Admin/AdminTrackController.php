@@ -47,6 +47,7 @@ class AdminTrackController extends Controller
 
     public function confirm_tracking(Request $request)
     {
+        // return $request->all();
         $validator = Validator::make($request->all(), [
             'au_location' => ['required'],
             'a_d' => ['required'],
@@ -130,5 +131,114 @@ class AdminTrackController extends Controller
         }
 
         return $request->all();
+    }
+
+    public function confirm_delivery(Request $request)
+    {
+        // dd($user[0]->picture);
+        $validator = Validator::make($request->all(), [
+            "p_id" => "required",
+            "way_bill" => "nullable",
+            "c_way_bill" => "nullable",
+            "delivery_image" => "image|mimes:jpeg,jpg,png,gif|max:9000|required",
+        ]);
+
+        if ($validator->fails()) {
+            return back()->with('error', $validator->errors());
+        }
+
+        $package = Package::find($request->p_id);
+
+        if ($request->hasFile("delivery_image")) {
+            $imageNameWExt = $request->file("delivery_image")->getClientOriginalName();
+            $imageName = pathinfo($imageNameWExt, PATHINFO_FILENAME);
+            $imageExt = $request->file("delivery_image")->getClientOriginalExtension();
+
+            $imageNameToStore = $package->tracking_id . "_" . time() . "." . $imageExt;
+
+
+            $request->file("delivery_image")->storeAs("public/package/delivery", $imageNameToStore);
+        } else {
+            // $imageNameToStore = $user[0]->picture;
+            return back()->with('error', 'Delivery file not Confirmed, Try Again.');
+        }
+
+        $imageNameToStore = url("/storage/package/delivery/$imageNameToStore");
+
+        if ($package->delivery_image == null) {
+            $imageNameToStore = $imageNameToStore;
+        } else {
+            $imageNameToStore = $package->delivery_image . ', ' . $imageNameToStore;
+        }
+
+        $arrayToUpdate = [
+            "delivery_image" => $imageNameToStore,
+            "way_bill" => $request->way_bill,
+            "c_way_bill" => $request->c_way_bill,
+            "status" => '2',
+        ];
+
+        $package_update = Package::where('id', '=', $package->id)->update($arrayToUpdate);
+
+        if ($package_update) {
+            $p = Package::find($package->id);
+
+            $data = [
+                'subject' => 'Package Delivery notice',
+                'email' => $p->email,
+                'content' => "Your Shipment has been delivered " . $p->to . ". And your tracking number is " . $p->tracking_id . "",
+            ];
+
+            $tracking = Tracking::create([
+                'package_id' => $package->id,
+                'current_location' => $p->to,
+                'a_d' => '1',
+            ]);
+            Tracking::where('id', '=', $tracking->id)->update([
+                'a_d' => "1",
+            ]);
+
+            // ebulk sma data
+
+
+            $msg = "Dear " . $p->phone . " \nYour Shipment has been delivered to " . $p->to . " And your tracking number is " . $p->tracking_id . ". \n  \nTo track your shipment follow this link: {" . url('/track') . "} ";
+            $msg = strval($msg);
+
+            $new = substr($p->phone, 0, 1);
+
+            if ($new == 0) {
+                $d = substr($p->phone, -10);
+                $num = '234' . $d;
+            } elseif ($new == 6) {
+                $d = substr($p->phone, -9);
+                $num = '237' . $d;
+            } else {
+                $num = $p->phone;
+            }
+            $to = $num;
+
+            try {
+                Mail::send('main.email.receipt', $data, function ($message) use ($data) {
+                    $message->from('info@gls.com', 'GLS');
+                    $message->sender('info@gls.com', 'GLS');
+                    $message->to($data['email']);
+                    $message->subject($data['subject']);
+                });
+            } catch (\Throwable $th) {
+                return back()->with('success', 'Package Has been Delivery confirmed to ' . $p->to . ', Update is Not sent to contact Email');
+            }
+
+            // try sending sms to contact phone
+            try {
+                Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to . "&message=" . $msg . "&sender_id=GLS");
+            } catch (\Throwable $th) {
+                return back()->with('success', 'Package Has been Delivery confirmed to ' . $p->to . ', But Receipt is sent to only contact Email and Not to contact Phone');
+            }
+
+            return back()->with(['success' => "Package delivery has confirmed, Thank you for using this service."]);
+        }
+
+
+        // $package = Package::find($request->p_id);
     }
 }

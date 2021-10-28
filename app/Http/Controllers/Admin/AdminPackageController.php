@@ -118,7 +118,10 @@ class AdminPackageController extends Controller
                 $tracking = Tracking::create([
                     'package_id' => $id,
                     'current_location' => $p->from,
-                    'a_d' => 1,
+                    'a_d' => 2,
+                ]);
+                Tracking::where('id', '=', $tracking->id)->update([
+                    'a_d' => 2,
                 ]);
                 if ($tracking) {
                     $data = [

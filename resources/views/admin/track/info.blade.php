@@ -36,13 +36,13 @@
 							<div class="col-sm-6">
 								{{-- Show approve button (departure or arival) --}}
 								@if ($package->status == 1) 
-								@if (Auth::user()->unit_location)
+								{{-- @if (Auth::user()->unit_location)
 									@if (Auth::user()->unit_location == $tracking[0]->current_location && $tracking[0]->a_d==1)
 									    <form action="{{route('admin_confirm_track_package')}}" method="POST">
 									    @csrf
 									    <input type="hidden" value="{{Auth::user()->unit_location}}" name="au_location">
-									    <input type="hidden" value="2" name="a_d">
 									    <input type="hidden" value="{{$package->id}}" name="p_id">
+									    <input type="hidden" value="2" name="a_d">
 		
 									    <button type="submit" class="btn btn-warning" style="float: right; backgroud:blue;">Confirm Departure from {{Auth::user()->unit_location}}</button>
 									    </form>
@@ -57,11 +57,9 @@
 									    <button type="submit" class="btn btn-secondary" style="float: right; backgroud:blue;">Confirm Arrival To {{Auth::user()->unit_location}}</button>
 									    </form>
 									@endif
-								@endif   
-								{{-- <form action="{{route('admin_activate_package', ['id' => $package->id])}}" method="POST">
-								@csrf
-								<button type="submit" class="btn btn-primary" style="float: right">Activate Package</button>
-								</form> --}}
+								@endif  --}}
+
+								<button type="button" class="btn btn-primary"  id="m_confirm" style="float: right">Confirm package location</button>
 								@endif
 							</div>
 							<div class="col-sm-6">
@@ -162,35 +160,86 @@
                             </div>
                         </div>
 
-			{{-- <div class="card">
-				<div class="card-body">
-					<h3 class="box-title">Update Tracking Location</h3>
+			<div class="row" style="z-index:999999; position:fixed; top:10px; width:100%; display:none;" id="m_data">
+				<div class="col-md-12 col-sm-12" style="text-align: center;">
+				<div class="modal" style="display:block" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				  <div class="modal-dialog">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <h5 class="modal-title" id="exampleModalLabel">Confirm Location</h5>
+				        <button type="button" class="close" data-dismiss="modal" id="m_close" aria-label="Close">
+				          <span aria-hidden="true">&times;</span>
+				        </button>
+				      </div>
+				      <div class="modal-body">
+					      <div class="row">
+						      <div class="col">
+							      <h5><b>confirm package location status:</b></h5>
+							      <form action="{{route('admin_confirm_track_package')}}" method="POST" style="text-align: left;">
+								      @csrf
+								      <input type="text"  class="form-control" value="{{Auth::user()->unit_location}}" name="au_location">
+								      <input type="hidden" value="{{$package->id}}" name="p_id">
+								      <br> 
+								      <button type="submit" name="a_d"  value="1" class="btn btn-warning" style="float: left; backgroud:blue;">Arrival</button>
+								      <button type="submit" name="a_d"  value="2" class="btn btn-success" style="float: right; backgroud:blue;">Departure</button>
+							      </form>
+						      </div>
+					      </div>
+					      <hr>
+					      <div class="row">
+						      <div class="col">
+							      <h5><b>Confirm Package Delivery:</b></h5>
+								<form action="{{route('admin_confirm_package_delivery')}}" method="POST"  enctype="multipart/form-data" style="text-align: left;">
+								      	@csrf
+								      	<div class="form-group">
+  									  <label for="exampleInputEmail1">Delivery image (document):</label>
+  									  <input type="file" class="form-control" name="delivery_image" id="file" aria-describedby="fileHelp" required>
+  									  <small id="filelHelp" class="form-text text-muted">Document must be an image Type (Jpeg, Jpg, Png, Gif) And file-size (Max: 9MB).</small>
+  									</div>
+									<div class="form-group">
+  									  <label for="wbil">Way bill No: (optional)</label>
+  									  <input type="text" class="form-control" name="way_bill" id="wbil">
+  									</div>
+									<div class="form-group">
+  									  <label for="wbil1">Client Way bill No: (optional)</label>
+  									  <input type="text" class="form-control" name="c_way_bill" id="wbil1">
+  									</div>
+
+								      {{-- <input type="file"  class="form-control" name="file"> --}}
+								      <input type="hidden" value="{{$package->id}}" name="p_id">
+								      {{-- <input type="hidden" value="2" name="a_d"> --}}
+								      
+								      <button type="submit" class="btn btn-warning" style="float: left; backgroud:blue;">Confirm Delivery</button>
+								      
+								</form>
+						      </div>
+					      </div>
+				      </div>
+				      {{-- <div class="modal-footer">
+				        <button type="button" class="btn btn-secondary" id="m_close">Close</button>
+				        <button type="button" class="btn btn-primary">Save changes</button>
+				      </div> --}}
+				    </div>
+				  </div>
 				</div>
-                            <div class="card-body">
-                                <form class="form-horizontal form-material" method="POST" action="{{route('admin_track_package')}}">
-					@csrf
-                                    <div class="form-group mb-4">
-                                        <div class="col-md-12 border-bottom p-0">
-                                            <input type="text" name="tracking_location" placeholder="Tracking location" class="form-control p-0 border-0">
-					</div>
-					@error('tracking_number')
-					    <span style="color: red;">{{$message}}</span>
-					@enderror
-					
-                                    </div>
+				</div>
+			</div>
+			
 
-				    <div class="form-group mb-4">
-                                        <div class="col-md-12">
-                                            <input type="submit" id="track" value="Track" class="btn btn-primary">
-					</div>
-                                    </div>
-
-				</form>
-			    </div>
-			</div> --}}
                     </div>
                     <!-- Column -->
 
                 </div>
             </div>
+@endsection
+
+@section('script')
+    <script>
+	$('#m_confirm').on('click', function () {
+		$('#m_data').css('display','block');
+	});
+	$('#m_close').on('click', function () {
+		$('#m_data').css('display','none');
+	});
+    </script>
 @endsection

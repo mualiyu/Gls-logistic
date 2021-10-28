@@ -50,7 +50,7 @@
                                             <p>{{$tracking[count($tracking)-1]->current_location}}</p>
                                         @endif
                                         @if ($tracking[count($tracking)-1]->current_location != $package[0]->from && $tracking[count($tracking)-1]->current_location != $package[0]->to)
-                                            <span>{{$tracking[count($tracking)-1]->a_d==1 ? 'Departed From: ':''}}{{$tracking[count($tracking)-1]->a_d==2 ? 'Arrived At: ':''}}:</span>
+                                            <span>{{$tracking[count($tracking)-1]->a_d==2 ? 'Departed From: ':''}}{{$tracking[count($tracking)-1]->a_d==1 ? 'Arrived At: ':''}}:</span>
                                             <p>{{$tracking[count($tracking)-1]->current_location}}</p>
                                         @endif
                                     </div>
@@ -185,7 +185,8 @@
                                                 <span>{{$hour}}</span>
                                             </div>
                                             <div style="margin: 0;" class="col-sm-8">
-                                                <p style="margin: 0;"><b>{{$t->a_d==1 ? 'Departed From: ':''}}{{$t->a_d==2 ? 'Arrived At: ':''}}</b></p>
+                                                {{-- <p>Finaly</p> --}}
+                                                <p style="margin: 0;"><b>{{$t->a_d==2 ? 'Departed From: ':''}}{{$t->a_d==1 ? 'Arrived At: ':''}}</b></p>
                                                 <p style="margin: 0;">{{$t->current_location}}</p>
                                             </div>
                                         </div><hr>
@@ -210,7 +211,7 @@
                                                 <span>{{$hour}}</span>
                                             </div>
                                             <div style="margin: 0;" class="col-sm-8">
-                                                <p style="margin: 0;"><b>{{$t->a_d==1 ? 'Departed From: ':''}}{{$t->a_d==2 ? 'Arrived At: ':''}}</b></p>
+                                                <p style="margin: 0;"><b>{{$t->a_d==2 ? 'Departed From: ':''}}{{$t->a_d==1 ? 'Arrived At: ':''}}</b></p>
                                                 <p style="margin: 0;">{{$t->current_location}}</p>
                                             </div>
                                         </div><hr>

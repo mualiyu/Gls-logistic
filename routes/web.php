@@ -67,6 +67,7 @@ Route::get('admin/customers', [App\Http\Controllers\Admin\AdminCustomerControlle
 Route::get('admin/track', [App\Http\Controllers\Admin\AdminTrackController::class, 'index'])->name('admin_trackings');
 Route::post('admin/track', [App\Http\Controllers\Admin\AdminTrackController::class, 'track'])->name('admin_track_package');
 Route::post('admin/track/confirm', [App\Http\Controllers\Admin\AdminTrackController::class, 'confirm_tracking'])->name('admin_confirm_track_package');
+Route::post('admin/track/confirm/delivery', [App\Http\Controllers\Admin\AdminTrackController::class, 'confirm_delivery'])->name('admin_confirm_package_delivery');
 
 
 // locations route
