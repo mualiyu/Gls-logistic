@@ -38,11 +38,16 @@ class AdminTrackController extends Controller
 
         $package = Package::where('tracking_id', '=', $request->tracking_number)->get();
 
-        $package = $package[0];
 
-        $tracking = Tracking::where('package_id', '=', $package->id)->orderBy('created_at', 'desc')->get();
+        if (count($package) > 0 && !$package[0]->status == 0) {
+            $package = $package[0];
+            # code...
+            $tracking = Tracking::where('package_id', '=', $package->id)->orderBy('created_at', 'desc')->get();
 
-        return view('admin.track.info', compact('package', 'tracking'));
+            return view('admin.track.info', compact('package', 'tracking'));
+        } else {
+            return back()->with('error', 'Package Not found or Not activated');
+        }
     }
 
     public function confirm_tracking(Request $request)

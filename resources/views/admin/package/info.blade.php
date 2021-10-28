@@ -49,26 +49,37 @@
 			    </div>
                             <div class="card-body">
                                 {{-- <form class="form-horizontal form-material"> --}}
-					<h4 class="box-title"><b>Customer info</b></h4>
+					<h4 class="box-title"><b>Contact info</b></h4>
 					<br>
-					<div class="row">
+				   <div class="row">
 					    <div class="col-sm-6">
 						<div class="form-group mb-4">
-                                    		    <label for="example-email" class="col-md-12 p-0">Customer Name: </label>
+                                    		    <label for="example-email" class="col-md-12 p-0">Customer Email: (Creator)</label>
                                     		    <div class="col-md-12 border-bottom p-0">
-                                    		       <span class="form-control px-5 border-0"> {{$package->customer->name}}</span>
-                                    		    </div>
-                                    		</div>
-					    </div>
-					    <div class="col-sm-6">
-						<div class="form-group mb-4">
-                                    		    <label for="example-email" class="col-md-12 p-0">Email: </label>
-                                    		    <div class="col-md-12 border-bottom p-0">
-                                    		        <span class="form-control px-5 border-0"> {{$package->customer->email}}</span>
+                                    		       <span class="form-control px-5 border-0"> {{$package->customer->email}}</span>
                                     		    </div>
                                     		</div>
 					    </div>
 				    </div>
+				    <div class="row">
+					    <div class="col-sm-6">
+						<div class="form-group mb-4">
+                                    		    <label for="example-email" class="col-md-12 p-0">Contact Phone: </label>
+                                    		    <div class="col-md-12 border-bottom p-0">
+                                    		       <span class="form-control px-5 border-0"> {{$package->phone}}</span>
+                                    		    </div>
+                                    		</div>
+					    </div>
+					    <div class="col-sm-6">
+						<div class="form-group mb-4">
+                                    		    <label for="example-email" class="col-md-12 p-0">Contact Email: </label>
+                                    		    <div class="col-md-12 border-bottom p-0">
+                                    		        <span class="form-control px-5 border-0"> {{$package->email}}</span>
+                                    		    </div>
+                                    		</div>
+					    </div>
+				    </div>
+				    
 					<hr>
 					<h4 class="box-title"><b>Package info</b></h4>
 					<br>
