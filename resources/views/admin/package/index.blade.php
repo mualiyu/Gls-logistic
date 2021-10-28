@@ -93,7 +93,7 @@
                                         <tr>
                                             <td>{{$i}}</td>
                                             <td>{{$p->tracking_id}}</td>
-                                            <td>{{$p->item_type}} </td>
+                                            <td>{{$p->items[0]->name}}</td>
                                             <td>{{$p->total_amount/100}}</td>
 					    <td>
 						    @if ($p->status == 0)

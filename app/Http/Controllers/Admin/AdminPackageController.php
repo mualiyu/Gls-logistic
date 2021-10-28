@@ -72,14 +72,14 @@ class AdminPackageController extends Controller
                         $status = "<span class='btn btn-success'>Active</span>";
                     }
                     if ($row->status == 2) {
-                        $status = "<span class='btn btn-warning'>Delivered</span>";
+                        $status = "<span class='btn btn-secondary'>Delivered</span>";
                     }
 
                     // output
                     $output .= '<tr> <td>' . $i . '</td> <td>' . $row->tracking_id .
-                        '</td> <td>' . $row->item_type . '</td><td>' . $row->total_amount / 100 .
+                        '</td> <td>' . $row->items[0]->name . '</td><td>' . $row->total_amount / 100 .
                         '</td> <td>' . $status .
-                        '</td> <td> <a href="" class="btn btn-primary">Open Package</a> </td> </tr>';
+                        '</td> <td> <a href="' . route("admin_package_info", ["id" => $row->id]) . '" class="btn btn-primary">Open Package</a> </td> </tr>';
 
                     $i--;
                 }
