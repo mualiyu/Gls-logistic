@@ -328,7 +328,7 @@ class PackageApiController extends Controller
                     'to' => $request->to,
                     // 'address_from' => $request->address_from,
                     'address_to' => $request->address_to,
-                    'status' => $request->status,
+                    // 'status' => $request->status,
                     'email' => $request->contact_email,
                     'phone' => $request->contact_phone,
                 ];
