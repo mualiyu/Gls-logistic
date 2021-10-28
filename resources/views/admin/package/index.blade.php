@@ -103,7 +103,7 @@
 							<span class="btn btn-success">Active</span>
 						    @endif
 						    @if ($p->status == 2)
-							<span class="btn btn-warning">Deliverd</span>
+							<span class="btn btn-secondary">Deliverd</span>
 						    @endif
 					    </td>
                                             <td>
