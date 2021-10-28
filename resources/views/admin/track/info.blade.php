@@ -232,7 +232,13 @@
 							      <h5><b>confirm package location status:</b></h5>
 							      <form action="{{route('admin_confirm_track_package')}}" method="POST" style="text-align: left;">
 								      @csrf
-								      <input type="text"  class="form-control" value="{{Auth::user()->unit_location}}" name="au_location">
+								      {{-- <input type="text"  class="form-control" value="{{Auth::user()->unit_location}}" name="au_location"> --}}
+								      <select class="form-control" name="au_location" id="">
+									      <?php $locations = \App\Models\Location::all(); ?>
+                                            					@foreach ($locations as $l)
+                                            					    <option value="{{$l->location}}">{{$l->region}}-> {{$l->city}}-> {{$l->location}}</option>
+                                            					@endforeach
+								      </select>
 								      <input type="hidden" value="{{$package->id}}" name="p_id">
 								      <br> 
 								      <button type="submit" name="a_d"  value="1" class="btn btn-warning" style="float: left; backgroud:blue;">Arrival</button>
