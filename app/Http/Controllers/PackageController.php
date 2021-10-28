@@ -11,6 +11,7 @@ use App\Models\Tracking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Http;
 use Throwable;
 
 class PackageController extends Controller
@@ -242,22 +243,24 @@ class PackageController extends Controller
                         'content' => 'Your Package has been Activated successfully \n And your tracking number is ' . $tracking->package->tracking_id . '',
                     ];
 
-                    $ebulk = new Ebulksms();
 
-                    $from = "Gls";
-                    $msg = "Your Package has been Activated successfully \n And your tracking number is " . $tracking->package->tracking_id . " \n To track your shipment flow this link: {" . url('/track') . "} ";
-                    $ss = strval($msg);
+                    // sms End
+                    $msg = "Your Package has been Activated successfully \n And your tracking number is " . $tracking->package->tracking_id . ". \n \nTo track your shipment flow this link: {" . url('/track') . "} ";
+                    $msg = strval($msg);
 
                     $new = substr($p->phone, 0, 1);
-
                     if ($new == 0) {
                         $d = substr($p->phone, -10);
                         $num = '234' . $d;
-                    } else {
+                    } elseif ($new == 6) {
                         $d = substr($p->phone, -9);
                         $num = '237' . $d;
+                    } else {
+                        $num = $p->phone;
                     }
+
                     $to = $num;
+
 
                     // try sending email to contact email
                     try {
@@ -271,12 +274,20 @@ class PackageController extends Controller
                         return back()->with('success', 'Package Has been Activated, Receipt is Not sent to contact Email');
                     }
 
-                    // try sending sms to contact phone
                     try {
-                        $ebulk->useJSON($from, $ss, $to);
-                    } catch (Throwable $th) {
-                        return back()->with('success', 'Package Has been Activated, Receipt is Not sent to contact Phone');
+                        Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to . "&message=" . $msg . "&sender_id=GLS");
+                    } catch (\Throwable $th) {
+
+                        return back()->with('success', 'Package Has been Activated, Receipt is sent to contact Email but not Phone');
                     }
+
+
+                    // // try sending sms to contact phone
+                    // try {
+                    //     $ebulk->useJSON($from, $ss, $to);
+                    // } catch (Throwable $th) {
+                    //     return back()->with('success', 'Package Has been Activated, Receipt is Not sent to contact Phone');
+                    // }
 
                     // if Success is on every this
                     return back()->with('success', 'Package Has been Activated, Receipt is sent to contact Email And Phone');

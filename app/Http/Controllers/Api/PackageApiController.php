@@ -8,6 +8,7 @@ use App\Models\Item;
 use App\Models\Package;
 use App\Models\Tracking;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
@@ -18,7 +19,7 @@ class PackageApiController extends Controller
         $validator = Validator::make($request->all(), [
             'api_user' => 'required',
             'api_key' => 'required',
-            'customer' => 'required',
+            // 'customer' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -33,7 +34,7 @@ class PackageApiController extends Controller
         if (count($api) > 0) {
             if ($api[0]->api_key == $request->api_key) {
 
-                $package = Package::where('customer_id', '=', $request->customer)->get();
+                $package = Package::where('customer_id', '=', $api[0]->customer)->get();
                 if (count($package) > 0) {
                     $res = [
                         'status' => true,
@@ -120,22 +121,20 @@ class PackageApiController extends Controller
             'customer' => 'required',
             'from' => 'required',
             'to' => 'required',
-            'address_from' => 'required',
             'address_to' => 'required',
             'status' => 'nullable',
-            'item_name' => 'required',
+            'item_type' => 'required',
             'item_description' => 'required',
-            'item_length' => 'required',
-            'item_width' => 'required',
-            'item_height' => 'required',
             'item_weight' => 'required',
-            'amount' => 'required',
+            'quantity' => ['required'],
+            'contact_email' => ['required'],
+            'contact_phone' => ['required'],
         ]);
 
         if ($validator->fails()) {
             $res = [
                 'status' => false,
-                'data' => $validator,
+                'data' => $validator->errors(),
             ];
             return response()->json($res);
         }
@@ -150,12 +149,14 @@ class PackageApiController extends Controller
                     'customer_id' => $request->customer,
                     'from' => $request->from,
                     'to' => $request->to,
-                    'address_from' => $request->address_from,
+                    // 'address_from' => $request->address_from,
                     'address_to' => $request->address_to,
                     'tracking_id' => $tracking_id,
                     'adjusted_amount' => 0,
                     'total_amount' => 0,
                     'status' => 0,
+                    'email' => $request->contact_email,
+                    'phone' => $request->contact_phone,
                 ];
 
                 $package = Package::create($arrayToInsert);
@@ -164,23 +165,27 @@ class PackageApiController extends Controller
                     'adjusted_amount' => '0',
                     'total_amount' => '0',
                     'status' => '0',
+                    'email' => $request->contact_email,
+                    'phone' => $request->contact_phone,
                 ]);
 
                 if ($package) {
                     $item = Item::create([
                         'package_id' => $package->id,
-                        'name' => $request->item_name,
+                        'name' => $request->item_type,
                         'description' => $request->item_description,
-                        'length' => $request->item_length,
-                        'height' => $request->item_height,
-                        'width' => $request->item_width,
                         'weight' => $request->item_weight,
+                        'quantity' => $request->quantity,
+                    ]);
+                    Item::where('id', '=', $item->id)->update([
+                        'weight' => $request->item_weight,
+                        'quantity' => $request->quantity,
                     ]);
 
                     if ($item) {
 
-                        $a = $request->amount * 100;
-                        $amount = $package->total_amount + $a;
+                        // $a = $request->amount * 100;
+                        $amount = $package->total_amount + $package->to_location->charges[0]->amount;
 
                         Package::where('id', '=', $package->id)->update([
                             "status" => 1,
@@ -203,6 +208,23 @@ class PackageApiController extends Controller
                                 'content' => 'Your Package has been Activated successfully \n And your tracking number is ' . $tracking->package->tracking_id . '',
                             ];
 
+                            // sms Exit
+                            $msg = "Your Package has been Activated successfully \n And your tracking number is " . $tracking->package->tracking_id . ". \n \nTo track your shipment flow this link: {" . url('/track') . "} ";
+                            $msg = strval($msg);
+
+                            $new = substr($package->phone, 0, 1);
+                            if ($new == 0) {
+                                $d = substr($package->phone, -10);
+                                $num = '234' . $d;
+                            } elseif ($new == 6) {
+                                $d = substr($package->phone, -9);
+                                $num = '237' . $d;
+                            } else {
+                                $num = $package->phone;
+                            }
+
+                            $to = $num;
+
                             try {
                                 Mail::send('main.email.receipt', $data, function ($message) use ($data) {
                                     $message->from('info@gls.com', 'GLS');
@@ -212,6 +234,13 @@ class PackageApiController extends Controller
                                 });
                             } catch (\Throwable $th) {
                                 // return back()->with('success', 'Package Has been Activated, Receipt is Not sent to Email');
+                            }
+
+                            try {
+                                Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to . "&message=" . $msg . "&sender_id=GLS");
+                            } catch (\Throwable $th) {
+
+                                // return back()->with('success', 'Package Has been Activated, Receipt is sent to contact Email but not Phone');
                             }
 
                             $p_info = Package::where('id', '=', $package->id)->with('customer')->with('items')->with('trackings')->get();
@@ -275,9 +304,11 @@ class PackageApiController extends Controller
             'package_id' => 'required',
             'from' => 'required',
             'to' => 'required',
-            'address_from' => 'required',
+            // 'address_from' => 'required',
             'address_to' => 'required',
             'status' => 'nullable',
+            'contact_phone' => 'required',
+            'contact_email' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -295,16 +326,18 @@ class PackageApiController extends Controller
                 $arrayToUpdate = [
                     'from' => $request->from,
                     'to' => $request->to,
-                    'address_from' => $request->address_from,
+                    // 'address_from' => $request->address_from,
                     'address_to' => $request->address_to,
                     'status' => $request->status,
+                    'email' => $request->contact_email,
+                    'phone' => $request->contact_phone,
                 ];
                 $package = Package::where('id', '=', $request->package_id)->update($arrayToUpdate);
                 if ($package) {
-                    $p = Package::find($request->package_id);
+                    $p = Package::where('id', '=', $request->package_id)->with('customer')->with('items')->with('trackings')->get();
                     $res = [
                         'status' => true,
-                        'data' => $p
+                        'data' => $p[0]
                     ];
                     return response()->json($res);
                 } else {

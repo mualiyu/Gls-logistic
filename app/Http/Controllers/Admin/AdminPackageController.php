@@ -8,6 +8,7 @@ use App\Models\Package;
 use App\Models\Region;
 use App\Models\Tracking;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Throwable;
 
@@ -126,11 +127,10 @@ class AdminPackageController extends Controller
                         'content' => 'Your shipments has been Activated successfully and your tracking number is ' . $tracking->package->tracking_id . '',
                     ];
 
-                    $ebulk = new Ebulksms();
+                    // $ebulk = new Ebulksms();
 
-                    $from = "Gls";
-                    $msg = "Your Package has been Activated successfully \n And your tracking number is " . $tracking->package->tracking_id . " \n To track your shipment flow this link: {" . url('/track') . "} ";
-                    $ss = strval($msg);
+                    $msg = "Your Package has been Activated successfully \n And your tracking number is " . $tracking->package->tracking_id . ". \n\nTo track your shipment flow this link: {" . url('/track') . "} ";
+                    $msg = strval($msg);
 
                     $new = substr($p->phone, 0, 1);
 
@@ -157,8 +157,9 @@ class AdminPackageController extends Controller
 
                     // try sending sms to contact phone
                     try {
-                        $ebulk->useJSON($from, $ss, $to);
-                    } catch (Throwable $th) {
+                        Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to . "&message=" . $msg . "&sender_id=GLS");
+                    } catch (\Throwable $th) {
+
                         return back()->with('success', 'Package Has been Activated, But Receipt is sent to only contact Email and Not to contact Phone');
                     }
 

@@ -9,6 +9,7 @@ use App\Models\Region;
 use App\Models\Tracking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Throwable;
@@ -67,7 +68,7 @@ class AdminTrackController extends Controller
             'a_d' => $request->a_d,
         ]);
 
-        if ($request->a_b == 1) {
+        if ($request->a_d == '1') {
             $ff = "arrived at";
         } else {
             $ff = "Dispatched from";
@@ -81,20 +82,22 @@ class AdminTrackController extends Controller
             ];
 
             // ebulk sma data
-            $ebulk = new Ebulksms();
+            // $ebulk = new Ebulksms();
 
-            $from = "Gls";
-            $msg = "Dear " . $package->phone . " \nYour Shipment has " . $ff . " " . $request->au_location . " And your tracking number is " . $tracking->package->tracking_id . " \n  \n To track your shipment flow this link: {" . url('/track') . "} ";
-            $ss = strval($msg);
+
+            $msg = "Dear " . $package->phone . " \nYour Shipment has " . $ff . " " . $request->au_location . " And your tracking number is " . $tracking->package->tracking_id . ". \n  \nTo track your shipment flow this link: {" . url('/track') . "} ";
+            $msg = strval($msg);
 
             $new = substr($package->phone, 0, 1);
 
             if ($new == 0) {
                 $d = substr($package->phone, -10);
                 $num = '234' . $d;
-            } else {
+            } elseif ($new == 6) {
                 $d = substr($package->phone, -9);
                 $num = '237' . $d;
+            } else {
+                $num = $package->phone;
             }
             $to = $num;
 
@@ -111,10 +114,15 @@ class AdminTrackController extends Controller
 
             // try sending sms to contact phone
             try {
-                $ebulk->useJSON($from, $ss, $to);
-            } catch (Throwable $th) {
-                return back()->with('success', 'Package Has been confirm at ' . $request->au_location . ', Update is Not sent to contact phone');
+                Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to . "&message=" . $msg . "&sender_id=GLS");
+            } catch (\Throwable $th) {
+                return back()->with('success', 'Package Has been Activated, But Receipt is sent to only contact Email and Not to contact Phone');
             }
+            // try {
+            //     $ebulk->useJSON($from, $ss, $to);
+            // } catch (Throwable $th) {
+            //     return back()->with('success', 'Package Has been confirm at ' . $request->au_location . ', Update is Not sent to contact phone');
+            // }
 
             return back()->with('success', 'Package with ' . $package->tracking_id . ' tracking number Has been confirm at ' . $request->au_location . ', Update is sent to contact Email and phone');
         } else {

@@ -38,8 +38,6 @@ class TrackingApiController extends Controller
                     if ($package[0]->status != 0) {
                         $tracking = Tracking::where('package_id', '=', $package[0]->id)->orderBy('created_at', 'desc')->get();
 
-
-                        // return view('main.tracking.show_info', compact('package', 'tracking'));
                         if (!count($tracking) > 0) {
                             $res = [
                                 'status' => false,

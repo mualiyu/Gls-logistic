@@ -37,21 +37,21 @@
 								{{-- Show approve button (departure or arival) --}}
 								@if ($package->status == 1) 
 								@if (Auth::user()->unit_location)
-									@if (Auth::user()->unit_location == $tracking[0]->current_location && $tracking[0]->a_d==2)
+									@if (Auth::user()->unit_location == $tracking[0]->current_location && $tracking[0]->a_d==1)
 									    <form action="{{route('admin_confirm_track_package')}}" method="POST">
 									    @csrf
 									    <input type="hidden" value="{{Auth::user()->unit_location}}" name="au_location">
-									    <input type="hidden" value="1" name="a_d">
+									    <input type="hidden" value="2" name="a_d">
 									    <input type="hidden" value="{{$package->id}}" name="p_id">
 		
 									    <button type="submit" class="btn btn-warning" style="float: right; backgroud:blue;">Confirm Departure from {{Auth::user()->unit_location}}</button>
 									    </form>
 									@endif
-									@if(!Auth::user()->unit_location == $tracking[0]->current_location && $tracking[0]->a_d==1)
+									@if(Auth::user()->unit_location !== $tracking[0]->current_location)
 									    <form action="{{route('admin_confirm_track_package')}}" method="POST">
 									    @csrf
 									    <input type="hidden" value="{{Auth::user()->unit_location}}" name="au_location">
-									    <input type="hidden" value="2" name="a_d">
+									    <input type="hidden" value="1" name="a_d">
 									    <input type="hidden" value="{{$package->id}}" name="p_id">
 		
 									    <button type="submit" class="btn btn-secondary" style="float: right; backgroud:blue;">Confirm Arrival To {{Auth::user()->unit_location}}</button>
