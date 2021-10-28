@@ -35,8 +35,8 @@
 						<div class="row">
 							<div class="col-sm-6">
 								{{-- Show approve button (departure or arival) --}}
-								@if ($package->status == 1) 
-								{{-- @if (Auth::user()->unit_location)
+								{{-- @if ($package->status == 1) 
+								 @if (Auth::user()->unit_location)
 									@if (Auth::user()->unit_location == $tracking[0]->current_location && $tracking[0]->a_d==1)
 									    <form action="{{route('admin_confirm_track_package')}}" method="POST">
 									    @csrf
@@ -57,10 +57,10 @@
 									    <button type="submit" class="btn btn-secondary" style="float: right; backgroud:blue;">Confirm Arrival To {{Auth::user()->unit_location}}</button>
 									    </form>
 									@endif
-								@endif  --}}
+								@endif  
 
+								@endif --}}
 								<button type="button" class="btn btn-primary"  id="m_confirm" style="float: right">Confirm package location</button>
-								@endif
 							</div>
 							<div class="col-sm-6">
 								{{-- Activation button --}}
@@ -83,7 +83,7 @@
 				    </div>
 			    </div>
                             <div class="card-body">
-                                <form class="form-horizontal form-material">
+                                {{-- <form class="form-horizontal form-material"> --}}
 					<h4 class="box-title"><b>Contact info</b></h4>
 					<br>
 					<div class="row">
@@ -155,23 +155,78 @@
                                         </div>
                                     </div>
 				    @endif
+				    @if ($package->status == 2)
+					<div class="form-group mb-4">
+                                        <label for="example-email" class="col-md-12 p-0">Package Delivered To:</label>
+                                        <div class="col-md-12 border-bottom px-4">
+						<span class="form-control px-5 border-0">
+						    {{-- <a href="" class="btn btn-primary" style="float: right" onclick="$('#update').css('display', 'block');">Update Tracking location</a> --}}
+						    {{$package->trackings[count($package->trackings)-1]->current_location}}
+						</span>
+                                        </div>
+                                    </div>
+				    @endif
                                     
-                                </form>
+
+				    <hr>
+				    <h4 class="box-title"><b>Proof of Delivery</b></h4>
+				    <br>
+				    @if ($package->status == 2)
+				    <?php 
+				    	$imgs = explode(', ', $package->delivery_image);
+				    ?>
+				    <div class="row">
+					    <?php $k = 1; ?>
+					@foreach ($imgs as $i)
+                                    	<div class="col-md-3 border-bottom px-4">
+					    	<div class="card border">
+                        			    <div class="card-body">
+                        			        <img src="{{$i}}" alt="Delivery_confirmation_image" style="height: 200px; width:100%; position: relative;"><br>
+							<br>
+							<a class="btn btn-primary w-100" onclick="$('#m_data{{$k}}').css('display', 'block');">Open</a>
+                        			    </div>
+                        			</div>
+				    	{{-- <img src="{{$package->delivery_image}}" style="width: " alt="Deliveri_confirmation_img"> --}}
+                                    	</div>
+					<div class="row" style="z-index:999999; position:fixed; top:10px; width:100%; display:none;" id="m_data{{$k}}">
+						<div class="col-md-12 col-sm-12" style="text-align: center;">
+						<div class="modal" style="display:block; background:rgba(47,50,62,0.7);" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+						  <div class="modal-dialog modal-xl">
+						    <div class="modal-content w-100">
+						      <div class="modal-header">
+						        <button type="button" class="close" data-dismiss="modal" onclick="$('#m_data{{$k}}').css('display', 'none');" id="m_close" aria-label="Close">
+						          <span aria-hidden="true">&times;</span>
+						        </button>
+						      </div>
+						      <div class="modal-body"  style="height: 600px">     
+							<img src="{{$i}}" alt="Delivery_confirmation_image" style="height: 100%; width:100%; position: relative;"><br>
+						      </div>
+						    </div>
+						  </div>
+						</div>
+						</div>
+					</div>
+					<?php $k++; ?>
+					@endforeach
+                                    </div>
+				    @endif
+                                {{-- </form> --}}
                             </div>
                         </div>
 
-			<div class="row" style="z-index:999999; position:fixed; top:10px; width:100%; display:none;" id="m_data">
+			<div class="row" style="z-index:999999; position:fixed; top:10px; width:100%; display:none;" id="m_dataa">
 				<div class="col-md-12 col-sm-12" style="text-align: center;">
 				<div class="modal" style="display:block" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 				  <div class="modal-dialog">
 				    <div class="modal-content">
 				      <div class="modal-header">
 				        <h5 class="modal-title" id="exampleModalLabel">Confirm Location</h5>
-				        <button type="button" class="close" data-dismiss="modal" id="m_close" aria-label="Close">
+				        <button type="button" class="close" data-dismiss="modal" id="m_close" onclick="$('#m_dataa').css('display', 'none');" aria-label="Close">
 				          <span aria-hidden="true">&times;</span>
 				        </button>
 				      </div>
 				      <div class="modal-body">
+					      @if ($package->status == 1)
 					      <div class="row">
 						      <div class="col">
 							      <h5><b>confirm package location status:</b></h5>
@@ -186,6 +241,7 @@
 						      </div>
 					      </div>
 					      <hr>
+					      @endif
 					      <div class="row">
 						      <div class="col">
 							      <h5><b>Confirm Package Delivery:</b></h5>
@@ -236,10 +292,10 @@
 @section('script')
     <script>
 	$('#m_confirm').on('click', function () {
-		$('#m_data').css('display','block');
+		$('#m_dataa').css('display','block');
 	});
 	$('#m_close').on('click', function () {
-		$('#m_data').css('display','none');
+		$('#m_dataa').css('display','none');
 	});
     </script>
 @endsection
