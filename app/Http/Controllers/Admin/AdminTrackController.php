@@ -91,7 +91,7 @@ class AdminTrackController extends Controller
             // $ebulk = new Ebulksms();
 
 
-            $msg = "Dear " . $package->phone . " \nYour Shipment has " . $ff . " " . $request->au_location . " And your tracking number is " . $tracking->package->tracking_id . ". \n  \nTo track your shipment flow this link: {" . url('/track') . "} ";
+            $msg = "Dear " . $package->phone . " \nYour Shipment has " . $ff . " " . $request->au_location . " And your tracking number is " . $tracking->package->tracking_id . ". \n  \nTo track your shipment follow this link: {" . url('/track') . "} ";
             $msg = strval($msg);
 
             $new = substr($package->phone, 0, 1);

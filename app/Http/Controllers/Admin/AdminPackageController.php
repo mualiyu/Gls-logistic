@@ -132,7 +132,7 @@ class AdminPackageController extends Controller
 
                     // $ebulk = new Ebulksms();
 
-                    $msg = "Your Package has been Activated successfully \n And your tracking number is " . $tracking->package->tracking_id . ". \n\nTo track your shipment flow this link: {" . url('/track') . "} ";
+                    $msg = "Your Package has been Activated successfully \n And your tracking number is " . $tracking->package->tracking_id . ". \n\nTo track your shipment follow this link: {" . url('/track') . "} ";
                     $msg = strval($msg);
 
                     $new = substr($p->phone, 0, 1);
