@@ -62,7 +62,7 @@ class AdminLocationController extends Controller
         if ($location) {
             $charge = Charge::create([
                 'location_id' => $location->id,
-                'amount' => $request->amount * 100,
+                'amount' => $request->amount,
             ]);
 
             if ($charge) {
@@ -146,7 +146,7 @@ class AdminLocationController extends Controller
         }
 
         $charge = Charge::where('id', '=', $id)->update([
-            'amount' => $request->amount * 100,
+            'amount' => $request->amount,
         ]);
 
         if ($charge) {

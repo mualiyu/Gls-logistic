@@ -77,7 +77,7 @@ class AdminPackageController extends Controller
 
                     // output
                     $output .= '<tr> <td>' . $i . '</td> <td>' . $row->tracking_id .
-                        '</td> <td>' . $row->items[0]->name . '</td><td>' . $row->total_amount / 100 .
+                        '</td> <td>' . $row->items[0]->name . '</td><td>' . $row->total_amount .
                         '</td> <td>' . $status .
                         '</td> <td> <a href="' . route("admin_package_info", ["id" => $row->id]) . '" class="btn btn-primary">Open Package</a> </td> </tr>';
 

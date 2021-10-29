@@ -88,30 +88,30 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-					    <?php $i = count($packages); ?>
-					@foreach ($packages as $p)
+					                    <?php $i = count($packages); ?>
+					                    @foreach ($packages as $p)
                                         <tr>
                                             <td>{{$i}}</td>
                                             <td>{{$p->tracking_id}}</td>
                                             <td>{{$p->items[0]->name}}</td>
-                                            <td>{{$p->total_amount/100}}</td>
-					    <td>
-						    @if ($p->status == 0)
-							<span class="btn btn-warning">Inactive</span>
-						    @endif
-						    @if ($p->status == 1)
-							<span class="btn btn-success">Active</span>
-						    @endif
-						    @if ($p->status == 2)
-							<span class="btn btn-secondary">Deliverd</span>
-						    @endif
-					    </td>
+                                            <td>{{$p->total_amount}}</td>
+					                        <td>
+						                        @if ($p->status == 0)
+						                    	<span class="btn btn-warning">Inactive</span>
+						                        @endif
+						                        @if ($p->status == 1)
+						                    	<span class="btn btn-success">Active</span>
+						                        @endif
+						                        @if ($p->status == 2)
+						                    	<span class="btn btn-secondary">Deliverd</span>
+						                        @endif
+					                        </td>
                                             <td>
-						    <a href="{{route('admin_package_info', ['id' => $p->id])}}" class="btn btn-primary">Open Package</a>
-					    </td>
+						                        <a href="{{route('admin_package_info', ['id' => $p->id])}}" class="btn btn-primary">Open Package</a>
+					                        </td>
                                         </tr>
-					<?php $i--; ?>
-					@endforeach
+					                    <?php $i--; ?>
+					                    @endforeach
                                         
                                     </tbody>
                                 </table>

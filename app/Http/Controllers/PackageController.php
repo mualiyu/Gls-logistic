@@ -201,7 +201,7 @@ class PackageController extends Controller
         ]);
 
         if ($item) {
-            $a = $request->amount * 100;
+            $a = $request->amount;
             $amount = $p->total_amount + $a;
             $p->update([
                 "total_amount" => $amount,

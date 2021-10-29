@@ -87,7 +87,7 @@
 					      ?>
 					      <a href="{{route('main_show_activate_package', ['id' => $p->id])}}" class="btn btn-primary" style="float: right">Open</a>
 					<p style="margin:0"><b>Customer:</b> {{$p->customer->name}}</p>
-					<p style="margin:0"><b>Total Amount:</b> {{$p->total_amount/100}}</p>
+					<p style="margin:0"><b>Total Amount:</b> {{$p->total_amount ?? "Activate to see Amount"}}</p>
 					<p style="margin:0"><b>Item type:</b>  {{$p->items[0]->name}}</p>
 					<div class="row" style="margin:0">
 						<div class="col-md-6">
@@ -105,7 +105,7 @@
 				<?php $k--; ?>
 				@endforeach
 				@else
-				<a href="" class="list-group-item list-group-item-action border-dark"> No Parcel collections</a>
+				<a href="" class="list-group-item list-group-item-action border-dark"> No Package collections</a>
 				@endif
 				</div>
 			    </div>

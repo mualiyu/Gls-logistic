@@ -35,7 +35,7 @@
 								<h6 class="font-weight-bold mb-4">Items</h6>
 							</div>
 							<div class="col-sm-6">
-								<h5 class="text-primary mb-2">FCFA <span data-toggle="counter-up">{{$package->to_location->charges[0]->amount/100}}</span></h5>
+								<h5 class="text-primary mb-2">FCFA <span data-toggle="counter-up">{{$package->to_location->charges[0]->amount ?? "Activate To view Amount"}}</span></h5>
 								<h6 class="font-weight-bold ">Amount</h6>
 							</div>
 						</div>

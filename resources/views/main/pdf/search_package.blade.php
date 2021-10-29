@@ -29,7 +29,7 @@
 <div class="container-fluid px-3 py-3" style="text-align: center;">
 	<div class="row" style="justify-content: ">
 		<div class="col-sm-2" style="float:left">
-				<img style="float:; width: 100px; height:100px; margin:15px;" src="{{asset('main2/img/core-img/logo.png')}}" alt="">
+				{{-- <img style="float:; width: 100px; height:100px; margin:15px;" src="{{asset('main2/img/core-img/logo.png')}}" alt=""> --}}
 			
 		</div>
 		<div class="colsm-10" style="margin-left: 35px;">
@@ -92,10 +92,10 @@
 							<td> --- </td>
 							<td>{{$p->items[0]->description ?? "No Description"}}</td>
 							<td>{{$p->items[0]->weight ?? "No Weight"}}KG</td>
-							<td>{{$p->total_amount/100}}</td>
+							<td>{{$p->total_amount}}</td>
 							<td>{{$p->trackings[0]->created_at ?? '---'}}</td>
 							<td>{{$p->trackings[count($p->trackings)-1]->created_at ?? "---"}}</td>
-							<td>{{$p->total_amount/100}}</td>
+							<td>{{$p->total_amount}}</td>
 						</tr>
 						@endforeach
 							
@@ -120,7 +120,7 @@
 							Arrete la presente facture au prix total de FCFA : 
 							</td>
 							<td style="padding:0;border:  1px solid;">TOTAL</td>
-							<td style="padding:0;border: black 1px solid !important;">{{$t_amount/100}}</td>
+							<td style="padding:0;border: black 1px solid !important;">{{$t_amount}}</td>
 						</tr>
 						<tr style=" font-weight:bold">
 							<td style="padding:0;border:  1px solid;" colspan="8"> Trios millions duex cent quatre vingt onze mille trois cent</td>
@@ -148,7 +148,7 @@
 						<tr style=" font-weight:bold">
 							<td style="padding:0;border:  1px solid;" colspan="8"></td>
 							<td style="padding:0;border:  1px solid;">TOTAL TTC</td>
-							<td style="padding:0;border: black 1px solid !important;">{{$t_amount/100}}</td>
+							<td style="padding:0;border: black 1px solid !important;">{{$t_amount}}</td>
 						</tr>
 				</table>
 			</div>

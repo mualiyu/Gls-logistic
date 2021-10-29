@@ -103,7 +103,7 @@
                                     <div class="form-group mb-4">
                                         <label for="example-email" class="col-md-12 p-0">Amount:</label>
                                         <div class="col-md-12 border-bottom px-4">
-                                            <input class="form-control px-5 border-0" name="amount" type="number" value="{{$location->charges[0]->amount/100}}">
+                                            <input class="form-control px-5 border-0" name="amount" type="number" value="{{$location->charges[0]->amount}}">
                                         </div>
 					@error('amount')
                                 	        <p class="help-block text-danger">{{$message}}</p>

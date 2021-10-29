@@ -53,7 +53,7 @@
                                             <option value="">Select__</option>
                                             <?php $locations = \App\Models\Location::all(); ?>
                                             @foreach ($locations as $l)
-                                                <option value="{{$l->location}}">{{$l->region}}-> {{$l->city}}-> {{$l->location}} (FCFA {{$l->charges[0]->amount/100}})</option>
+                                                <option value="{{$l->location}}">{{$l->region}}-> {{$l->city}}-> {{$l->location}} (FCFA {{$l->charges[0]->amount}})</option>
                                             @endforeach
                                         </select>
                                             @error('to')

@@ -1,6 +1,5 @@
 @extends('layouts.Admin.index')
 
-
 @section('content')
             <div class="page-breadcrumb bg-white">
                 <div class="row align-items-center">
@@ -49,7 +48,7 @@
                                             <td>{{$l->city}}</td>
                                             <td>{{$l->location}}</td>
 					    <td>{{$l->zone}}</td>
-					    <td>FCFA {{$l->charges[0]->amount/100}}</td>
+					    <td>FCFA {{$l->charges[0]->amount}}</td>
                                             <td>
 						    <a href="{{route('admin_show_location', ['id' => $l->id])}}" class="btn btn-primary">Open Location</a>
 					    </td>
