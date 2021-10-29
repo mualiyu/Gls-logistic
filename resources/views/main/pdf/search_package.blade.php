@@ -29,7 +29,7 @@
 <div class="container-fluid px-3 py-3" style="text-align: center;">
 	<div class="row" style="justify-content: ">
 		<div class="col-sm-2" style="float:left">
-				{{-- <img style="float:; width: 100px; height:100px; margin:15px;" src="{{asset('main2/img/core-img/logo.png')}}" alt=""> --}}
+				<img style="float:; width: 100px; height:100px; margin:15px;" src="{{asset('main2/img/core-img/logo.png')}}" alt="">
 			
 		</div>
 		<div class="colsm-10" style="margin-left: 35px;">
