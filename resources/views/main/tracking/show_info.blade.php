@@ -24,17 +24,21 @@
                                         <p>{{$package[0]->tracking_id}}</p>
                                     </div>
                                     <div class="col-md-12">
-                                        @if ($tracking[count($tracking)-1]->current_location == $package[0]->from)
-                                            <span>Parcel is on process:</span>
+                                        @if ($package[0]->status == 1)    
+                                            @if ($tracking[count($tracking)-1]->current_location == $package[0]->from)
+                                                <span>Parcel is on process:</span>
+                                            @endif
+                                            @if ($tracking[count($tracking)-1]->current_location !== $package[0]->from)
+                                                <span>Package is on process</span> &
+                                                <span>Currently At:</span>
+                                                <p>{{$tracking[count($tracking)-1]->current_location}}</p>
+                                            @endif
                                         @endif
-                                        @if ($tracking[count($tracking)-1]->current_location == $package[0]->to)
-                                            <span>Delivered on</span>
-                                            <p>{{$tracking[count($tracking)-1]->created_at}}</p>
-                                        @endif
-                                        @if ($tracking[count($tracking)-1]->current_location != $package[0]->from && $tracking[count($tracking)-1]->current_location != $package[0]->to)
-                                            <span>Package is on process</span> &
-                                            <span>Currently At:</span>
-                                            <p>{{$tracking[count($tracking)-1]->current_location}}</p>
+                                        @if ($package[0]->status == 2)
+                                            {{-- @if ($tracking[count($tracking)-1]->current_location == $package[0]->to) --}}
+                                                <span>Delivered on</span>
+                                                <p>{{$tracking[count($tracking)-1]->created_at}}</p>
+                                            {{-- @endif --}}
                                         @endif
                                     </div>
                                 </div>
@@ -49,23 +53,38 @@
                                             <span>Delivered To</span>
                                             <p>{{$tracking[count($tracking)-1]->current_location}}</p>
                                         @endif
-                                        @if ($tracking[count($tracking)-1]->current_location != $package[0]->from && $tracking[count($tracking)-1]->current_location != $package[0]->to)
+                                        @if ($tracking[count($tracking)-1]->current_location !== $package[0]->from && $tracking[count($tracking)-1]->current_location !== $package[0]->to)
                                             <span>{{$tracking[count($tracking)-1]->a_d==2 ? 'Departed From: ':''}}{{$tracking[count($tracking)-1]->a_d==1 ? 'Arrived At: ':''}}:</span>
                                             <p>{{$tracking[count($tracking)-1]->current_location}}</p>
                                         @endif
                                     </div>
                                     <div class="col-sm-6">
-                                        @if ($tracking[count($tracking)-1]->current_location == $package[0]->from)
-                                            <span>Received By :</span>
-                                            <p>Nill</p>
+                                        @if ($package[0]->status == 1)
+                                            @if ($tracking[count($tracking)-1]->current_location == $package[0]->from)
+                                                <span>Received By :</span>
+                                                <p>Nill</p>
+                                            @endif
+                                            @if ($tracking[count($tracking)-1]->current_location !== $package[0]->from && $tracking[count($tracking)-1]->current_location !== $package[0]->to)
+                                                <span>Confirmed By:</span>
+                                                <p>Agent</p>
+                                            @endif
+                                            
+                                            @if ($tracking[count($tracking)-1]->current_location == $package[0]->to)
+                                                <span>Confirmed By:</span>
+                                                <p>Agent</p>
+                                                {{-- <p>{{$package[0]->customer->name}}</p> --}}
+                                            @endif
                                         @endif
-                                        @if ($tracking[count($tracking)-1]->current_location == $package[0]->to)
-                                            <span>Received By:</span>
-                                            <p>{{$package[0]->customer->name}}</p>
-                                        @endif
-                                        @if ($tracking[count($tracking)-1]->current_location != $package[0]->from && $tracking[count($tracking)-1]->current_location != $package[0]->to)
-                                            <span>Confirmed By:</span>
-                                            <p>Agent</p>
+                                        @if ($package[0]->status == 2)
+                                            @if ($tracking[count($tracking)-1]->current_location !== $package[0]->from && $tracking[count($tracking)-1]->current_location !== $package[0]->to)
+                                                <span>Confirmed By:</span>
+                                                <p>Agent</p>
+                                            @endif
+                                            
+                                            @if ($tracking[count($tracking)-1]->current_location == $package[0]->to)
+                                                <span>Received By:</span>
+                                                <p>{{$package[0]->customer->name}}</p>
+                                            @endif
                                         @endif
                                     </div>
                                 </div>
@@ -186,8 +205,13 @@
                                             </div>
                                             <div style="margin: 0;" class="col-sm-8">
                                                 {{-- <p>Finaly</p> --}}
-                                                <p style="margin: 0;"><b>{{$t->a_d==2 ? 'Departed From: ':''}}{{$t->a_d==1 ? 'Arrived At: ':''}}</b></p>
-                                                <p style="margin: 0;">{{$t->current_location}}</p>
+                                                @if ($t->a_d == 3 )
+                                                    <p style="margin: 0;"><b>Dispatched from {{$t->current_location}} To:</b></p>
+                                                    <p style="margin: 0;">Address: {{$t->package->address_to}}</p>
+                                                @else
+                                                    <p style="margin: 0;"><b>{{$t->a_d==2 ? 'Departed From: ':''}}{{$t->a_d==1 ? 'Arrived At: ':''}}</b></p>
+                                                    <p style="margin: 0;">{{$t->current_location}}</p>
+                                                @endif
                                             </div>
                                         </div><hr>
                                     @endforeach
@@ -196,7 +220,7 @@
 
 
                                 {{-- if sipment is on process  show this--}}
-                                @if ($tracking[count($tracking)-1]->current_location != $package[0]->from && $package[0]->status == 1)
+                                @if ($tracking[count($tracking)-1]->current_location !== $package[0]->from && $package[0]->status == 1)
                                     @foreach ($tracking as $t)
                                      <?php 
                                         $time = explode(' ', $t->created_at);
@@ -211,8 +235,13 @@
                                                 <span>{{$hour}}</span>
                                             </div>
                                             <div style="margin: 0;" class="col-sm-8">
-                                                <p style="margin: 0;"><b>{{$t->a_d==2 ? 'Departed From: ':''}}{{$t->a_d==1 ? 'Arrived At: ':''}}</b></p>
-                                                <p style="margin: 0;">{{$t->current_location}}</p>
+                                                @if ($t->a_d == 3 )
+                                                    <p style="margin: 0;"><b>Dispatched from {{$t->current_location}} To:</b></p>
+                                                    <p style="margin: 0;">Address: {{$t->package->address_to}}</p>
+                                                @else
+                                                    <p style="margin: 0;"><b>{{$t->a_d==2 ? 'Departed From: ':''}}{{$t->a_d==1 ? 'Arrived At: ':''}}</b></p>
+                                                    <p style="margin: 0;">{{$t->current_location}}</p>
+                                                @endif
                                             </div>
                                         </div><hr>
                                     @endforeach

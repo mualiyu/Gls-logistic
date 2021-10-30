@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\UsersExport;
 use App\Models\Ebulksms;
 use App\Models\Item;
 use App\Models\Journey;
@@ -12,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Http;
+use Maatwebsite\Excel\Facades\Excel;
 use Throwable;
 
 class PackageController extends Controller
@@ -394,5 +396,23 @@ class PackageController extends Controller
         }
 
         return back()->with('error', 'No Shipments found for this category. Try Again!');
+    }
+
+
+    public function export_summary_in_excel(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'from' => ['required'],
+            'to' => ['required'],
+            'type' => ['required'],
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator);
+        }
+
+        $customer = session('customer');
+        # code...
+        return Excel::download(new UsersExport($customer->id, $request->from, $request->to, $request->type), 'packages_' . time() . '.xlsx');
     }
 }

@@ -227,6 +227,7 @@
 				      </div>
 				      <div class="modal-body">
 					      @if ($package->status == 1)
+
 					      <div class="row">
 						      <div class="col">
 							      <h5><b>confirm package location status:</b></h5>
@@ -242,7 +243,11 @@
 								      <input type="hidden" value="{{$package->id}}" name="p_id">
 								      <br> 
 								      <button type="submit" name="a_d"  value="1" class="btn btn-warning" style="float: left; backgroud:blue;">Arrival</button>
-								      <button type="submit" name="a_d"  value="2" class="btn btn-success" style="float: right; backgroud:blue;">Departure</button>
+								 	@if ($package->trackings[count($package->trackings)-1]->current_location == $package->to)
+									 <button type="submit" name="a_d"  value="3" class="btn btn-success" style="float: right; backgroud:blue;">Dispatched</button>
+									@else
+								      	 <button type="submit" name="a_d"  value="2" class="btn btn-success" style="float: right; backgroud:blue;">Departure</button>
+					      				@endif     
 							      </form>
 						      </div>
 					      </div>
@@ -253,25 +258,38 @@
 							      <h5><b>Confirm Package Delivery:</b></h5>
 								<form action="{{route('admin_confirm_package_delivery')}}" method="POST"  enctype="multipart/form-data" style="text-align: left;">
 								      	@csrf
-								      	<div class="form-group">
-  									  <label for="exampleInputEmail1">Delivery image (document):</label>
-  									  <input type="file" class="form-control" name="delivery_image" id="file" aria-describedby="fileHelp" required>
-  									  <small id="filelHelp" class="form-text text-muted">Document must be an image Type (Jpeg, Jpg, Png, Gif) And file-size (Max: 9MB).</small>
-  									</div>
-									<div class="form-group">
-  									  <label for="wbil">Way bill No: (optional)</label>
-  									  <input type="text" class="form-control" name="way_bill" id="wbil">
-  									</div>
-									<div class="form-group">
+								      	@if ($package->c_way_bill == null)
+										  
+									      @if ($package->delivery_image == null)  
+										<div class="form-group">
+										    <label for="exampleInputEmail1">Delivery document (Image):</label>
+										    <input type="file" class="form-control" name="delivery_image" id="file" aria-describedby="fileHelp" required>
+										    <small id="filelHelp" class="form-text text-muted">Document must be an image Type (Jpeg, Jpg, Png, Gif) And file-size (Max: 9MB).</small>
+										  </div>  
+										<div class="form-group">
+										  <label for="wbil">Way bill No: (*)</label>
+										  <input type="text" class="form-control" name="way_bill" id="wbil">
+										</div>
+									      @else
+										<div class="form-group">
+										    <label for="exampleInputEmail1">Client Delivery document (Image):</label>
+										    <input type="file" class="form-control" name="delivery_image" id="file" aria-describedby="fileHelp" required>
+										    <small id="filelHelp" class="form-text text-muted">Document must be an image Type (Jpeg, Jpg, Png, Gif) And file-size (Max: 9MB).</small>
+										  </div> 
+										<div class="form-group">
+										  <label for="wbil">Client Way bill No: (*)</label>
+										  <input type="text" class="form-control" name="way_bill" id="wbil">
+										</div>
+									      @endif
+									      <input type="hidden" value="{{$package->id}}" name="p_id">
+									      
+									      <button type="submit" class="btn btn-warning" style="float: left; backgroud:blue;">Confirm Delivery</button>
+									@endif
+									{{-- <div class="form-group">
   									  <label for="wbil1">Client Way bill No: (optional)</label>
   									  <input type="text" class="form-control" name="c_way_bill" id="wbil1">
-  									</div>
+  									</div> --}}
 
-								      {{-- <input type="file"  class="form-control" name="file"> --}}
-								      <input type="hidden" value="{{$package->id}}" name="p_id">
-								      {{-- <input type="hidden" value="2" name="a_d"> --}}
-								      
-								      <button type="submit" class="btn btn-warning" style="float: left; backgroud:blue;">Confirm Delivery</button>
 								      
 								</form>
 						      </div>

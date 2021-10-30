@@ -40,6 +40,11 @@ Route::get('/track', [\App\Http\Controllers\TrackingController::class, 'index'])
 Route::post('/track', [\App\Http\Controllers\TrackingController::class, 'get_track'])->name('main_get_track_info');
 
 
+// 
+// Excel main
+// 
+Route::get('/excel/shipment', [\App\Http\Controllers\PackageController::class, 'export_summary_in_excel'])->name('main_excel_shipments_report')->middleware('customerAuth');
+
 
 // 
 // PDF ROUTE

@@ -73,12 +73,12 @@
 			<div class="card-header">
 				<h4 class="text-primary text-uppercase font-weight-bold" style="float: left;">Search list</h4>
 
-				<form action="{{route('main_pdf_shipments_search')}}" method="GET">
+				<form action="{{route('main_excel_shipments_report')}}" method="GET">
 				@csrf
 				<input type="hidden" name="from" value="{{$from}}">
 				<input type="hidden" name="to" value="{{$to}}">
 				<input type="hidden" name="type" value="{{$type}}">
-				<button type="submit" class="btn btn-primary" style="float: right">Export As PDF</button>
+				<button type="submit" class="btn btn-primary" style="float: right">Export As Excel</button>
 				</form>
 			</div>   
 			
