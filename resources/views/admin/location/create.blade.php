@@ -108,9 +108,9 @@
                                     		    <div class="col-md-12 border-bottom p-0">
 							<select class="form-control px-5 border-0" name="desig" required>
                                 			    <option value="">Select__</option>
-                                			    <option value="1">From</option>
-							    <option value="2">To</option>
-							    <option value="3">From & To</option>
+                                			    <option value="1">Depart</option>
+							    <option value="2">Arrive</option>
+							    <option value="3">Depart & Arrive</option>
                                 			</select>
                                     		        {{-- <input class="form-control px-5 border-0" name="zone" type="text" value="{{ old('zone')}}"> --}}
                                     		    </div>
