@@ -25,7 +25,7 @@
                                         <div class="input-group">
                                         <select class="form-control" name="from" id="from" required="required">
                                             <option value="">Select__</option>
-                                            <?php $locations = \App\Models\Location::all(); ?>
+                                            <?php $locations = \App\Models\Location::where('type', '=', 1)->get(); ?>
                                             @foreach ($locations as $l)
                                                 <option value="{{$l->location}}">{{$l->region}}-> {{$l->city}}-> {{$l->location}}</option>
                                             @endforeach
@@ -75,10 +75,10 @@
                                 <hr>
                                 <br>
 
-                                <div class="row">
+                                {{-- <div class="row">
                                     <div class="col-md-12" style="text-align: center"><h6>Contact details</h6></div>
                                     <div class="col-md-6">
-                                        {{-- <label for="from">Choose Contact Option:</label> --}}
+                                        {{-- <label for="from">Choose Contact Option:</label> --}
                                         <div class="input-group">
                                         <select class="form-control" name="c_info" id="c_info" required="required">
                                             <option value="0">Use current account contact info</option>
@@ -97,6 +97,41 @@
                                             @enderror
                                         </div>
             
+                                        <label for="email">Email:</label>
+                                        <div class="input-group">
+                                            <input type="email" class="form-control p-4" id="email" value="{{old('email')}}" name="email" placeholder="E-mail Address" />
+                                                @error('email')
+                                                <p class="help-block text-danger">{{$message}}</p>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div> --}}
+
+                                <div class="row">
+                                    <div class="col-md-12" style="text-align: center"><h6>Contact details</h6></div>
+                                    <div class="col-md-6" id="c_data" style="display: ;">
+                                        <label for="phone">Name:</label>
+                                        <div class="input-group">
+                                        <input type="text" class="form-control p-4" id="name" value="{{old('name')}}" name="name" placeholder="Contact Name" />
+                                            @error('name')
+                                                <p class="help-block text-danger">{{$message}}</p>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6" id="c_data" style="display: ;">
+                                        <label for="phone">Phone:</label>
+                                        <div class="input-group">
+                                        <input type="number" class="form-control p-4" id="phone" value="{{old('phone')}}" name="phone" placeholder="Phone" />
+                                            @error('phone')
+                                                <p class="help-block text-danger">{{$message}}</p>
+                                            @enderror
+                                        </div>
+            
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
                                         <label for="email">Email:</label>
                                         <div class="input-group">
                                             <input type="email" class="form-control p-4" id="email" value="{{old('email')}}" name="email" placeholder="E-mail Address" />

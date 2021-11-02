@@ -26,17 +26,17 @@
 	<div class="row py-3 px4">
         <div class="col">
              <div class="card" style="font-size: 12px; text-align: left;">
-                 {{-- <div class="card-header">Welcome!</div> --}}
+                 <div class="card-header">Welcome!</div>
                    <div class="card-body">
                     @if (session('resent'))
                         <div class="alert alert-success" role="alert">
                             {{ __('A fresh mail has been sent to your email address.') }}
                         </div>
                     @endif
-                    {{-- <p>Dear {!! $email !!}, </p> --}}
+                    <p>Dear {!! $email !!}, </p>
                     <p>{!! $content !!}</p>
                     <br>
-                   {{-- <p>To track your shipment flow this link! {{!! url('/track') !!}}</p> --}}
+                   <p>To track your shipment flow this link! {{!! url('/track') !!}}</p>
                 </div>
             </div>
         </div>

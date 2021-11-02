@@ -29,17 +29,40 @@
 							</div>
 						</div>
 						<div class="col col-md-6 col-sm-12">
-							<div class="form-group form-default">
-								<label class="float-label" style="color: blue;">Select Category</label>
-								<select name="type" class="form-control" required>
-									<option value="all">All</option>
-									<option value="not_shipped">Not Shipped</option>
-									<option value="shipped">Shipped</option>
-									<option value="delivered">Delivered</option>
-								</select>
-							    @error('type')
-								  <Span style="color: red;">{{$message}}</Span>
-							    @enderror
+							<div class="row">
+								<div class="col">
+									<div class="form-group form-default">
+										<label class="float-label" style="color: blue;">Select Category</label>
+										<select name="type" class="form-control" required>
+											<option value="all">All</option>
+											<option value="not_shipped">Not Shipped</option>
+											<option value="shipped">Shipped</option>
+											<option value="delivered">Delivered</option>
+										</select>
+									    @error('type')
+										  <Span style="color: red;">{{$message}}</Span>
+									    @enderror
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col">
+									<div class="form-group form-default">
+										<label class="float-label" style="color: blue;">Select City</label>
+										<select name="l_type" class="form-control" required>
+											<option value="all">All</option>
+											<?php $locations = \App\Models\Location::where('type', '=', 1)->get(); ?>
+											@foreach ($locations as $l)
+											<option value="{{$l->location}}">{{$l->city}}->{{$l->location}}</option>
+											@endforeach 
+											{{-- <option value="shipped">Shipped</option>
+											<option value="delivered">Delivered</option> --}}
+										</select>
+									    @error('l_type')
+										  <Span style="color: red;">{{$message}}</Span>
+									    @enderror
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>

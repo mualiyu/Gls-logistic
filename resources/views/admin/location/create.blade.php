@@ -90,16 +90,36 @@
                                     		</div>
 					    </div>
 				    </div>
-
-                                    <div class="form-group mb-4">
-                                        <label for="example-email" class="col-md-12 p-0">Amount:</label>
-                                        <div class="col-md-12 border-bottom px-4">
-                                            <input class="form-control px-5 border-0" name="amount" type="number" value="{{ old('amount')}}" required>
-                                        </div>
-					@error('amount')
-                                	        <p class="help-block text-danger">{{$message}}</p>
-                                	@enderror
-                                    </div>
+				    <div class="row">
+					    <div class="col-sm-6">
+						    <div class="form-group mb-4">
+							<label for="example-email" class="col-md-12 p-0">Amount:</label>
+							<div class="col-md-12 border-bottom px-4">
+							    <input class="form-control px-5 border-0" name="amount" type="number" value="{{ old('amount')}}" required>
+							</div>
+							@error('amount')
+								<p class="help-block text-danger">{{$message}}</p>
+							@enderror
+						    </div>
+					    </div>
+					    <div class="col-sm-6">
+						<div class="form-group mb-4">
+                                    		    <label for="example-email" class="col-md-12 p-0">Designation: </label>
+                                    		    <div class="col-md-12 border-bottom p-0">
+							<select class="form-control px-5 border-0" name="desig" required>
+                                			    <option value="">Select__</option>
+                                			    <option value="1">From</option>
+							    <option value="2">To</option>
+							    <option value="3">From & To</option>
+                                			</select>
+                                    		        {{-- <input class="form-control px-5 border-0" name="zone" type="text" value="{{ old('zone')}}"> --}}
+                                    		    </div>
+							@error('desig')
+                                			        <p class="help-block text-danger">{{$message}}</p>
+                                			@enderror
+                                    		</div>
+					    </div>
+				    </div>
 
 				    <div class="form-group mb-4">
                                         <div class="col-md-12 p-0">

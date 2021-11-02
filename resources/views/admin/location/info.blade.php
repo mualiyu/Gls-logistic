@@ -91,6 +91,23 @@
                                     		</div>
 					    </div>
 				    </div>
+
+				    	<div class="form-group mb-4">
+                                    	    <label for="example-email" class="col-md-12 p-0">Designation: </label>
+                                    	    <div class="col-md-12 border-bottom p-0">
+						<select class="form-control px-5 border-0" name="desig" required>
+                                		    <option value="{{$location->type}}">{{$location->type==1? 'Depart': ''}}{{$location->type==2? 'Arrive': ''}}{{$location->type==3? 'Depart & Arrive':''}}</option>
+                                		    <option value="1">Depart</option>
+						    <option value="2">Arrive</option>
+						    <option value="3">Depart & Arrive</option>
+                                		</select>
+                                    	        {{-- <input class="form-control px-5 border-0" name="zone" type="text" value="{{ old('zone')}}"> --}}
+                                    	    </div>
+						@error('desig')
+                                		        <p class="help-block text-danger">{{$message}}</p>
+                                		@enderror
+                                    	</div>
+
 				    	<div class="form-group mb-4">
                                 	    <div class="col-md-12  p-0">
 						 <input class="btn btn-primary px-5 " type="submit" value="Update Location">

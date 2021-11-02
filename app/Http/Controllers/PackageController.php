@@ -6,6 +6,7 @@ use App\Exports\UsersExport;
 use App\Models\Ebulksms;
 use App\Models\Item;
 use App\Models\Journey;
+use App\Models\Location;
 use App\Models\Package;
 use App\Models\Region;
 use App\Models\Tracking;
@@ -41,11 +42,14 @@ class PackageController extends Controller
             'from' => ['required'],
             'to' => ['required'],
             'to_address' => ['required'],
-            'c_info' => ['required'],
+            // 'c_info' => ['required'],
             'item' => ['required'],
             'description' => ['required'],
             'weight' => ['nullable'],
             'quantity' => ['required'],
+            'name' => ['required'],
+            'email' => ['required'],
+            'phone' => ['required'],
         ]);
 
         if ($validator->fails()) {
@@ -59,51 +63,55 @@ class PackageController extends Controller
             $customer = session('customer');
             $tracking_id = rand(100000000000, 999999999999);
 
-            if ($request->c_info == 0) {
+            // if ($request->c_info == 0) {
 
-                $package = Package::create([
-                    'customer_id' => $customer->id,
-                    'from' => $request->from,
-                    'to' => $request->to,
-                    'phone' => $customer->phone,
-                    'email' => $customer->email,
-                    'address_to' => $request->to_address,
-                    'tracking_id' => $tracking_id,
-                    'adjusted_amount' => 0,
-                    'total_amount' => 0,
-                    'status' => 0,
-                    // 'item_type' => $request->item,
-                ]);
-                Package::where('id', '=', $package->id)->update([
-                    'status' => 0,
-                ]);
-            } else {
-                $val = Validator::make($request->all(), [
-                    'phone' => ['required'],
-                    'email' => ['required'],
-                ]);
+            //     $package = Package::create([
+            //         'customer_id' => $customer->id,
+            //         'from' => $request->from,
+            //         'to' => $request->to,
+            //         'phone' => $customer->phone,
+            //         'email' => $customer->email,
+            //         'address_to' => $request->to_address,
+            //         'tracking_id' => $tracking_id,
+            //         'adjusted_amount' => 0,
+            //         'total_amount' => 0,
+            //         'status' => 0,
+            //         // 'item_type' => $request->item,
+            //     ]);
+            //     Package::where('id', '=', $package->id)->update([
+            //         'status' => 0,
+            //     ]);
+            // } else {
+            //     $val = Validator::make($request->all(), [
+            //         'phone' => ['required'],
+            //         'email' => ['required'],
+            //     ]);
 
-                if ($val->fails()) {
-                    return back()->withErrors($val)->withInput();
-                }
+            //     if ($val->fails()) {
+            //         return back()->withErrors($val)->withInput();
+            //     }
 
-                $package = Package::create([
-                    'customer_id' => $customer->id,
-                    'from' => $request->from,
-                    'to' => $request->to,
-                    'phone' => $request->phone,
-                    'email' => $request->email,
-                    'address_to' => $request->to_address,
-                    'tracking_id' => $tracking_id,
-                    'adjusted_amount' => 0,
-                    'total_amount' => 0,
-                    'status' => 0,
-                    // 'item_type' => $request->item,
-                ]);
-                Package::where('id', '=', $package->id)->update([
-                    'status' => 0,
-                ]);
-            }
+            $package = Package::create([
+                'customer_id' => $customer->id,
+                'from' => $request->from,
+                'to' => $request->to,
+                'name' => $request->name,
+                'phone' => $request->phone,
+                'email' => $request->email,
+                'address_to' => $request->to_address,
+                'tracking_id' => $tracking_id,
+                'adjusted_amount' => 0,
+                'total_amount' => 0,
+                'status' => 0,
+                // 'item_type' => $request->item,
+            ]);
+            Package::where('id', '=', $package->id)->update([
+                'status' => 0,
+                'name' => $request->name,
+                'phone' => $request->phone,
+                'email' => $request->email,
+            ]);
+            // }
 
 
             if ($package) {
@@ -237,17 +245,28 @@ class PackageController extends Controller
                     'a_d' => 2
                 ]);
 
+                // "Bonjour Mr / Mme " . $tracking->package->name . ", votre commande est maintenant disponible. Vous serez contacté par un agent de liaison GLS.  \nVotre numéro tracking est " . $tracking->package->tracking_id . "\nMerci de suivile tracking de votre colis sur " . url('/') . ". \nRestant à votre disposition.";
+
                 if ($tracking) {
+
+                    $data2 = [
+                        'subject' => 'Customer Package Receipt',
+                        'email' => $p->customer->email,
+                        // 'c_email' => $p->customer->email,
+                        'content' => 'Your shipments has been Activated successfully and your tracking number is ' . $tracking->package->tracking_id . '',
+                        // 'content' => "Bonjour Mr / Mme " . $tracking->package->name . ", votre commande est maintenant disponible. Vous serez contacté par un agent de liaison GLS.  \nVotre numéro tracking est " . $tracking->package->tracking_id . "\nMerci de suivile tracking de votre colis sur " . url('/') . ". \nRestant à votre disposition.",
+                    ];
 
                     $data = [
                         'subject' => 'Package Receipt',
                         'email' => $p->email,
-                        'content' => 'Your Package has been Activated successfully \n And your tracking number is ' . $tracking->package->tracking_id . '',
+                        // 'c_email' => $p->customer->email,
+                        'content' => "Bonjour Mr / Mme " . $tracking->package->name . ", votre commande est maintenant disponible. Vous serez contacté par un agent de liaison GLS.  \nVotre numéro tracking est " . $tracking->package->tracking_id . "\nMerci de suivile tracking de votre colis sur " . url('/') . ". \nRestant à votre disposition.",
                     ];
 
 
                     // sms End
-                    $msg = "Your Package has been Activated successfully \n And your tracking number is " . $tracking->package->tracking_id . ". \n \nTo track your shipment follow this link: {" . url('/track') . "} ";
+                    $msg = "Bonjour Mr / Mme " . $tracking->package->name . ", votre commande est maintenant disponible. Vous serez contacté par un agent de liaison GLS.  \nVotre numéro tracking est " . $tracking->package->tracking_id . "\nMerci de suivile tracking de votre colis sur " . url('/') . ". \nRestant à votre disposition.";
                     $msg = strval($msg);
 
                     $new = substr($p->phone, 0, 1);
@@ -263,6 +282,17 @@ class PackageController extends Controller
 
                     $to = $num;
 
+                    // try sending email to customer email
+                    try {
+                        Mail::send('main.email.c_receipt', $data2, function ($message) use ($data2) {
+                            $message->from('info@gls.com', 'GLS');
+                            $message->sender('info@gls.com', 'GLS');
+                            $message->to($data2['email']);
+                            $message->subject($data2['subject']);
+                        });
+                    } catch (\Throwable $th) {
+                        // return back()->with('success', 'Package Has been Activated, Receipt is Not sent to contact Email');
+                    }
 
                     // try sending email to contact email
                     try {
@@ -309,11 +339,14 @@ class PackageController extends Controller
         $validator = Validator::make($request->all(), [
             'date_range' => ['required'],
             'type' => ['required'],
+            'l_type' => ['required'],
         ]);
 
         if ($validator->fails()) {
             return back()->withErrors($validator);
         }
+
+        // return $request->all();
 
         $customer = session('customer');
 
@@ -342,58 +375,118 @@ class PackageController extends Controller
             'December',
         );
 
-        // When All is selected
-        if ($request->type == 'all') {
-            $packages = Package::where('customer_id', '=', $customer->id)->whereBetween('created_at', [$from . ' 00:00:00', $to . ' 23:59:59'])->get();
 
-            if ($packages) {
+        // if location type is set to All
+        if ($request->l_type == 'all') {
+            // When All is selected
+            if ($request->type == 'all') {
+                $packages = Package::where('customer_id', '=', $customer->id)->whereBetween('created_at', [$from . ' 00:00:00', $to . ' 23:59:59'])->get();
 
-                if (count($packages) > 0) {
-                    return view('main.package.searched', compact('packages', 'from', 'to', 'months', 'type'));
-                } else {
-                    return back()->with('error', 'No Shipments Within selected range or in All. Try Again!');
+                if ($packages) {
+
+                    if (count($packages) > 0) {
+                        return view('main.package.searched', compact('packages', 'from', 'to', 'months', 'type'));
+                    } else {
+                        return back()->with('error', 'No Shipments Within selected range or in All. Try Again!');
+                    }
+                }
+            }
+            // When Not shipped is selected
+            if ($request->type == 'not_shipped') {
+                $packages = Package::where(['customer_id' => $customer->id, 'status' => '0'])->whereBetween('created_at', [$from . ' 00:00:00', $to . ' 23:59:59'])->get();
+
+                if ($packages) {
+
+                    if (count($packages) > 0) {
+                        return view('main.package.searched', compact('packages', 'from', 'to', 'months', 'type'));
+                    } else {
+                        return back()->with('error', 'No Shipments Within selected range or In Not shipped category. Try Again!');
+                    }
+                }
+            }
+            // When Shipped is selected
+            if ($request->type == 'shipped') {
+                $packages = Package::where(['customer_id' => $customer->id, 'status' => '1'])->whereBetween('created_at', [$from . ' 00:00:00', $to . ' 23:59:59'])->get();
+
+                if ($packages) {
+
+                    if (count($packages) > 0) {
+                        return view('main.package.searched', compact('packages', 'from', 'to', 'months', 'type'));
+                    } else {
+                        return back()->with('error', 'No Shipments Within selected range or In shipped category. Try Again!');
+                    }
+                }
+            }
+            // When Delivered is selected
+            if ($request->type == 'delivered') {
+                $packages = Package::where(['customer_id' => $customer->id, 'status' => '2'])->whereBetween('created_at', [$from . ' 00:00:00', $to . ' 23:59:59'])->get();
+
+                if ($packages) {
+
+                    if (count($packages) > 0) {
+                        return view('main.package.searched', compact('packages', 'from', 'to', 'months', 'type'));
+                    } else {
+                        return back()->with('error', 'No Shipments Within selected range or In delivered category. Try Again!');
+                    }
+                }
+            }
+        } else {    //Else condition for Location_type
+            // $location = Location::where('city', '=', $request->l_type)->get();
+            // When All is selected
+            if ($request->type == 'all') {
+                $packages = Package::where(['customer_id' => $customer->id, 'from' => $request->l_type])->whereBetween('created_at', [$from . ' 00:00:00', $to . ' 23:59:59'])->get();
+
+                if ($packages) {
+
+                    if (count($packages) > 0) {
+                        return view('main.package.searched', compact('packages', 'from', 'to', 'months', 'type'));
+                    } else {
+                        return back()->with('error', 'No Shipments Within selected range or in All. Try Again!');
+                    }
+                }
+            }
+
+            // When Not shipped is selected
+            if ($request->type == 'not_shipped') {
+                $packages = Package::where(['customer_id' => $customer->id, 'from' => $request->l_type, 'status' => '0'])->whereBetween('created_at', [$from . ' 00:00:00', $to . ' 23:59:59'])->get();
+
+                if ($packages) {
+
+                    if (count($packages) > 0) {
+                        return view('main.package.searched', compact('packages', 'from', 'to', 'months', 'type'));
+                    } else {
+                        return back()->with('error', 'No Shipments Within selected range or In Not shipped category. Try Again!');
+                    }
+                }
+            }
+            // When Shipped is selected
+            if ($request->type == 'shipped') {
+                $packages = Package::where(['customer_id' => $customer->id, 'from' => $request->l_type, 'status' => '1'])->whereBetween('created_at', [$from . ' 00:00:00', $to . ' 23:59:59'])->get();
+
+                if ($packages) {
+
+                    if (count($packages) > 0) {
+                        return view('main.package.searched', compact('packages', 'from', 'to', 'months', 'type'));
+                    } else {
+                        return back()->with('error', 'No Shipments Within selected range or In shipped category. Try Again!');
+                    }
+                }
+            }
+            // When Delivered is selected
+            if ($request->type == 'delivered') {
+                $packages = Package::where(['customer_id' => $customer->id, 'from' => $request->l_type, 'status' => '2'])->whereBetween('created_at', [$from . ' 00:00:00', $to . ' 23:59:59'])->get();
+
+                if ($packages) {
+
+                    if (count($packages) > 0) {
+                        return view('main.package.searched', compact('packages', 'from', 'to', 'months', 'type'));
+                    } else {
+                        return back()->with('error', 'No Shipments Within selected range or In delivered category. Try Again!');
+                    }
                 }
             }
         }
-        // When Not shipped is selected
-        if ($request->type == 'not_shipped') {
-            $packages = Package::where(['customer_id' => $customer->id, 'status' => '0'])->whereBetween('created_at', [$from . ' 00:00:00', $to . ' 23:59:59'])->get();
 
-            if ($packages) {
-
-                if (count($packages) > 0) {
-                    return view('main.package.searched', compact('packages', 'from', 'to', 'months', 'type'));
-                } else {
-                    return back()->with('error', 'No Shipments Within selected range or In Not shipped category. Try Again!');
-                }
-            }
-        }
-        // When Shipped is selected
-        if ($request->type == 'shipped') {
-            $packages = Package::where(['customer_id' => $customer->id, 'status' => '1'])->whereBetween('created_at', [$from . ' 00:00:00', $to . ' 23:59:59'])->get();
-
-            if ($packages) {
-
-                if (count($packages) > 0) {
-                    return view('main.package.searched', compact('packages', 'from', 'to', 'months', 'type'));
-                } else {
-                    return back()->with('error', 'No Shipments Within selected range or In shipped category. Try Again!');
-                }
-            }
-        }
-        // When Delivered is selected
-        if ($request->type == 'delivered') {
-            $packages = Package::where(['customer_id' => $customer->id, 'status' => '2'])->whereBetween('created_at', [$from . ' 00:00:00', $to . ' 23:59:59'])->get();
-
-            if ($packages) {
-
-                if (count($packages) > 0) {
-                    return view('main.package.searched', compact('packages', 'from', 'to', 'months', 'type'));
-                } else {
-                    return back()->with('error', 'No Shipments Within selected range or In delivered category. Try Again!');
-                }
-            }
-        }
 
         return back()->with('error', 'No Shipments found for this category. Try Again!');
     }

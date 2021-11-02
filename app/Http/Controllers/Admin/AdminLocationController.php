@@ -46,6 +46,7 @@ class AdminLocationController extends Controller
             'zone' => ['required'],
             'location' => ['required'],
             'amount' => ['required', 'integer'],
+            'desig' => ['required'],
         ]);
 
         if ($validator->fails()) {
@@ -57,6 +58,10 @@ class AdminLocationController extends Controller
             'city' => $request->city,
             'zone' => $request->zone,
             'location' => $request->location,
+            'type' => $request->desig,
+        ]);
+        Location::where('id', '=',  $location->id)->update([
+            'type' => $request->desig,
         ]);
 
         if ($location) {
@@ -115,6 +120,7 @@ class AdminLocationController extends Controller
             'city' => ['required'],
             'zone' => ['required'],
             'location' => ['required'],
+            'desig' => ['required'],
         ]);
 
         if ($validator->fails()) {
@@ -126,7 +132,12 @@ class AdminLocationController extends Controller
             'city' => $request->city,
             'zone' => $request->zone,
             'location' => $request->location,
+            'type' => $request->desig
         ]);
+        // Location::where('id', '=', $location->id)->update([
+        //     'type' => $request->desig,
+        // ]);
+
 
         if ($location) {
             return back()->with('success', 'Location has been updated');

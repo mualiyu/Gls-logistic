@@ -124,15 +124,23 @@ class AdminPackageController extends Controller
                     'a_d' => 2,
                 ]);
                 if ($tracking) {
+                    $customer_data = [
+                        'subject' => 'Package Receipt',
+                        'email' => $p->customer->email,
+                        // 'content' => "Bonjour Mr / Mme " . $tracking->package->name . ", votre commande est maintenant disponible. Vous serez contacté par un agent de liaison GLS.  \nVotre numéro tracking est " . $tracking->package->tracking_id . "\nMerci de suivile tracking de votre colis sur " . url('/') . ". \nRestant à votre disposition.",
+                        'content' => 'Your shipments has been Activated successfully and your tracking number is ' . $tracking->package->tracking_id . '',
+                    ];
                     $data = [
                         'subject' => 'Package Receipt',
                         'email' => $p->email,
-                        'content' => 'Your shipments has been Activated successfully and your tracking number is ' . $tracking->package->tracking_id . '',
+                        'content' => "Bonjour Mr / Mme " . $tracking->package->name . ", votre commande est maintenant disponible. Vous serez contacté par un agent de liaison GLS.  \nVotre numéro tracking est " . $tracking->package->tracking_id . "\nMerci de suivile tracking de votre colis sur " . url('/') . ". \nRestant à votre disposition.",
+                        // 'content' => 'Your shipments has been Activated successfully and your tracking number is ' . $tracking->package->tracking_id . '',
                     ];
 
                     // $ebulk = new Ebulksms();
 
-                    $msg = "Your Package has been Activated successfully \n And your tracking number is " . $tracking->package->tracking_id . ". \n\nTo track your shipment follow this link: {" . url('/track') . "} ";
+                    $msg = "Bonjour Mr / Mme " . $tracking->package->name . ", votre commande est maintenant disponible. Vous serez contacté par un agent de liaison GLS.  \nVotre numéro tracking est " . $tracking->package->tracking_id . "\nMerci de suivile tracking de votre colis sur " . url('/') . ". \nRestant à votre disposition.";
+                    // $msg = "Your Package has been Activated successfully \n And your tracking number is " . $tracking->package->tracking_id . ". \n\nTo track your shipment follow this link: {" . url('/track') . "} ";
                     $msg = strval($msg);
 
                     $new = substr($p->phone, 0, 1);
@@ -146,7 +154,19 @@ class AdminPackageController extends Controller
                     }
                     $to = $num;
 
-                    // try sending email
+                    // try sending email to customer
+                    try {
+                        Mail::send('main.email.c_receipt', $customer_data, function ($message) use ($customer_data) {
+                            $message->from('info@gls.com', 'GLS');
+                            $message->sender('info@gls.com', 'GLS');
+                            $message->to($customer_data['email']);
+                            $message->subject($customer_data['subject']);
+                        });
+                    } catch (\Throwable $th) {
+                        // return back()->with('success', 'Package Has been Activated, But receipt is not sent to Contact email');
+                    }
+
+                    // try sending email to client
                     try {
                         Mail::send('main.email.receipt', $data, function ($message) use ($data) {
                             $message->from('info@gls.com', 'GLS');
