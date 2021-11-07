@@ -124,11 +124,13 @@ class PackageApiController extends Controller
             'address_to' => 'required',
             'status' => 'nullable',
             'item_type' => 'required',
+            'tracking_id' => 'required',
             'item_description' => 'required',
             'item_weight' => 'required',
             'quantity' => ['required'],
-            'contact_email' => ['required'],
-            'contact_phone' => ['required'],
+            'client_email' => ['required'],
+            'client_phone' => ['required'],
+            'client_name' => ['required'],
         ]);
 
         if ($validator->fails()) {
@@ -143,7 +145,7 @@ class PackageApiController extends Controller
         if (count($api) > 0) {
             if ($api[0]->api_key == $request->api_key) {
 
-                $tracking_id = rand(100000000000, 999999999999);
+                // $tracking_id = rand(100000000000, 999999999999);
 
                 $arrayToInsert = [
                     'customer_id' => $request->customer,
@@ -151,12 +153,13 @@ class PackageApiController extends Controller
                     'to' => $request->to,
                     // 'address_from' => $request->address_from,
                     'address_to' => $request->address_to,
-                    'tracking_id' => $tracking_id,
+                    'tracking_id' => $request->tracking_id,
                     'adjusted_amount' => 0,
                     'total_amount' => 0,
                     'status' => 0,
-                    'email' => $request->contact_email,
-                    'phone' => $request->contact_phone,
+                    'email' => $request->client_email,
+                    'name' => $request->client_name,
+                    'phone' => $request->client_phone,
                 ];
 
                 $package = Package::create($arrayToInsert);
@@ -165,8 +168,9 @@ class PackageApiController extends Controller
                     'adjusted_amount' => '0',
                     'total_amount' => '0',
                     'status' => '0',
-                    'email' => $request->contact_email,
-                    'phone' => $request->contact_phone,
+                    'email' => $request->client_email,
+                    'phone' => $request->client_phone,
+                    'name' => $request->client_name,
                 ]);
 
                 if ($package) {
@@ -202,29 +206,14 @@ class PackageApiController extends Controller
                         ]);
 
                         if ($tracking) {
+
+
+                            // mail to customer
                             $data = [
                                 'subject' => 'Package Receipt',
                                 'email' => $package->customer->email,
                                 'content' => 'Your Package has been Activated successfully \n And your tracking number is ' . $tracking->package->tracking_id . '',
                             ];
-
-                            // sms Exit
-                            $msg = "Your Package has been Activated successfully \n And your tracking number is " . $tracking->package->tracking_id . ". \n \nTo track your shipment follow this link: {" . url('/track') . "} ";
-                            $msg = strval($msg);
-
-                            $new = substr($package->phone, 0, 1);
-                            if ($new == 0) {
-                                $d = substr($package->phone, -10);
-                                $num = '234' . $d;
-                            } elseif ($new == 6) {
-                                $d = substr($package->phone, -9);
-                                $num = '237' . $d;
-                            } else {
-                                $num = $package->phone;
-                            }
-
-                            $to = $num;
-
                             try {
                                 Mail::send('main.email.receipt', $data, function ($message) use ($data) {
                                     $message->from('info@gls.com', 'GLS');
@@ -236,8 +225,60 @@ class PackageApiController extends Controller
                                 // return back()->with('success', 'Package Has been Activated, Receipt is Not sent to Email');
                             }
 
+                            // Client mail 
+                            $client_data = [
+                                'subject' => 'Package Receipt',
+                                'email' => $package->email,
+                                'content' => "Bonjour Mr / Mme " . $tracking->package->name . ", votre commande est maintenant disponible. Vous serez contacté par un agent de liaison GLS.  \nVotre numéro tracking est " . $tracking->package->tracking_id . "\nMerci de suivile tracking de votre colis sur " . url('/track') . ". \nRestant à votre disposition.",
+                            ];
                             try {
-                                Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to . "&message=" . $msg . "&sender_id=GLS");
+                                Mail::send('main.email.receipt', $client_data, function ($message) use ($client_data) {
+                                    $message->from('info@gls.com', 'GLS');
+                                    $message->sender('info@gls.com', 'GLS');
+                                    $message->to($client_data['email']);
+                                    $message->subject($client_data['subject']);
+                                });
+                            } catch (\Throwable $th) {
+                                // return back()->with('success', 'Package Has been Activated, Receipt is Not sent to Email');
+                            }
+
+                            // sms Exit client
+
+                            // client
+                            $msg_c = "Bonjour Mr / Mme " . $tracking->package->name . ", votre commande est maintenant disponible. Vous serez contacté par un agent de liaison GLS.  \nVotre numéro tracking est " . $tracking->package->tracking_id . "\nMerci de suivile tracking de votre colis sur " . url('/track') . ". \nRestant à votre disposition.";
+                            $msg_c = strval($msg_c);
+                            $new_c = substr($package->phone, 0, 1);
+                            if ($new_c == 0) {
+                                $d = substr($package->phone, -10);
+                                $num = '234' . $d;
+                            } elseif ($new_c == 6) {
+                                $d = substr($package->phone, -9);
+                                $num = '237' . $d;
+                            } else {
+                                $num = $package->phone;
+                            }
+                            $to_client = $num;
+
+
+                            // customer
+                            $msg = "Your Package has been Activated successfully \n And your tracking number is " . $tracking->package->tracking_id . ". \n \nTo track your shipment follow this link: {" . url('/track') . "} ";
+                            $msg = strval($msg);
+                            $new = substr($package->customer->phone, 0, 1);
+                            if ($new == 0) {
+                                $d = substr($package->customer->phone, -10);
+                                $numm = '234' . $d;
+                            } elseif ($new == 6) {
+                                $d = substr($package->customer->phone, -9);
+                                $numm = '237' . $d;
+                            } else {
+                                $numm = $package->customer->phone;
+                            }
+                            $to_customer = $numm;
+
+
+                            try {
+                                Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to_client . "&message=" . $msg_c . "&sender_id=GLS");
+                                Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to_customer . "&message=" . $msg . "&sender_id=GLS");
                             } catch (\Throwable $th) {
 
                                 // return back()->with('success', 'Package Has been Activated, Receipt is sent to contact Email but not Phone');
@@ -307,8 +348,9 @@ class PackageApiController extends Controller
             // 'address_from' => 'required',
             'address_to' => 'required',
             'status' => 'nullable',
-            'contact_phone' => 'required',
-            'contact_email' => 'required'
+            'client_phone' => 'required',
+            'client_name' => 'required',
+            'client_email' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -329,8 +371,9 @@ class PackageApiController extends Controller
                     // 'address_from' => $request->address_from,
                     'address_to' => $request->address_to,
                     // 'status' => $request->status,
-                    'email' => $request->contact_email,
-                    'phone' => $request->contact_phone,
+                    'name' => $request->client_name,
+                    'email' => $request->client_email,
+                    'phone' => $request->client_phone,
                 ];
                 $package = Package::where('id', '=', $request->package_id)->update($arrayToUpdate);
                 if ($package) {

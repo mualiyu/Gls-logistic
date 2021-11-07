@@ -117,7 +117,7 @@ class AdminTrackController extends Controller
                 $data = [
                     'subject' => 'Package Receipt',
                     'email' => $package->email,
-                    'content' => "Bonjour Mr/Mme " . $package->name . ", Votre commande " . $tracking->package->tracking_id . " vient d'arriver à " . $request->au_location . " et confirmée par un agent GLS. Vous serez contacté chaque fois qu'il y aura une nouvelle mise à jour.\nmerci pour votre disponibilité",
+                    'content' => "Bonjour Mr/Mme " . $package->name . ", Votre commande " . $tracking->package->tracking_id . " vient d'arriver à " . $request->au_location . " et confirmée par un agent GLS. Vous serez contacté chaque fois qu'il y aura une nouvelle mise à jour. \n Suivez votre commande ici : " . url('/track') . " \n merci pour votre disponibilité",
                     // 'content' => 'Your Shipment has arrived at ' . $request->au_location . ' And your tracking number is ' . $tracking->package->tracking_id . '',
                 ];
                 try {
@@ -174,7 +174,7 @@ class AdminTrackController extends Controller
                 $data = [
                     'subject' => 'Package Receipt',
                     'email' => $package->email,
-                    'content' => "Bonjour Mr/Mme " . $package->name . ", \nVotre commande " . $tracking->package->tracking_id . " vient de Partir de" . $request->au_location . " et confirmée par un agent GLS. Vous serez contacté chaque fois qu'il y aura une nouvelle mise à jour.\nmerci pour votre disponibilité",
+                    'content' => "Bonjour Mr/Mme " . $package->name . ", \nVotre commande " . $tracking->package->tracking_id . " vient de Partir de" . $request->au_location . " et confirmée par un agent GLS. Vous serez contacté chaque fois qu'il y aura une nouvelle mise à jour.  \n Suivez votre commande ici : " . url('/track') . ". \nmerci pour votre disponibilité",
                     // 'content' => 'Your Shipment has departed from ' . $request->au_location . ' And your tracking number is ' . $tracking->package->tracking_id . '',
                 ];
                 try {
@@ -232,7 +232,7 @@ class AdminTrackController extends Controller
                 $data = [
                     'subject' => 'Package Receipt',
                     'email' => $package->email,
-                    'content' => "Bonjour Mr/Mme " . $package->name . " \nVotre commande N " . $package->tracking_id . " est arrivée à destination (" . $package->to . ") \nMerci de confirmer la livraison dès réception de votre colis.",
+                    'content' => "Bonjour Mr/Mme " . $package->name . " \nVotre commande N " . $package->tracking_id . " est arrivée à destination (" . $package->to . ") \nMerci de confirmer la livraison dès réception de votre colis.  \n Suivez votre commande ici : " . url('/track') . ". ",
                     // 'content' => "Your Package with tracking number of " . $tracking->package->tracking_id . " is at destination location and has been dispatched to  " . $package->address_to . ". \nAnd your shipment tracking number is " . $tracking->package->tracking_id . "",
                 ];
                 try {
