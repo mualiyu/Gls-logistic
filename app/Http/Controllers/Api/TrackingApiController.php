@@ -125,7 +125,7 @@ class TrackingApiController extends Controller
                         ]);
 
                         if ($tracking) {
-                            $p = Package::where('id', '=', $package[0]->id)->with('trackings')->get();
+                            $p = Package::where('id', '=', $package[0]->id)->with('trackings')->with('items')->get();
 
                             $res = [
                                 'status' => true,
