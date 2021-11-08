@@ -44,7 +44,7 @@ class TrackingApiController extends Controller
                                 'data' => 'No tracking detail found',
                             ];
                         }
-                        $p = Package::where('id', '=', $package[0]->id)->with('trackings')->get();
+                        $p = Package::where('id', '=', $package[0]->id)->with('trackings')->with('items')->get();
 
                         // $t_info = [
                         //     'package' => $package[0],
