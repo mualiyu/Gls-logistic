@@ -63,34 +63,6 @@ class PackageController extends Controller
             $customer = session('customer');
             $tracking_id = rand(100000000000, 999999999999);
 
-            // if ($request->c_info == 0) {
-
-            //     $package = Package::create([
-            //         'customer_id' => $customer->id,
-            //         'from' => $request->from,
-            //         'to' => $request->to,
-            //         'phone' => $customer->phone,
-            //         'email' => $customer->email,
-            //         'address_to' => $request->to_address,
-            //         'tracking_id' => $tracking_id,
-            //         'adjusted_amount' => 0,
-            //         'total_amount' => 0,
-            //         'status' => 0,
-            //         // 'item_type' => $request->item,
-            //     ]);
-            //     Package::where('id', '=', $package->id)->update([
-            //         'status' => 0,
-            //     ]);
-            // } else {
-            //     $val = Validator::make($request->all(), [
-            //         'phone' => ['required'],
-            //         'email' => ['required'],
-            //     ]);
-
-            //     if ($val->fails()) {
-            //         return back()->withErrors($val)->withInput();
-            //     }
-
             $package = Package::create([
                 'customer_id' => $customer->id,
                 'from' => $request->from,
@@ -242,7 +214,7 @@ class PackageController extends Controller
                     'a_d' => 2,
                 ]);
                 Tracking::where('id', '=', $tracking->id)->update([
-                    'a_d' => 2
+                    'a_d' => 2,
                 ]);
 
                 // "Bonjour Mr / Mme " . $tracking->package->name . ", votre commande est maintenant disponible. Vous serez contacté par un agent de liaison GLS.  \nVotre numéro tracking est " . $tracking->package->tracking_id . "\nMerci de suivile tracking de votre colis sur " . url('/') . ". \nRestant à votre disposition.";
@@ -261,12 +233,12 @@ class PackageController extends Controller
                         'subject' => 'Package Receipt',
                         'email' => $p->email,
                         // 'c_email' => $p->customer->email,
-                        'content' => "Bonjour Mr / Mme " . $tracking->package->name . ", votre commande est maintenant disponible. Vous serez contacté par un agent de liaison GLS.  \nVotre numéro tracking est " . $tracking->package->tracking_id . "\nMerci de suivile tracking de votre colis sur " . url('/') . ". \nRestant à votre disposition.",
+                        'content' => "Bonjour Mr / Mme " . $tracking->package->name . ", votre commande est maintenant disponible. Vous serez contacté par un agent de liaison GLS.  \nVotre numéro tracking est " . $tracking->package->tracking_id . "\nMerci de suivile tracking de votre colis sur " . route('main_get_track_info_get', ['t_id' => $tracking->package->tracking_id]) . ". \nRestant à votre disposition.",
                     ];
 
 
                     // sms End
-                    $msg = "Bonjour Mr / Mme " . $tracking->package->name . ", votre commande est maintenant disponible. Vous serez contacté par un agent de liaison GLS.  \nVotre numéro tracking est " . $tracking->package->tracking_id . "\nMerci de suivile tracking de votre colis sur " . url('/') . ". \nRestant à votre disposition.";
+                    $msg = "Bonjour Mr / Mme " . $tracking->package->name . ", votre commande est maintenant disponible. Vous serez contacté par un agent de liaison GLS.  \nVotre numéro tracking est " . $tracking->package->tracking_id . "\nMerci de suivile tracking de votre colis sur " . route('main_get_track_info_get', ['t_id' => $tracking->package->tracking_id]) . ". \nRestant à votre disposition.";
                     $msg = strval($msg);
 
                     $new = substr($p->phone, 0, 1);
@@ -279,7 +251,6 @@ class PackageController extends Controller
                     } else {
                         $num = $p->phone;
                     }
-
                     $to = $num;
 
                     // try sending email to customer email
@@ -313,13 +284,6 @@ class PackageController extends Controller
                         return back()->with('success', 'Package Has been Activated, Receipt is sent to contact Email but not Phone');
                     }
 
-
-                    // // try sending sms to contact phone
-                    // try {
-                    //     $ebulk->useJSON($from, $ss, $to);
-                    // } catch (Throwable $th) {
-                    //     return back()->with('success', 'Package Has been Activated, Receipt is Not sent to contact Phone');
-                    // }
 
                     // if Success is on every this
                     return back()->with('success', 'Package Has been Activated, Receipt is sent to contact Email And Phone');

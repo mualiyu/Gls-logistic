@@ -33,7 +33,7 @@
 					    </div>
 					    <div class="col-md-6">
 						<div class="row">
-							<div class="col-sm-6">
+							<div class="col-sm-4">
 								{{-- Show approve button (departure or arival) --}}
 								{{-- @if ($package->status == 1) 
 								 @if (Auth::user()->unit_location)
@@ -62,7 +62,16 @@
 								@endif --}}
 								<button type="button" class="btn btn-primary"  id="m_confirm" style="float: right">Confirm package location</button>
 							</div>
-							<div class="col-sm-6">
+							<div class="col-sm-4">
+								@if ($package->status == 2)
+								@if (!$package->c_d == null)
+								    <button type="submit" class="btn btn-secondary" style="float: right" disabled>Confirmed By Client</button>
+								@else
+								    <button type="submit" class="btn btn-warning" disabled style="float: right">Client Not Confirmed</button>
+								@endif
+								@endif
+							</div>
+							<div class="col-sm-4">
 								{{-- Activation button --}}
 								@if ($package->status == 0)    
 								<form action="{{route('admin_activate_package', ['id' => $package->id])}}" method="POST">
@@ -270,6 +279,10 @@
 										  <label for="wbil">Way bill No: (*)</label>
 										  <input type="text" class="form-control" name="way_bill" id="wbil">
 										</div>
+										<div class="form-group">
+										  <label for="s_by">Sign by<small>(collector)</small>: (*)</label>
+										  <input type="text" class="form-control" name="s_by" id="s_by">
+										</div>
 									      @else
 										<div class="form-group">
 										    <label for="exampleInputEmail1">Client Delivery document (Image):</label>
@@ -284,6 +297,14 @@
 									      <input type="hidden" value="{{$package->id}}" name="p_id">
 									      
 									      <button type="submit" class="btn btn-warning" style="float: left; backgroud:blue;">Confirm Delivery</button>
+									@else
+										<div class="form-group">
+										    <label for="exampleInputEmail1">Document (Image):</label>
+										    <input type="file" class="form-control" name="delivery_image" id="file" aria-describedby="fileHelp" required>
+										    <small id="filelHelp" class="form-text text-muted">Document must be an image Type (Jpeg, Jpg, Png, Gif) And file-size (Max: 9MB).</small>
+										  </div> 
+										  <input type="hidden" value="{{$package->id}}" name="p_id">
+										  <button type="submit" class="btn btn-warning" style="float: left; backgroud:blue;">Add Document</button>
 									@endif
 									{{-- <div class="form-group">
   									  <label for="wbil1">Client Way bill No: (optional)</label>

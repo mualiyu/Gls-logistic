@@ -38,6 +38,7 @@ Route::post('/package/item/add', [\App\Http\Controllers\PackageController::class
 // Tracking
 Route::get('/track', [\App\Http\Controllers\TrackingController::class, 'index'])->name('main_show_track_index');
 Route::post('/track', [\App\Http\Controllers\TrackingController::class, 'get_track'])->name('main_get_track_info');
+Route::get('/tracking/{t_id}', [\App\Http\Controllers\TrackingController::class, 'get_track_get'])->name('main_get_track_info_get');
 
 
 // 
@@ -51,6 +52,14 @@ Route::get('/excel/shipment', [\App\Http\Controllers\PackageController::class, '
 // 
 Route::get('/pdf/search/shipment', [\App\Http\Controllers\PdfController::class, 'main_shipments_search'])->name('main_pdf_shipments_search');
 
+
+
+
+// 
+// confirm delivery otp
+// 
+Route::post('/confirm/delivery', [\App\Http\Controllers\DeliveryController::class, 'index'])->name('main_confirm_delivery_index');
+Route::post('/verify/delivery', [\App\Http\Controllers\DeliveryController::class, 'verify_delivery'])->name('main_verify_delivery_otp');
 
 
 

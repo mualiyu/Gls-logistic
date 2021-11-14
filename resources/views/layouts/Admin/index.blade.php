@@ -195,6 +195,27 @@
                                 <span class="hide-menu">Merchandises</span>
                             </a>
                         </li>
+
+                        <?php 
+                        $sms_num = '';
+                        try {
+                             $balance = Http::get("https://auth.sms.to/api/balance?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa");
+                             $estimate = Http::get("https://api.sms.to/sms/estimate?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&to=+2348167236629&message=test&sender_id=Gls");
+                             $sms_num = $balance['balance'] / $estimate['estimated_cost'];
+                             //  $b = $balance['balance'] ? $balance['balance'] : '';
+                            //  $e = $estimate['estimated_cost'] ? $estimate['estimated_cost'] : '';
+                            //  $sms_num = ($b ? $b:0) / ($e?$e:1);
+                        } catch (\Throwable $th) {
+                            
+                        }
+
+                        ?>
+                        <li class="sidebar-item" style="background: rgb(78,105,158)">
+                            <p class="sidebar-link waves-effect waves-dark sidebar-link"
+                                aria-expanded="false">
+                                <span style="color: aliceblue; margin-left:3px;">{{(int)$sms_num ?? ''}}</span>&nbsp;
+                                <span style="color: aliceblue;"> sms remain</span>&nbsp; 
+                        </li>
                     </ul>
 
                 </nav>

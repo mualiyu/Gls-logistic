@@ -207,7 +207,6 @@ class PackageApiController extends Controller
 
                         if ($tracking) {
 
-
                             // mail to customer
                             $data = [
                                 'subject' => 'Package Receipt',
@@ -229,7 +228,7 @@ class PackageApiController extends Controller
                             $client_data = [
                                 'subject' => 'Package Receipt',
                                 'email' => $package->email,
-                                'content' => "Bonjour Mr / Mme " . $tracking->package->name . ", votre commande est maintenant disponible. Vous serez contacté par un agent de liaison GLS.  \nVotre numéro tracking est " . $tracking->package->tracking_id . "\nMerci de suivile tracking de votre colis sur " . url('/track') . ". \nRestant à votre disposition.",
+                                'content' => "Bonjour Mr / Mme " . $tracking->package->name . ", votre commande est maintenant disponible. Vous serez contacté par un agent de liaison GLS.  \nVotre numéro tracking est " . $tracking->package->tracking_id . "\nMerci de suivile tracking de votre colis sur " . route('main_get_track_info_get', ['t_id' => $tracking->package->tracking_id]) . ". \nRestant à votre disposition.",
                             ];
                             try {
                                 Mail::send('main.email.receipt', $client_data, function ($message) use ($client_data) {
@@ -245,7 +244,7 @@ class PackageApiController extends Controller
                             // sms Exit client
 
                             // client
-                            $msg_c = "Bonjour Mr / Mme " . $tracking->package->name . ", votre commande est maintenant disponible. Vous serez contacté par un agent de liaison GLS.  \nVotre numéro tracking est " . $tracking->package->tracking_id . "\nMerci de suivile tracking de votre colis sur " . url('/track') . ". \nRestant à votre disposition.";
+                            $msg_c = "Bonjour Mr / Mme " . $tracking->package->name . ", votre commande est maintenant disponible. Vous serez contacté par un agent de liaison GLS.  \nVotre numéro tracking est " . $tracking->package->tracking_id . "\nMerci de suivile tracking de votre colis sur " . route('main_get_track_info_get', ['t_id' => $tracking->package->tracking_id]) . ". \nRestant à votre disposition.";
                             $msg_c = strval($msg_c);
                             $new_c = substr($package->phone, 0, 1);
                             if ($new_c == 0) {
@@ -261,7 +260,7 @@ class PackageApiController extends Controller
 
 
                             // customer
-                            $msg = "Your Package has been Activated successfully \n And your tracking number is " . $tracking->package->tracking_id . ". \n \nTo track your shipment follow this link: {" . url('/track') . "} ";
+                            $msg = "Your Package has been Activated successfully \n And your tracking number is " . $tracking->package->tracking_id . ". \n \nTo track your shipment follow this link: {" . route('main_get_track_info_get', ['t_id' => $tracking->package->tracking_id]) . "} ";
                             $msg = strval($msg);
                             $new = substr($package->customer->phone, 0, 1);
                             if ($new == 0) {

@@ -77,7 +77,6 @@ class AdminTrackController extends Controller
 
         if ($tracking) {
 
-
             $new = substr($package->phone, 0, 1);
             if ($new == 0) {
                 $d = substr($package->phone, -10);
@@ -112,12 +111,11 @@ class AdminTrackController extends Controller
 
 
                 // 
-
-                // email data notice (mail)
+                // email data to client notice (mail)
                 $data = [
                     'subject' => 'Package Receipt',
                     'email' => $package->email,
-                    'content' => "Bonjour Mr/Mme " . $package->name . ", Votre commande " . $tracking->package->tracking_id . " vient d'arriver à " . $request->au_location . " et confirmée par un agent GLS. Vous serez contacté chaque fois qu'il y aura une nouvelle mise à jour. \n Suivez votre commande ici : " . url('/track') . " \n merci pour votre disponibilité",
+                    'content' => "Bonjour Mr/Mme " . $package->name . ", Votre commande " . $tracking->package->tracking_id . " vient d'arriver à " . $request->au_location . " et confirmée par un agent GLS. Vous serez contacté chaque fois qu'il y aura une nouvelle mise à jour. \n Suivez votre commande ici : " . route('main_get_track_info_get', ['t_id' => $tracking->package->tracking_id]) . ". \n merci pour votre disponibilité",
                     // 'content' => 'Your Shipment has arrived at ' . $request->au_location . ' And your tracking number is ' . $tracking->package->tracking_id . '',
                 ];
                 try {
@@ -131,8 +129,9 @@ class AdminTrackController extends Controller
                     return back()->with('success', 'Package Has been confirm at ' . $request->au_location . ', Update is Not sent to contact Email');
                 }
 
-                // Phone data notice (sms)
-                $msg = "Bonjour Mr/Mme " . $package->name . ", \nVotre commande " . $tracking->package->tracking_id . " vient d'arriver à " . $request->au_location . " et confirmée par un agent GLS. Vous serez contacté chaque fois qu'il y aura une nouvelle mise à jour.\nmerci pour votre disponibilité";
+
+                // Phone data to client notice (sms)
+                $msg = "Bonjour Mr/Mme " . $package->name . ", \nVotre commande " . $tracking->package->tracking_id . " vient d'arriver à " . $request->au_location . " et confirmée par un agent GLS. Vous serez contacté chaque fois qu'il y aura une nouvelle mise à jour. \n Suivez votre commande ici : " . route('main_get_track_info_get', ['t_id' => $tracking->package->tracking_id]) . ". \nmerci pour votre disponibilité";
                 // $msg = "Dear " . $package->phone . ". \n\nYour Shipment has arrived at " . $request->au_location . " And your tracking number is " . $tracking->package->tracking_id . ". \n  \nTo track your shipment follow this link: {" . url('/track') . "} ";
                 $msg = strval($msg);
                 try {
@@ -149,10 +148,10 @@ class AdminTrackController extends Controller
                 // If package departed from location
             } elseif ($request->a_d == '2') {
 
+                // Email to customer for change of location
                 $customer_data = [
                     'subject' => 'Package Receipt',
                     'email' => $package->customer->email,
-                    // 'content' => "Bonjour Mr / Mme " . $tracking->package->name . ", votre commande est maintenant disponible. Vous serez contacté par un agent de liaison GLS.  \nVotre numéro tracking est " . $tracking->package->tracking_id . "\nMerci de suivile tracking de votre colis sur " . url('/') . ". \nRestant à votre disposition.",
                     'content' => 'Your Shipment has departed from  ' . $request->au_location . ' And your tracking number is ' . $tracking->package->tracking_id . '',
                 ];
                 try {
@@ -169,13 +168,12 @@ class AdminTrackController extends Controller
 
 
                 // 
-
-                // email data notice (mail)
+                // email data to client notice for change in location
                 $data = [
                     'subject' => 'Package Receipt',
                     'email' => $package->email,
-                    'content' => "Bonjour Mr/Mme " . $package->name . ", \nVotre commande " . $tracking->package->tracking_id . " vient de Partir de" . $request->au_location . " et confirmée par un agent GLS. Vous serez contacté chaque fois qu'il y aura une nouvelle mise à jour.  \n Suivez votre commande ici : " . url('/track') . ". \nmerci pour votre disponibilité",
-                    // 'content' => 'Your Shipment has departed from ' . $request->au_location . ' And your tracking number is ' . $tracking->package->tracking_id . '',
+                    'content' => "Bonjour Mr/Mme " . $package->name . ", \nVotre commande " . $tracking->package->tracking_id . " vient de Partir de" . $request->au_location . " et confirmée par un agent GLS. Vous serez contacté chaque fois qu'il y aura une nouvelle mise à jour.  \n Suivez votre commande ici : " . route('main_get_track_info_get', ['t_id' => $tracking->package->tracking_id]) . ". \nmerci pour votre disponibilité",
+
                 ];
                 try {
                     Mail::send('main.email.receipt', $data, function ($message) use ($data) {
@@ -188,8 +186,8 @@ class AdminTrackController extends Controller
                     return back()->with('success', 'Package Has been confirm at ' . $request->au_location . ', Update is Not sent to contact Email');
                 }
 
-                // Phone data notice (sms)
-                $msg = "Bonjour Mr/Mme " . $package->name . ", \nVotre commande " . $tracking->package->tracking_id . " vient de Partir de " . $request->au_location . " et confirmée par un agent GLS. Vous serez contacté chaque fois qu'il y aura une nouvelle mise à jour.\nmerci pour votre disponibilité";
+                // Phone data notice (sms) to client
+                $msg = "Bonjour Mr/Mme " . $package->name . ", \nVotre commande " . $tracking->package->tracking_id . " vient de Partir de " . $request->au_location . " et confirmée par un agent GLS. Vous serez contacté chaque fois qu'il y aura une nouvelle mise à jour. \n Suivez votre commande ici : " . route('main_get_track_info_get', ['t_id' => $tracking->package->tracking_id]) . ". \n merci pour votre disponibilité";
                 // $msg = "Dear " . $package->phone . ". \n\nYour Shipment has departed from " . $request->au_location . " And your tracking number is " . $tracking->package->tracking_id . ". \n  \nTo track your shipment follow this link: {" . url('/track') . "} ";
                 $msg = strval($msg);
                 try {
@@ -223,16 +221,12 @@ class AdminTrackController extends Controller
                 }
 
 
-
-
                 // 
-
-
                 // email data notice (mail)
                 $data = [
                     'subject' => 'Package Receipt',
                     'email' => $package->email,
-                    'content' => "Bonjour Mr/Mme " . $package->name . " \nVotre commande N " . $package->tracking_id . " est arrivée à destination (" . $package->to . ") \nMerci de confirmer la livraison dès réception de votre colis.  \n Suivez votre commande ici : " . url('/track') . ". ",
+                    'content' => "Bonjour Mr/Mme " . $package->name . " \nVotre commande N " . $package->tracking_id . " est arrivée à destination (" . $package->to . ") \nMerci de confirmer la livraison dès réception de votre colis.  \n Suivez votre commande ici : " . route('main_get_track_info_get', ['t_id' => $tracking->package->tracking_id]) . ".",
                     // 'content' => "Your Package with tracking number of " . $tracking->package->tracking_id . " is at destination location and has been dispatched to  " . $package->address_to . ". \nAnd your shipment tracking number is " . $tracking->package->tracking_id . "",
                 ];
                 try {
@@ -247,7 +241,7 @@ class AdminTrackController extends Controller
                 }
 
                 // Phone data notice (sms)
-                $msg = "Bonjour Mr/Mme " . $package->name . " \nVotre commande N " . $package->tracking_id . " est arrivée à destination (" . $package->to . ") \nMerci de confirmer la livraison dès réception de votre colis.";
+                $msg = "Bonjour Mr/Mme " . $package->name . " \nVotre commande N " . $package->tracking_id . " est arrivée à destination (" . $package->to . ") \nMerci de confirmer la livraison dès réception de votre colis. \n Suivez votre commande ici : " . route('main_get_track_info_get', ['t_id' => $tracking->package->tracking_id]) . ". ";
                 // $msg = "Dear " . $package->phone . ". \n\nYour Package with tracking number of " . $tracking->package->tracking_id . " is at destination location and has been dispatched to  " . $package->address_to . ". \n  \nTo track your package current location follow this link: {" . url('/track') . "} ";
                 $msg = strval($msg);
                 try {
@@ -275,8 +269,6 @@ class AdminTrackController extends Controller
         // dd($user[0]->picture);
         $validator = Validator::make($request->all(), [
             "p_id" => "required",
-            "way_bill" => "required",
-            // "c_way_bill" => "nullable",
             "delivery_image" => "image|mimes:jpeg,jpg,png,gif|max:9000|required",
         ]);
 
@@ -302,103 +294,125 @@ class AdminTrackController extends Controller
 
         $imageNameToStore = url("/storage/package/delivery/$imageNameToStore");
 
-        if ($package->delivery_image == null) {
-            $imageNameToStore = $imageNameToStore;
+        if ($package->c_way_bill == null) {
+            $validator = Validator::make($request->all(), [
+                "way_bill" => "required",
+                // "s_by" => "nullable",
+            ]);
 
-            $arrayToUpdate = [
-                "delivery_image" => $imageNameToStore,
-                "way_bill" => $request->way_bill,
-                // "c_way_bill" => $request->c_way_bill,
-                "status" => '2',
-            ];
-
-            $package_update = Package::where('id', '=', $package->id)->update($arrayToUpdate);
-
-            if ($package_update) {
-                $p = Package::find($package->id);
-
-                $customer_data = [
-                    'subject' => 'Package Receipt',
-                    'email' => $p->customer->email,
-                    'content' => "Your package has been delivered successfully to " . $p->address_to . "" . $p->to . " \nAnd its been confirmed by Agent [" . Auth::user()->name . "] And received by [" . $p->email . "]\n\nAnd your tracking number is " . $p->tracking_id . "",
-                ];
-                try {
-                    Mail::send('main.email.c_receipt', $customer_data, function ($message) use ($customer_data) {
-                        $message->from('info@gls.com', 'GLS');
-                        $message->sender('info@gls.com', 'GLS');
-                        $message->to($customer_data['email']);
-                        $message->subject($customer_data['subject']);
-                    });
-                } catch (\Throwable $th) {
-                    // return back()->with('success', 'Package Has been confirm at ' . $request->au_location . ', Update is Not sent to contact Email');
-                }
-
-
-                // 
-
-
-                $data = [
-                    'subject' => 'Package Delivery notice',
-                    'email' => $p->email,
-                    "Bonjour " . $p->name . "\nVotre colis a été livré avec succès à " . $p->address_to . ", " . $p->to . " Et il a été confirmé par l'agent [" . Auth::user()->name . "] Et reçu par [" . $p->name . "] Et votre numéro de commande est " . $p->tracking_id . " \nPour suivre votre envoi, suivez ce lien : {" . url('/track') . "} ",
-                    // 'content' => "Your package has been delivered successfully to " . $p->address_to . "" . $p->to . " \nAnd its been confirmed by Agent [" . Auth::user()->name . "] And received by [" . $p->email . "]\n\nAnd your tracking number is " . $p->tracking_id . "",
-                ];
-
-                // $tracking = Tracking::create([
-                //     'package_id' => $package->id,
-                //     'current_location' => $p->to,
-                //     'a_d' => '1',
-                // ]);
-                // Tracking::where('id', '=', $tracking->id)->update([
-                //     'a_d' => "1",
-                // ]);
-
-                $msg = "Bonjour " . $p->name . "\nVotre colis a été livré avec succès à " . $p->address_to . ", " . $p->to . " Et il a été confirmé par l'agent [" . Auth::user()->name . "] Et reçu par [" . $p->name . "] Et votre numéro de commande est " . $p->tracking_id . " \nPour suivre votre envoi, suivez ce lien : {" . url('/track') . "} ";
-                $msg = strval($msg);
-
-                $new = substr($p->phone, 0, 1);
-
-                if ($new == 0) {
-                    $d = substr($p->phone, -10);
-                    $num = '234' . $d;
-                } elseif ($new == 6) {
-                    $d = substr($p->phone, -9);
-                    $num = '237' . $d;
-                } else {
-                    $num = $p->phone;
-                }
-                $to = $num;
-
-                try {
-                    Mail::send('main.email.receipt', $data, function ($message) use ($data) {
-                        $message->from('info@gls.com', 'GLS');
-                        $message->sender('info@gls.com', 'GLS');
-                        $message->to($data['email']);
-                        $message->subject($data['subject']);
-                    });
-                } catch (\Throwable $th) {
-                    // return back()->with('success', 'Package Has been Delivery confirmed to ' . $p->to . ', Update is Not sent to contact Email');
-                }
-
-                // try sending sms to contact phone
-                try {
-                    Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to . "&message=" . $msg . "&sender_id=GLS");
-                } catch (\Throwable $th) {
-                    return back()->with('success', 'Package Has been Delivery confirmed to ' . $p->to . ', But Receipt is sent to only contact Email and Not to contact Phone');
-                }
-
-                return back()->with(['success' => "Package delivery has confirmed And notification is sent on both ends, Thank you for using this service."]);
+            if ($validator->fails()) {
+                return back()->with('error', $validator->errors());
             }
 
-            // else
+            if ($package->delivery_image == null) {
+                $validator = Validator::make($request->all(), [
+                    // "way_bill" => "required",
+                    "s_by" => "required",
+                ]);
+
+                if ($validator->fails()) {
+                    return back()->with('error', $validator->errors());
+                }
+                $imageNameToStore = $imageNameToStore;
+
+                $arrayToUpdate = [
+                    "delivery_image" => $imageNameToStore,
+                    "way_bill" => $request->way_bill,
+                    "s_by" => $request->s_by,
+                    "status" => '2',
+                ];
+
+                $package_update = Package::where('id', '=', $package->id)->update($arrayToUpdate);
+
+                if ($package_update) {
+                    $p = Package::find($package->id);
+
+                    $customer_data = [
+                        'subject' => 'Package Receipt',
+                        'email' => $p->customer->email,
+                        'content' => "Your package has been delivered successfully to " . $p->address_to . "" . $p->to . " \nAnd its been confirmed by Agent [" . Auth::user()->name . "] And received by [" . $request->s_by . "]\n\nAnd your tracking number is " . $p->tracking_id . "",
+                    ];
+                    try {
+                        Mail::send('main.email.c_receipt', $customer_data, function ($message) use ($customer_data) {
+                            $message->from('info@gls.com', 'GLS');
+                            $message->sender('info@gls.com', 'GLS');
+                            $message->to($customer_data['email']);
+                            $message->subject($customer_data['subject']);
+                        });
+                    } catch (\Throwable $th) {
+                        // return back()->with('success', 'Package Has been confirm at ' . $request->au_location . ', Update is Not sent to contact Email');
+                    }
+
+
+                    // 
+                    // email to client for delivery confirmation
+                    $data = [
+                        'subject' => 'Package Delivery notice',
+                        'email' => $p->email,
+                        'content' => "Bonjour " . $p->name . "\nVotre colis a été livré avec succès à " . $p->address_to . ", " . $p->to . " Et il a été confirmé par l'agent [" . Auth::user()->name . "] Et reçu par [" . $p->s_by . "] Et votre numéro de commande est " . $p->tracking_id . " \nPour suivre votre envoi, suivez ce lien : {" . route('main_get_track_info_get', ['t_id' => $p->tracking_id]) . "} ",
+                        // 'content' => "Your package has been delivered successfully to " . $p->address_to . "" . $p->to . " \nAnd its been confirmed by Agent [" . Auth::user()->name . "] And received by [" . $p->email . "]\n\nAnd your tracking number is " . $p->tracking_id . "",
+                    ];
+                    try {
+                        Mail::send('main.email.receipt', $data, function ($message) use ($data) {
+                            $message->from('info@gls.com', 'GLS');
+                            $message->sender('info@gls.com', 'GLS');
+                            $message->to($data['email']);
+                            $message->subject($data['subject']);
+                        });
+                    } catch (\Throwable $th) {
+                        // return back()->with('success', 'Package Has been Delivery confirmed to ' . $p->to . ', Update is Not sent to contact Email');
+                    }
+
+
+                    $msg = "Bonjour " . $p->name . "\nVotre colis a été livré avec succès à " . $p->address_to . ", " . $p->to . " Et il a été confirmé par l'agent [" . Auth::user()->name . "] Et reçu par [" . $p->name . "] Et votre numéro de commande est " . $p->tracking_id . " \nPour suivre votre envoi, suivez ce lien : {" . route('main_get_track_info_get', ['t_id' => $p->tracking_id]) . "} ";
+                    $msg = strval($msg);
+
+                    $new = substr($p->phone, 0, 1);
+
+                    if ($new == 0) {
+                        $d = substr($p->phone, -10);
+                        $num = '234' . $d;
+                    } elseif ($new == 6) {
+                        $d = substr($p->phone, -9);
+                        $num = '237' . $d;
+                    } else {
+                        $num = $p->phone;
+                    }
+                    $to = $num;
+
+                    // try sending sms to contact phone
+                    try {
+                        Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to . "&message=" . $msg . "&sender_id=GLS");
+                    } catch (\Throwable $th) {
+                        return back()->with('success', 'Package Has been Delivery confirmed to ' . $p->to . ', But Receipt is sent to only contact Email and Not to contact Phone');
+                    }
+
+                    return back()->with(['success' => "Package delivery has confirmed And notification is sent on both ends, Thank you for using this service."]);
+                }
+
+                // else
+            } else {
+                $imageNameToStore = $package->delivery_image . ', ' . $imageNameToStore;
+
+                $arrayToUpdate = [
+                    "delivery_image" => $imageNameToStore,
+                    "c_way_bill" => $request->way_bill,
+                    "status" => '2',
+                ];
+
+                $package_update = Package::where('id', '=', $package->id)->update($arrayToUpdate);
+
+                if ($package_update) {
+                    $p = Package::find($package->id);
+
+                    return back()->with(['success' => "Package delivery has updated updated, Thank you for using this service."]);
+                }
+            }
         } else {
             $imageNameToStore = $package->delivery_image . ', ' . $imageNameToStore;
 
             $arrayToUpdate = [
                 "delivery_image" => $imageNameToStore,
-                // "way_bill" => $request->way_bill,
-                "c_way_bill" => $request->way_bill,
-                "status" => '2',
             ];
 
             $package_update = Package::where('id', '=', $package->id)->update($arrayToUpdate);
@@ -406,12 +420,8 @@ class AdminTrackController extends Controller
             if ($package_update) {
                 $p = Package::find($package->id);
 
-                return back()->with(['success' => "Package delivery has confirmed, Thank you for using this service."]);
+                return back()->with(['success' => "Document is uploaded successful, Thank you for using this service."]);
             }
         }
-
-
-
-        // $package = Package::find($request->p_id);
     }
 }

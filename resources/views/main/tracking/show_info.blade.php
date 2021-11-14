@@ -7,6 +7,7 @@
             <div class="container">
                 <a onclick="window.history.back()" id="back" class="pre">&laquo; Previous</a><br><br>
             <h4 class="text-primary text-uppercase font-weight-bold">Package Info</h4> 
+            @include('layouts.flash')
                 <div class="row">
                     <div class="col-lg-8 pb-4 pb-lg-0">
                         {{-- <div class="bg-primary text-dark text-center p-4">
@@ -22,6 +23,26 @@
                                     <div class="col-md-12">
                                         <span>Your Shipment</span>
                                         <p>{{$package[0]->tracking_id}}</p>
+                                        @if ($package[0]->status == 2)
+                                            {{-- @if ($tracking[count($tracking)-1]->current_location == $package[0]->to) --}}
+                                            @if (!$package[0]->c_d == null)
+                                                <button style="float: right;" class="btn btn-secondary" disabled>
+                                                    {{ __('Delivery Confirmed') }}
+                                                </button>
+                                            @else 
+                                                <a style="float: right;" class="btn btn-primary" href="{{ route('main_confirm_delivery_index') }}"
+                                                   onclick="event.preventDefault();
+                                                                 document.getElementById('otp-form').submit();">
+                                                    {{ __('Confirm delivery') }}
+                                                </a>
+                                                <form id="otp-form" action="{{ route('main_confirm_delivery_index') }}" method="POST" class="d-none">
+                                                    <input type="hidden" name="package_id" value="{{$package[0]->id}}">
+                                                    @csrf
+                                                </form>
+                                            @endif
+                                                {{-- <a onclick="window.history.back()" style="float: right;" class="btn btn-primary">Confirm delivery</a><br> --}}
+                                            {{-- @endif --}}
+                                        @endif 
                                     </div>
                                     <div class="col-md-12">
                                         @if ($package[0]->status == 1)    
@@ -83,7 +104,7 @@
                                             
                                             @if ($tracking[count($tracking)-1]->current_location == $package[0]->to)
                                                 <span>Received By:</span>
-                                                <p>{{$package[0]->customer->name}}</p>
+                                                <p>{{$package[0]->s_by}}</p>
                                             @endif
                                         @endif
                                     </div>
@@ -104,7 +125,7 @@
                                 <h6 class="text-primary text-uppercase font-weight-bold">Track Another parcel</h6>
                             </div>
                             <div class="card-body">
-                                @include('layouts.flash')
+                                {{-- @include('layouts.flash') --}}
                                 <form action="{{route('main_get_track_info')}}" method="POST">
                                         @csrf
                                         <div class="input-group">
@@ -259,5 +280,68 @@
                 </div>
             </div>
         </div>
+
+        @if ($message = Session::get('otp'))
+            
+        {{-- modal Details --}}
+        <div class="mc_otp" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="position:fixed;  margin: auto; width:100%; top: 2px; z-index: 999999999999; display:block;">
+            <div class="modal-dialog  modal-lg"  role="document">
+                <div class="modal-content">
+                    <div class="modal-body px-4 py-3">
+                        <button type="button" class="close" data-dismiss="modal" onclick="$('#mc_otp').css('display','none');" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>        
+                        <!-- 16:9 aspect ratio -->
+                        <div class="row justify-centent-center px-4 py-3">
+                            <h5>Confirm Delivery</h5>
+                        </div>
+                        
+                        <div class="row border-dark" style="border:black 1px solid;;">
+                            <div class="col-md-12 px-3 py-3">
+                                @if ($message = Session::get('err'))
+                                <div class="alert alert-warning alert-block">
+                                    <button type="button" class="close" data-dismiss="alert">×</button>
+                                    <strong>{{ $message }}</strong>
+                                </div>
+                                @else
+                                <div class="alert alert-warning alert-block">
+                                    <button type="button" class="close" data-dismiss="alert">×</button>
+                                    <strong>Otp is sent to Your Phone, If you did not receive after 10 minutes then close and try again.</strong>
+                                </div>
+                                @endif
+
+                                <form method="POST" action="{{ route('main_verify_delivery_otp') }}">
+                                    @csrf
+                                    <div class="form-group row">
+                                        <label for="otp" class="col-md-4 col-form-label text-md-right">{{ __('OTP code') }}</label>
+                                        <div class="col-md-6">
+                                            <input id="otp" type="number" class="form-control @error('otp') is-invalid @enderror" name="otp" value="{{ old('otp') }}" required autocomplete="otp" autofocus>
+                                            @error('otp')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="form-group row mb-0">
+                                        <div class="col-md-6 offset-md-4">
+                                            <button type="submit" class="btn btn-primary">
+                                                {{ __('verify') }}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        {{-- <div class="row justify-content-center">
+                            <button type="button" class=" btn btn-warning" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">Close</span>
+                        </button>  --}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
     </section>
 @endsection
