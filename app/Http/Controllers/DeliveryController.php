@@ -32,27 +32,10 @@ class DeliveryController extends Controller
         $p = Package::find($request->package_id);
         if ($p) {
             # code...
+
             $otp = rand(100000, 999999);
 
-            // $msg = "GLS\n your OTP is " . $otp . " will expire in the next 10-mins, Do not share otp, \n " . date("l jS \of F Y h:i:s A") . ".";
-            // $msg = strval($msg);
-            // $new = substr($p->phone, 0, 1);
-            // if ($new == 0) {
-            //     $d = substr($p->phone, -10);
-            //     $num = '234' . $d;
-            // } elseif ($new == 6) {
-            //     $d = substr($p->phone, -9);
-            //     $num = '237' . $d;
-            // } else {
-            //     $num = $p->phone;
-            // }
-
-            // $to = $num;
-            // try {
-            //     $send = Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to . "&message=" . $msg . "&sender_id=GLS");
-            // } catch (\Throwable $th) {
-            //     return back()->with('error', 'Failed to send Opt, Try again!');
-            // }
+            // Otpt mail 
             $customer_data = [
                 'subject' => 'Confirm Package delivery',
                 'email' => $p->email,
@@ -69,7 +52,28 @@ class DeliveryController extends Controller
                 // return back()->with('success', 'Package Has been confirm at ' . $request->au_location . ', Update is Not sent to contact Email');
             }
 
-            // return $send;
+
+
+            $msg = "GLS\n your OTP is " . $otp . " will expire in the next 10-mins, Do not share otp, \n " . date("l jS \of F Y h:i:s A") . ".";
+            $msg = strval($msg);
+            $new = substr($p->phone, 0, 1);
+            if ($new == 0) {
+                $d = substr($p->phone, -10);
+                $num = '234' . $d;
+            } elseif ($new == 6) {
+                $d = substr($p->phone, -9);
+                $num = '237' . $d;
+            } else {
+                $num = $p->phone;
+            }
+
+            $to = $num;
+            try {
+                Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to . "&message=" . $msg . "&sender_id=GLS");
+            } catch (\Throwable $th) {
+                return back()->with('error', 'Failed to send Opt, Try again!');
+            }
+
 
             $info = [
                 'otp' => $otp,
