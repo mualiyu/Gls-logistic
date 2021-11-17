@@ -1,0 +1,9 @@
+MAIL_MAILER=smtp
+MAIL_HOST=mail.ajisaq.com
+MAIL_PORT=465
+MAIL_USERNAME=smtp@ajisaq.com
+MAIL_PASSWORD=;-;k[D-g^v$K
+MAIL_ENCRYPTION=ssl
+MAIL_FROM_ADDRESS=info@gls.com
+MAIL_FROM_NAME="${APP_NAME}"
+
