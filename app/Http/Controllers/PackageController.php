@@ -277,12 +277,12 @@ class PackageController extends Controller
                         return back()->with('success', 'Package Has been Activated, Receipt is Not sent to contact Email');
                     }
 
-                    try {
-                        Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to . "&message=" . $msg . "&sender_id=GLS");
-                    } catch (\Throwable $th) {
+                    // try {
+                    //     Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to . "&message=" . $msg . "&sender_id=GLS");
+                    // } catch (\Throwable $th) {
 
-                        return back()->with('success', 'Package Has been Activated, Receipt is sent to contact Email but not Phone');
-                    }
+                    //     return back()->with('success', 'Package Has been Activated, Receipt is sent to contact Email but not Phone');
+                    // }
 
 
                     // if Success is on every this
