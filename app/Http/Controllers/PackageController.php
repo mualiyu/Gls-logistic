@@ -254,16 +254,16 @@ class PackageController extends Controller
                     $to = $num;
 
                     // try sending email to customer email
-                    try {
-                        Mail::send('main.email.c_receipt', $data2, function ($message) use ($data2) {
-                            $message->from('info@gls.com', 'GLS');
-                            $message->sender('info@gls.com', 'GLS');
-                            $message->to($data2['email']);
-                            $message->subject($data2['subject']);
-                        });
-                    } catch (\Throwable $th) {
-                        // return back()->with('success', 'Package Has been Activated, Receipt is Not sent to contact Email');
-                    }
+                    Mail::send('main.email.c_receipt', $data2, function ($message) use ($data2) {
+                        $message->from('info@gls.com', 'GLS');
+                        $message->sender('info@gls.com', 'GLS');
+                        $message->to($data2['email']);
+                        $message->subject($data2['subject']);
+                    });
+                    // try {
+                    // } catch (\Throwable $th) {
+                    //     // return back()->with('success', 'Package Has been Activated, Receipt is Not sent to contact Email');
+                    // }
 
                     // try sending email to contact email
                     try {
