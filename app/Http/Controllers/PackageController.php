@@ -254,16 +254,16 @@ class PackageController extends Controller
                     $to = $num;
 
                     // try sending email to customer email
-                    Mail::send('main.email.c_receipt', $data2, function ($message) use ($data2) {
-                        $message->from('info@gls.com', 'GLS');
-                        $message->sender('info@gls.com', 'GLS');
-                        $message->to($data2['email']);
-                        $message->subject($data2['subject']);
-                    });
-                    // try {
-                    // } catch (\Throwable $th) {
-                    //     // return back()->with('success', 'Package Has been Activated, Receipt is Not sent to contact Email');
-                    // }
+                    try {
+                        Mail::send('main.email.c_receipt', $data2, function ($message) use ($data2) {
+                            $message->from('info@gls.com', 'GLS');
+                            $message->sender('info@gls.com', 'GLS');
+                            $message->to($data2['email']);
+                            $message->subject($data2['subject']);
+                        });
+                    } catch (\Throwable $th) {
+                        // return back()->with('success', 'Package Has been Activated, Receipt is Not sent to contact Email');
+                    }
 
                     // try sending email to contact email
                     try {
@@ -277,12 +277,12 @@ class PackageController extends Controller
                         return back()->with('success', 'Package Has been Activated, Receipt is Not sent to contact Email');
                     }
 
-                    // try {
-                    //     Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to . "&message=" . $msg . "&sender_id=GLS");
-                    // } catch (\Throwable $th) {
+                    try {
+                        Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to . "&message=" . $msg . "&sender_id=GLS");
+                    } catch (\Throwable $th) {
 
-                    //     return back()->with('success', 'Package Has been Activated, Receipt is sent to contact Email but not Phone');
-                    // }
+                        return back()->with('success', 'Package Has been Activated, Receipt is sent to contact Email but not Phone');
+                    }
 
 
                     // if Success is on every this
