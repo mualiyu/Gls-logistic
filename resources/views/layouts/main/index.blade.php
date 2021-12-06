@@ -73,14 +73,14 @@
         <!-- Navbar Area -->
         <div class="delicious-main-menu">
             <div class="classy-nav-container breakpoint-off">
-                <div class="container">
+                <div class="container-fluid w-90">
                     <!-- Menu -->
                     <nav class="classy-navbar justify-content-between" id="deliciousNav">
 
                         <!-- Logo -->
                         <a class="nav-brand" href="{{url('/')}}">
-				            <img style="width: 40px; height:40px;"  src="{{asset('main2/img/core-img/logo.png')}}" alt="">
-                            <span>GLS</span>
+				            <img style="width: ; height:150px;"  src="{{asset('main2/img/logo2.webp')}}" alt="">
+                            {{-- <span>GLS</span> --}}
 			            </a>
 
                         <div class="ui_info">
@@ -115,9 +115,9 @@
                             <!-- Nav Start -->
                             <div class="classynav">
                                 <ul>
-                                    <li class=""><a href="/">Home</a></li>
+                                    <li class=""><a href="/delivery">Home</a></li>
                                     <li><a href="#">Quick Start</a>
-                                        <ul class="dropdown w-170 py-3 px-3" style="width: 300px;">
+                                        <ul class="dropdown w-170 py-1 px-3" style="width: 300px;">
                                             <li><b>Hello.</b> Get Started with Gls.</li>
                                             <hr>
                                             <li class="py-2"><a href="#">Track</a>

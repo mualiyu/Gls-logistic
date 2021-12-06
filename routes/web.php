@@ -14,52 +14,55 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-Route::get('/', [\App\Http\Controllers\MainController::class, 'index'])->name('main_home');
+// 
+// root
+// 
+Route::get('/', function () {
+	return view('home.index');
+});
 
 
-Route::get('/signin', [\App\Http\Controllers\CustomerAuthController::class, 'show_signin'])->name('main_signin');
-Route::post('/signin', [\App\Http\Controllers\CustomerAuthController::class, 'signin'])->name('main_signin_customer');
-Route::get('/signup', [\App\Http\Controllers\CustomerAuthController::class, 'show_signup'])->name('main_signup');
-Route::post('/signup', [\App\Http\Controllers\CustomerAuthController::class, 'create_customer'])->name('main_create_customer');
-Route::post('/customer_logout', [\App\Http\Controllers\CustomerAuthController::class, 'customer_logout'])->name('main_customer_logout');
 
+// 
+// Delivery
+// 
 
-Route::get('/packages', [\App\Http\Controllers\PackageController::class, 'index'])->name('main_show_packages')->middleware('customerAuth');
-Route::get('/package/add', [\App\Http\Controllers\PackageController::class, 'show'])->name('main_show_add_package')->middleware('customerAuth');
-Route::post('/package/add', [\App\Http\Controllers\PackageController::class, 'create'])->name('main_create_package')->middleware('customerAuth');
-Route::post('/package/{id}/activate', [\App\Http\Controllers\PackageController::class, 'activate_package'])->name('main_activate_package')->middleware('customerAuth');
-Route::get('/package/get_to_region', [\App\Http\Controllers\PackageController::class, 'get_to_region'])->name('main_get_to_region');
-Route::get('/package/search', [\App\Http\Controllers\PackageController::class, 'search_package'])->name('main_search_package')->middleware('customerAuth');
+// Delivery home
+Route::get('/delivery', [\App\Http\Controllers\MainController::class, 'index'])->name('main_home');
+
+// sign in route
+Route::get('/delivery/signin', [\App\Http\Controllers\CustomerAuthController::class, 'show_signin'])->name('main_signin');
+Route::post('/delivery/signin', [\App\Http\Controllers\CustomerAuthController::class, 'signin'])->name('main_signin_customer');
+Route::get('/delivery/signup', [\App\Http\Controllers\CustomerAuthController::class, 'show_signup'])->name('main_signup');
+Route::post('/delivery/signup', [\App\Http\Controllers\CustomerAuthController::class, 'create_customer'])->name('main_create_customer');
+Route::post('/delivery/customer_logout', [\App\Http\Controllers\CustomerAuthController::class, 'customer_logout'])->name('main_customer_logout');
+
+// packages route
+Route::get('/delivery/packages', [\App\Http\Controllers\PackageController::class, 'index'])->name('main_show_packages')->middleware('customerAuth');
+Route::get('/delivery/package/add', [\App\Http\Controllers\PackageController::class, 'show'])->name('main_show_add_package')->middleware('customerAuth');
+Route::post('/delivery/package/add', [\App\Http\Controllers\PackageController::class, 'create'])->name('main_create_package')->middleware('customerAuth');
+Route::post('/delivery/package/{id}/activate', [\App\Http\Controllers\PackageController::class, 'activate_package'])->name('main_activate_package')->middleware('customerAuth');
+Route::get('/delivery/package/get_to_region', [\App\Http\Controllers\PackageController::class, 'get_to_region'])->name('main_get_to_region');
+Route::get('/delivery/package/search', [\App\Http\Controllers\PackageController::class, 'search_package'])->name('main_search_package')->middleware('customerAuth');
 
 // show Add item to package
-Route::get('/package/{id}', [\App\Http\Controllers\PackageController::class, 'show_activate_package'])->name('main_show_activate_package')->middleware('customerAuth');
-Route::post('/package/item/add', [\App\Http\Controllers\PackageController::class, 'add_item'])->name('main_add_item_to_package')->middleware('customerAuth');
+Route::get('/delivery/package/{id}', [\App\Http\Controllers\PackageController::class, 'show_activate_package'])->name('main_show_activate_package')->middleware('customerAuth');
+Route::post('/delivery/package/item/add', [\App\Http\Controllers\PackageController::class, 'add_item'])->name('main_add_item_to_package')->middleware('customerAuth');
 
 // Tracking
-Route::get('/track', [\App\Http\Controllers\TrackingController::class, 'index'])->name('main_show_track_index');
-Route::post('/track', [\App\Http\Controllers\TrackingController::class, 'get_track'])->name('main_get_track_info');
-Route::get('/tracking/{t_id}', [\App\Http\Controllers\TrackingController::class, 'get_track_get'])->name('main_get_track_info_get');
+Route::get('/delivery/track', [\App\Http\Controllers\TrackingController::class, 'index'])->name('main_show_track_index');
+Route::post('/delivery/track', [\App\Http\Controllers\TrackingController::class, 'get_track'])->name('main_get_track_info');
+Route::get('/delivery/tracking/{t_id}', [\App\Http\Controllers\TrackingController::class, 'get_track_get'])->name('main_get_track_info_get');
 
-
-// 
 // Excel main
-// 
-Route::get('/excel/shipment', [\App\Http\Controllers\PackageController::class, 'export_summary_in_excel'])->name('main_excel_shipments_report')->middleware('customerAuth');
+Route::get('/delivery/excel/shipment', [\App\Http\Controllers\PackageController::class, 'export_summary_in_excel'])->name('main_excel_shipments_report')->middleware('customerAuth');
 
+// PDF ROUTE 
+Route::get('/delivery/pdf/search/shipment', [\App\Http\Controllers\PdfController::class, 'main_shipments_search'])->name('main_pdf_shipments_search');
 
-// 
-// PDF ROUTE
-// 
-Route::get('/pdf/search/shipment', [\App\Http\Controllers\PdfController::class, 'main_shipments_search'])->name('main_pdf_shipments_search');
-
-
-
-
-// 
 // confirm delivery otp
-// 
-Route::post('/confirm/delivery', [\App\Http\Controllers\DeliveryController::class, 'index'])->name('main_confirm_delivery_index');
-Route::post('/verify/delivery', [\App\Http\Controllers\DeliveryController::class, 'verify_delivery'])->name('main_verify_delivery_otp');
+Route::post('/delivery/confirm/delivery', [\App\Http\Controllers\DeliveryController::class, 'index'])->name('main_confirm_delivery_index');
+Route::post('/delivery/verify/delivery', [\App\Http\Controllers\DeliveryController::class, 'verify_delivery'])->name('main_verify_delivery_otp');
 
 
 
