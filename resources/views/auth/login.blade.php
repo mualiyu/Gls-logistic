@@ -71,5 +71,4 @@
     </div>
 </div>
 
-{{Hash::make('123456789')}}
 @endsection

@@ -78,7 +78,7 @@
                     <nav class="classy-navbar justify-content-between" id="deliciousNav">
 
                         <!-- Logo -->
-                        <a class="nav-brand" href="{{url('/')}}">
+                        <a class="nav-brand" href="{{url('/delivery')}}">
 				            <img style="width: ; height:150px;"  src="{{asset('main2/img/logo2.webp')}}" alt="">
                             {{-- <span>GLS</span> --}}
 			            </a>

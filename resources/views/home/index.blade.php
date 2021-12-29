@@ -45,7 +45,7 @@
             <div class="col-lg-8 text-center text-lg-start mb-2 mb-lg-0">
                 <div class="d-inline-flex align-items-center" style="height: 45px;">
                     <small class="me-3 text-light"><i class="fa fa-map-marker-alt me-2"></i>123 Street, Cameroon</small>
-                    <small class="me-3 text-light"><i class="fa fa-phone-alt me-2"></i>+694 47 68 52</small>
+                    <small class="me-3 text-light"><i class="fa fa-phone-alt me-2"></i>+237 694 47 68 52</small>
                     <small class="text-light"><i class="fa fa-envelope-open me-2"></i>info@Gls.com</small>
                 </div>
             </div>
@@ -144,7 +144,7 @@
     <div class="container-fluid py-5 wow fadeInUp" id="about" data-wow-delay="0.1s">
         <div class="container py-5">
             <div class="row g-5">
-                <div class="col-lg-7">
+                <div class="col-lg-6">
                     <div class="section-title position-relative pb-3 mb-5">
                         <h5 class="fw-bold text-primary text-uppercase">About Us</h5>
                         <h1 class="mb-0">The Best Logistic company</h1>
@@ -166,14 +166,14 @@
                         </div>
                         <div class="ps-4">
                             <h5 class="mb-2">Call to ask any question</h5>
-                            <h4 class="text-primary mb-0">+694 47 68 52 <small>or</small> +651 35 83 74</h4>
+                            <h4 class="text-primary mb-0">+237 694 47 68 52 <small>or</small> +237 651 35 83 74</h4>
                         </div>
                     </div>
                     <a href="{{route('main_signin')}}" class="btn btn-primary py-3 px-5 mt-3 wow zoomIn" data-wow-delay="0.9s">Get started</a>
                 </div>
-                <div class="col-lg-5" style="min-height: 500px;">
+                <div class="col-lg-6" style="min-height: 600px; min-width:auto;">
                     <div class="position-relative h-100">
-                        <img class="position-absolute w-100 h-100 rounded wow zoomIn" data-wow-delay="0.9s" src="{{asset('home/img/about_img.webp')}}" style="object-fit: cover;">
+                        <img class="position-absolute w-100 h-100 rounded wow" data-wow-delay="0.9s" src="{{asset('home/img/banner.jpeg')}}" style="object-fit: cover; ">
                     </div>
                 </div>
             </div>
@@ -261,7 +261,7 @@
                             </div>
                             <div class="d-flex mb-2">
                                 <i class="bi bi-telephone text-primary me-2"></i>
-                                <p class="mb-0">+694 47 68 52</p>
+                                <p class="mb-0">+237 694 47 68 52</p>
                             </div>
                             <div class="d-flex mt-4">
                                 <a class="btn btn-primary btn-square me-2" href="#"><i class="fab fa-twitter fw-normal"></i></a>
