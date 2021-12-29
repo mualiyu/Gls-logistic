@@ -171,9 +171,9 @@
                     </div>
                     <a href="{{route('main_signin')}}" class="btn btn-primary py-3 px-5 mt-3 wow zoomIn" data-wow-delay="0.9s">Get started</a>
                 </div>
-                <div class="col-lg-6" style="min-height: 600px; min-width:auto;">
+                <div class="col-lg-6" style="min-height: 400px; min-width:auto;">
                     <div class="position-relative h-100">
-                        <img class="position-absolute w-100 h-100 rounded wow" data-wow-delay="0.9s" src="{{asset('home/img/banner.jpeg')}}" style="object-fit: cover; ">
+                        <img class="position-absolute w-100 h-100 rounded wow" data-wow-delay="0.9s" src="{{asset('home/img/banner2.jpeg')}}" style="object-fit: cover; ">
                     </div>
                 </div>
             </div>
