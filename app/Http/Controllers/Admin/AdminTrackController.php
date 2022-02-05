@@ -134,11 +134,13 @@ class AdminTrackController extends Controller
                 $msg = "Bonjour Mr/Mme " . $package->name . ", \nVotre commande " . $tracking->package->tracking_id . " vient d'arriver à " . $request->au_location . " et confirmée par un agent GLS. Vous serez contacté chaque fois qu'il y aura une nouvelle mise à jour. \n Suivez votre commande ici : " . route('main_get_track_info_get', ['t_id' => $tracking->package->tracking_id]) . ". \nmerci pour votre disponibilité";
                 // $msg = "Dear " . $package->phone . ". \n\nYour Shipment has arrived at " . $request->au_location . " And your tracking number is " . $tracking->package->tracking_id . ". \n  \nTo track your shipment follow this link: {" . url('/track') . "} ";
                 $msg = strval($msg);
-                try {
-                    Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to . "&message=" . $msg . "&sender_id=GLS");
-                } catch (\Throwable $th) {
-                    return back()->with('success', 'Package Has been Activated, But Receipt is sent to only contact Email and Not to contact Phone');
-                }
+
+                // Disable SMS 
+                // try {
+                //     Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to . "&message=" . $msg . "&sender_id=GLS");
+                // } catch (\Throwable $th) {
+                //     return back()->with('success', 'Package Has been Activated, But Receipt is sent to only contact Email and Not to contact Phone');
+                // }
 
                 return back()->with('success', 'Package with ' . $package->tracking_id . ' tracking number Has been confirm at ' . $request->au_location . ', Update is sent to contact Email and phone');
                 // $ff = "arrived at";
@@ -190,11 +192,13 @@ class AdminTrackController extends Controller
                 $msg = "Bonjour Mr/Mme " . $package->name . ", \nVotre commande " . $tracking->package->tracking_id . " vient de Partir de " . $request->au_location . " et confirmée par un agent GLS. Vous serez contacté chaque fois qu'il y aura une nouvelle mise à jour. \n Suivez votre commande ici : " . route('main_get_track_info_get', ['t_id' => $tracking->package->tracking_id]) . ". \n merci pour votre disponibilité";
                 // $msg = "Dear " . $package->phone . ". \n\nYour Shipment has departed from " . $request->au_location . " And your tracking number is " . $tracking->package->tracking_id . ". \n  \nTo track your shipment follow this link: {" . url('/track') . "} ";
                 $msg = strval($msg);
-                try {
-                    Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to . "&message=" . $msg . "&sender_id=GLS");
-                } catch (\Throwable $th) {
-                    return back()->with('success', 'Package Has been Activated, But Receipt is sent to only contact Email and Not to contact Phone');
-                }
+
+                // Disable SMS 
+                // try {
+                //     Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to . "&message=" . $msg . "&sender_id=GLS");
+                // } catch (\Throwable $th) {
+                //     return back()->with('success', 'Package Has been Activated, But Receipt is sent to only contact Email and Not to contact Phone');
+                // }
 
                 return back()->with('success', 'Package with ' . $package->tracking_id . ' tracking number Has been confirm at ' . $request->au_location . ', Update is sent to contact Email and phone');
                 // $ff = "detapted";
@@ -244,11 +248,13 @@ class AdminTrackController extends Controller
                 $msg = "Bonjour Mr/Mme " . $package->name . " \nVotre commande N " . $package->tracking_id . " est arrivée à destination (" . $package->to . ") \nMerci de confirmer la livraison dès réception de votre colis. \n Suivez votre commande ici : " . route('main_get_track_info_get', ['t_id' => $tracking->package->tracking_id]) . ". ";
                 // $msg = "Dear " . $package->phone . ". \n\nYour Package with tracking number of " . $tracking->package->tracking_id . " is at destination location and has been dispatched to  " . $package->address_to . ". \n  \nTo track your package current location follow this link: {" . url('/track') . "} ";
                 $msg = strval($msg);
-                try {
-                    Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to . "&message=" . $msg . "&sender_id=GLS");
-                } catch (\Throwable $th) {
-                    return back()->with('success', 'Package Has been Activated, But Receipt is sent to only contact Email and Not to contact Phone');
-                }
+
+                // Disable SMS 
+                // try {
+                //     Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to . "&message=" . $msg . "&sender_id=GLS");
+                // } catch (\Throwable $th) {
+                //     return back()->with('success', 'Package Has been Activated, But Receipt is sent to only contact Email and Not to contact Phone');
+                // }
 
                 return back()->with('success', 'Package with ' . $package->tracking_id . ' tracking number Has been confirm at ' . $request->au_location . ', Update is sent to contact Email and phone');
                 // $ff = "arrived at";
@@ -380,12 +386,13 @@ class AdminTrackController extends Controller
                     }
                     $to = $num;
 
-                    // try sending sms to contact phone
-                    try {
-                        Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to . "&message=" . $msg . "&sender_id=GLS");
-                    } catch (\Throwable $th) {
-                        return back()->with('success', 'Package Has been Delivery confirmed to ' . $p->to . ', But Receipt is sent to only contact Email and Not to contact Phone');
-                    }
+                    // Disable SMS 
+                    // // try sending sms to contact phone
+                    // try {
+                    //     Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to . "&message=" . $msg . "&sender_id=GLS");
+                    // } catch (\Throwable $th) {
+                    //     return back()->with('success', 'Package Has been Delivery confirmed to ' . $p->to . ', But Receipt is sent to only contact Email and Not to contact Phone');
+                    // }
 
                     return back()->with(['success' => "Package delivery has confirmed And notification is sent on both ends, Thank you for using this service."]);
                 }

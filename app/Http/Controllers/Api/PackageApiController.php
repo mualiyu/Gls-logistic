@@ -275,13 +275,14 @@ class PackageApiController extends Controller
                             $to_customer = $numm;
 
 
-                            try {
-                                Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to_client . "&message=" . $msg_c . "&sender_id=GLS");
-                                Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to_customer . "&message=" . $msg . "&sender_id=GLS");
-                            } catch (\Throwable $th) {
+                            // Disable SMS 
+                            // try {
+                            //     Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to_client . "&message=" . $msg_c . "&sender_id=GLS");
+                            //     Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to_customer . "&message=" . $msg . "&sender_id=GLS");
+                            // } catch (\Throwable $th) {
 
-                                // return back()->with('success', 'Package Has been Activated, Receipt is sent to contact Email but not Phone');
-                            }
+                            //     // return back()->with('success', 'Package Has been Activated, Receipt is sent to contact Email but not Phone');
+                            // }
 
                             $p_info = Package::where('id', '=', $package->id)->with('customer')->with('items')->with('trackings')->get();
                             $res = [

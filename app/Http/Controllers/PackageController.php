@@ -277,12 +277,13 @@ class PackageController extends Controller
                         return back()->with('success', 'Package Has been Activated, Receipt is Not sent to contact Email');
                     }
 
-                    try {
-                        Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to . "&message=" . $msg . "&sender_id=GLS");
-                    } catch (\Throwable $th) {
+                    // Disable SMS 
+                    // try {
+                    //     Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to . "&message=" . $msg . "&sender_id=GLS");
+                    // } catch (\Throwable $th) {
 
-                        return back()->with('success', 'Package Has been Activated, Receipt is sent to contact Email but not Phone');
-                    }
+                    //     return back()->with('success', 'Package Has been Activated, Receipt is sent to contact Email but not Phone');
+                    // }
 
 
                     // if Success is on every this
@@ -395,7 +396,6 @@ class PackageController extends Controller
                 }
             }
         } else {    //Else condition for Location_type
-            // $location = Location::where('city', '=', $request->l_type)->get();
             // When All is selected
             if ($request->type == 'all') {
                 $packages = Package::where(['customer_id' => $customer->id, 'from' => $request->l_type])->whereBetween('created_at', [$from . ' 00:00:00', $to . ' 23:59:59'])->get();

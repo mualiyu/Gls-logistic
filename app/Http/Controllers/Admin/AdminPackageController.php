@@ -178,13 +178,14 @@ class AdminPackageController extends Controller
                         return back()->with('success', 'Package Has been Activated, But receipt is not sent to Contact email');
                     }
 
-                    // try sending sms to contact phone
-                    try {
-                        Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to . "&message=" . $msg . "&sender_id=GLS");
-                    } catch (\Throwable $th) {
+                    // Disable SMS 
+                    // // try sending sms to contact phone
+                    // try {
+                    //     Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to . "&message=" . $msg . "&sender_id=GLS");
+                    // } catch (\Throwable $th) {
 
-                        return back()->with('success', 'Package Has been Activated, But Receipt is sent to only contact Email and Not to contact Phone');
-                    }
+                    //     return back()->with('success', 'Package Has been Activated, But Receipt is sent to only contact Email and Not to contact Phone');
+                    // }
 
                     return back()->with('success', 'Package with ' . $p->tracking_id . ' tracking number Has been Activated, Receipt is sent to both Email and Phone');
                 } else {
