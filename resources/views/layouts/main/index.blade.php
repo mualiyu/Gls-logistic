@@ -57,8 +57,10 @@
         <div class="container">
             <div class="row">
                 <div class="col-12">
-                    <form action="#" method="post">
-                        <input type="search" name="search" placeholder="Type any keywords...">
+                    {{-- <form action="#" method="post"> --}}
+                    <form action="{{route('main_get_track_info')}}" method="POST">
+						    @csrf
+                        <input type="search" name="track" value="{{old("track")}}" placeholder="Type any keywords... (Track)">
                         <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
                     </form>
                 </div>

@@ -61,6 +61,11 @@
                                                 <p>{{$tracking[count($tracking)-1]->created_at}}</p>
                                             {{-- @endif --}}
                                         @endif
+
+                                        <img style="width: 130px; height:130px; float:right;" src="data:image/png;base64, {!! base64_encode(QrCode::format('png')
+                                            ->errorCorrection('H')
+                                            ->size(200)
+                                            ->generate($package[0]->tracking_id)) !!}" />
                                     </div>
                                 </div>
                                 <hr>

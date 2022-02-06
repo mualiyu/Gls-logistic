@@ -108,18 +108,28 @@
 							echo '<button class="btn btn-primary disabled" disabled>Deliverd</button>';
 						}
 					      ?>
-					      <a href="{{route('main_show_activate_package', ['id' => $p->id])}}" class="btn btn-primary" style="float: right">Open</a>
+					      <div style="float: right">
+							    <a href="{{route('main_show_activate_package', ['id' => $p->id])}}" class="btn btn-primary" >
+							      Open
+						      	    </a>
+					      </div>
 					<p style="margin:0"><b>Customer:</b> {{$p->customer->name}}</p>
 					<p style="margin:0"><b>Total Amount:</b> {{$p->total_amount ?? "Activate to see Amount"}}</p>
 					<p style="margin:0"><b>Item type:</b>  {{$p->items[0]->name}}</p>
 					<div class="row" style="margin:0">
-						<div class="col-md-6">
+						<div class="col-md-5">
 							<p style="margin:0"><b>From:</b></p>
 							<p style="margin:0"> {{$p->from}}</p>
 						</div>
-						<div class="col-md-6">
+						<div class="col-md-5">
 							<p style="margin:0"><b>To:</b></p>
 							<p style="margin:0">{{$p->address_to}}, {{$p->to}}</p>
+						</div>
+						<div class="col-md-2">
+							<img style="width: 100px; height:100px; float:right;" src="data:image/png;base64, {!! base64_encode(QrCode::format('png')
+							    ->errorCorrection('H')
+							    ->size(200)
+							    ->generate($p->tracking_id)) !!}" /> 
 						</div>
 					</div>
 					<p style="margin:0"><b>Created At: {{$p->created_at}}</b> </p>

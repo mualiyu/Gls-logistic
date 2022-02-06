@@ -115,13 +115,19 @@
 					<p style="margin:0"><b>Total Amount:</b> {{$p->total_amount ?? "Activate to see Amount"}}</p>
 					<p style="margin:0"><b>Item type:</b> {{$p->item_type}}</p>
 					<div class="row" style="margin:0">
-						<div class="col-md-6">
+						<div class="col-md-5">
 							<p style="margin:0"><b>From:</b></p>
 							<p style="margin:0"> {{$p->from}}</p>
 						</div>
-						<div class="col-md-6">
+						<div class="col-md-5">
 							<p style="margin:0"><b>To:</b></p>
 							<p style="margin:0">{{$p->address_to}}, {{$p->to}}</p>
+						</div>
+						<div class="col-md-2">
+							<img style="width: 100px; height:100px; float:right;" src="data:image/png;base64, {!! base64_encode(QrCode::format('png')
+							    ->errorCorrection('H')
+							    ->size(200)
+							    ->generate($p->tracking_id)) !!}" /> 
 						</div>
 					</div>
 					<p style="margin:0"><b>Created At: {{$p->created_at}}</b> </p>
