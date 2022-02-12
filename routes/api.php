@@ -30,6 +30,7 @@ Route::post('/package/update', [App\Http\Controllers\Api\PackageApiController::c
 Route::get('/track', [App\Http\Controllers\Api\TrackingApiController::class, 'index']);
 Route::post('/track/update', [App\Http\Controllers\Api\TrackingApiController::class, 'update']);
 
+
 //Api Auth Route
 Route::get('/apiUser/all', [App\Http\Controllers\Api\ApiAuthApiController::class, 'index']);
 Route::get('/apiUser/getByName', [App\Http\Controllers\Api\ApiAuthApiController::class, 'getByName']);
@@ -52,3 +53,6 @@ Route::post('/itemType/destroy', [App\Http\Controllers\Api\ItemTypeApiController
 
 // Api Agent login route
 Route::get('/agent/login', [App\Http\Controllers\Api\AgentApiController::class, 'login']);
+
+// Api Delivery route
+Route::post('/track/update/delivery', [App\Http\Controllers\Api\DeliveryController::class, 'index']);

@@ -130,6 +130,8 @@
 							    ->errorCorrection('H')
 							    ->size(200)
 							    ->generate($p->tracking_id)) !!}" /> 
+							    {{-- <div>{!! DNS1D::getBarcodeHTML($p->tracking_id, 'PHARMA') !!}</div> --}}
+							    {{-- <div class="mb-3">{!! DNS1D::getBarcodeHTML(''.$p->tracking_id.'', 'UPCA') !!}</div>  --}}
 						</div>
 					</div>
 					<p style="margin:0"><b>Created At: {{$p->created_at}}</b> </p>

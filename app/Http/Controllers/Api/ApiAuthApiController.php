@@ -74,7 +74,7 @@ class ApiAuthApiController extends Controller
         if ($validator->fails()) {
             $res = [
                 'status' => false,
-                'data' => $validator
+                'data' => $validator->errors(),
             ];
             return response()->json($res);
         }
