@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Api;
 use App\Models\Item;
+use App\Models\Location;
 use App\Models\Package;
 use App\Models\Tracking;
 use Illuminate\Http\Request;
@@ -113,6 +114,9 @@ class PackageApiController extends Controller
             return response()->json($res);
         }
     }
+
+
+
     public function create(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -123,8 +127,8 @@ class PackageApiController extends Controller
             'to' => 'required',
             'address_to' => 'required',
             'status' => 'nullable',
-            'item_type' => 'required',
-            'tracking_id' => 'required',
+            'item_type' => ['required'],
+            'tracking_id' => ['required', 'unique:packages'],
             'item_description' => 'required',
             'item_weight' => 'required',
             'quantity' => ['required'],
@@ -146,178 +150,188 @@ class PackageApiController extends Controller
             if ($api[0]->api_key == $request->api_key) {
 
                 // $tracking_id = rand(100000000000, 999999999999);
+                $location = Location::where('location', '=', $request->to)->get();
 
-                $arrayToInsert = [
-                    'customer_id' => $request->customer,
-                    'from' => $request->from,
-                    'to' => $request->to,
-                    // 'address_from' => $request->address_from,
-                    'address_to' => $request->address_to,
-                    'tracking_id' => $request->tracking_id,
-                    'adjusted_amount' => 0,
-                    'total_amount' => 0,
-                    'status' => 0,
-                    'email' => $request->client_email,
-                    'name' => $request->client_name,
-                    'phone' => $request->client_phone,
-                ];
+                if (count($location) > 0) {
+                    # code...
+                    $arrayToInsert = [
+                        'customer_id' => $request->customer,
+                        'from' => $request->from,
+                        'to' => $request->to,
+                        // 'address_from' => $request->address_from,
+                        'address_to' => $request->address_to,
+                        'tracking_id' => $request->tracking_id,
+                        'adjusted_amount' => 0,
+                        'total_amount' => 0,
+                        'status' => 0,
+                        'email' => $request->client_email,
+                        'name' => $request->client_name,
+                        'phone' => $request->client_phone,
+                    ];
 
-                $package = Package::create($arrayToInsert);
+                    $package = Package::create($arrayToInsert);
 
-                Package::where('id', '=', $package->id)->update([
-                    'adjusted_amount' => '0',
-                    'total_amount' => '0',
-                    'status' => '0',
-                    'email' => $request->client_email,
-                    'phone' => $request->client_phone,
-                    'name' => $request->client_name,
-                ]);
-
-                if ($package) {
-                    $item = Item::create([
-                        'package_id' => $package->id,
-                        'name' => $request->item_type,
-                        'description' => $request->item_description,
-                        'weight' => $request->item_weight,
-                        'quantity' => $request->quantity,
-                    ]);
-                    Item::where('id', '=', $item->id)->update([
-                        'weight' => $request->item_weight,
-                        'quantity' => $request->quantity,
+                    Package::where('id', '=', $package->id)->update([
+                        'adjusted_amount' => '0',
+                        'total_amount' => '0',
+                        'status' => '0',
+                        'email' => $request->client_email,
+                        'phone' => $request->client_phone,
+                        'name' => $request->client_name,
                     ]);
 
-                    if ($item) {
-
-                        // $a = $request->amount * 100;
-                        $amount = $package->total_amount + $package->to_location->charges[0]->amount;
-
-                        Package::where('id', '=', $package->id)->update([
-                            "status" => 1,
-                            "total_amount" => $amount,
-                        ]);
-
-                        $tracking = Tracking::create([
+                    if ($package) {
+                        $item = Item::create([
                             'package_id' => $package->id,
-                            'current_location' => $package->from,
-                            'a_d' => 1,
+                            'name' => $request->item_type,
+                            'description' => $request->item_description,
+                            'weight' => $request->item_weight,
+                            'quantity' => $request->quantity,
                         ]);
-                        Tracking::where('id', '=', $tracking->id)->update([
-                            'a_d' => 1
+                        Item::where('id', '=', $item->id)->update([
+                            'weight' => $request->item_weight,
+                            'quantity' => $request->quantity,
                         ]);
 
-                        if ($tracking) {
+                        if ($item) {
 
-                            // mail to customer
-                            $data = [
-                                'subject' => 'Package Receipt',
-                                'email' => $package->customer->email,
-                                'content' => 'Your Package has been Activated successfully \n And your tracking number is ' . $tracking->package->tracking_id . '',
-                            ];
-                            try {
-                                Mail::send('main.email.receipt', $data, function ($message) use ($data) {
-                                    $message->from('info@gls.com', 'GLS');
-                                    $message->sender('info@gls.com', 'GLS');
-                                    $message->to($data['email']);
-                                    $message->subject($data['subject']);
-                                });
-                            } catch (\Throwable $th) {
-                                // return back()->with('success', 'Package Has been Activated, Receipt is Not sent to Email');
-                            }
+                            // $a = $request->amount * 100;
+                            $amount = $package->total_amount + $package->to_location->charges[0]->amount;
 
-                            // Client mail 
-                            $client_data = [
-                                'subject' => 'Package Receipt',
-                                'email' => $package->email,
-                                'content' => "Bonjour Mr / Mme " . $tracking->package->name . ", votre commande est maintenant disponible. Vous serez contacté par un agent de liaison GLS.  \nVotre numéro tracking est " . $tracking->package->tracking_id . "\nMerci de suivile tracking de votre colis sur " . route('main_get_track_info_get', ['t_id' => $tracking->package->tracking_id]) . ". \nRestant à votre disposition.",
-                            ];
-                            try {
-                                Mail::send('main.email.receipt', $client_data, function ($message) use ($client_data) {
-                                    $message->from('info@gls.com', 'GLS');
-                                    $message->sender('info@gls.com', 'GLS');
-                                    $message->to($client_data['email']);
-                                    $message->subject($client_data['subject']);
-                                });
-                            } catch (\Throwable $th) {
-                                // return back()->with('success', 'Package Has been Activated, Receipt is Not sent to Email');
-                            }
+                            Package::where('id', '=', $package->id)->update([
+                                "status" => 1,
+                                "total_amount" => $amount,
+                            ]);
 
-                            // sms Exit client
+                            $tracking = Tracking::create([
+                                'package_id' => $package->id,
+                                'current_location' => $package->from,
+                                'a_d' => 1,
+                            ]);
+                            Tracking::where('id', '=', $tracking->id)->update([
+                                'a_d' => 1
+                            ]);
 
-                            // client
-                            $msg_c = "Bonjour Mr / Mme " . $tracking->package->name . ", votre commande est maintenant disponible. Vous serez contacté par un agent de liaison GLS.  \nVotre numéro tracking est " . $tracking->package->tracking_id . "\nMerci de suivile tracking de votre colis sur " . route('main_get_track_info_get', ['t_id' => $tracking->package->tracking_id]) . ". \nRestant à votre disposition.";
-                            $msg_c = strval($msg_c);
-                            $new_c = substr($package->phone, 0, 1);
-                            if ($new_c == 0) {
-                                $d = substr($package->phone, -10);
-                                $num = '234' . $d;
-                            } elseif ($new_c == 6) {
-                                $d = substr($package->phone, -9);
-                                $num = '237' . $d;
+                            if ($tracking) {
+
+                                // mail to customer
+                                $data = [
+                                    'subject' => 'Package Receipt',
+                                    'email' => $package->customer->email,
+                                    'content' => 'Your Package has been Activated successfully \n And your tracking number is ' . $tracking->package->tracking_id . '',
+                                ];
+                                try {
+                                    Mail::send('main.email.receipt', $data, function ($message) use ($data) {
+                                        $message->from('info@gls.com', 'GLS');
+                                        $message->sender('info@gls.com', 'GLS');
+                                        $message->to($data['email']);
+                                        $message->subject($data['subject']);
+                                    });
+                                } catch (\Throwable $th) {
+                                    // return back()->with('success', 'Package Has been Activated, Receipt is Not sent to Email');
+                                }
+
+                                // Client mail 
+                                $client_data = [
+                                    'subject' => 'Package Receipt',
+                                    'email' => $package->email,
+                                    'content' => "Bonjour Mr / Mme " . $tracking->package->name . ", votre commande est maintenant disponible. Vous serez contacté par un agent de liaison GLS.  \nVotre numéro tracking est " . $tracking->package->tracking_id . "\nMerci de suivile tracking de votre colis sur " . route('main_get_track_info_get', ['t_id' => $tracking->package->tracking_id]) . ". \nRestant à votre disposition.",
+                                ];
+                                try {
+                                    Mail::send('main.email.receipt', $client_data, function ($message) use ($client_data) {
+                                        $message->from('info@gls.com', 'GLS');
+                                        $message->sender('info@gls.com', 'GLS');
+                                        $message->to($client_data['email']);
+                                        $message->subject($client_data['subject']);
+                                    });
+                                } catch (\Throwable $th) {
+                                    // return back()->with('success', 'Package Has been Activated, Receipt is Not sent to Email');
+                                }
+
+                                // sms Exit client
+
+                                // client
+                                $msg_c = "Bonjour Mr / Mme " . $tracking->package->name . ", votre commande est maintenant disponible. Vous serez contacté par un agent de liaison GLS.  \nVotre numéro tracking est " . $tracking->package->tracking_id . "\nMerci de suivile tracking de votre colis sur " . route('main_get_track_info_get', ['t_id' => $tracking->package->tracking_id]) . ". \nRestant à votre disposition.";
+                                $msg_c = strval($msg_c);
+                                $new_c = substr($package->phone, 0, 1);
+                                if ($new_c == 0) {
+                                    $d = substr($package->phone, -10);
+                                    $num = '234' . $d;
+                                } elseif ($new_c == 6) {
+                                    $d = substr($package->phone, -9);
+                                    $num = '237' . $d;
+                                } else {
+                                    $num = $package->phone;
+                                }
+                                $to_client = $num;
+
+
+                                // customer
+                                $msg = "Your Package has been Activated successfully \n And your tracking number is " . $tracking->package->tracking_id . ". \n \nTo track your shipment follow this link: {" . route('main_get_track_info_get', ['t_id' => $tracking->package->tracking_id]) . "} ";
+                                $msg = strval($msg);
+                                $new = substr($package->customer->phone, 0, 1);
+                                if ($new == 0) {
+                                    $d = substr($package->customer->phone, -10);
+                                    $numm = '234' . $d;
+                                } elseif ($new == 6) {
+                                    $d = substr($package->customer->phone, -9);
+                                    $numm = '237' . $d;
+                                } else {
+                                    $numm = $package->customer->phone;
+                                }
+                                $to_customer = $numm;
+
+
+                                // Disable SMS 
+                                // try {
+                                //     Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to_client . "&message=" . $msg_c . "&sender_id=GLS");
+                                //     Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to_customer . "&message=" . $msg . "&sender_id=GLS");
+                                // } catch (\Throwable $th) {
+
+                                //     // return back()->with('success', 'Package Has been Activated, Receipt is sent to contact Email but not Phone');
+                                // }
+
+                                $p_info = Package::where('id', '=', $package->id)->with('customer')->with('items')->with('trackings')->get();
+                                $res = [
+                                    'status' => true,
+                                    'data' => $p_info,
+                                ];
+                                return response()->json($res);
                             } else {
-                                $num = $package->phone;
+                                Package::destroy($package->id);
+                                Item::destroy($item->id);
+
+                                $res = [
+                                    'status' => false,
+                                    'data' => 'Shipment tracking Not initiated, Try again.'
+                                ];
+                                return response()->json($res);
                             }
-                            $to_client = $num;
 
-
-                            // customer
-                            $msg = "Your Package has been Activated successfully \n And your tracking number is " . $tracking->package->tracking_id . ". \n \nTo track your shipment follow this link: {" . route('main_get_track_info_get', ['t_id' => $tracking->package->tracking_id]) . "} ";
-                            $msg = strval($msg);
-                            $new = substr($package->customer->phone, 0, 1);
-                            if ($new == 0) {
-                                $d = substr($package->customer->phone, -10);
-                                $numm = '234' . $d;
-                            } elseif ($new == 6) {
-                                $d = substr($package->customer->phone, -9);
-                                $numm = '237' . $d;
-                            } else {
-                                $numm = $package->customer->phone;
-                            }
-                            $to_customer = $numm;
-
-
-                            // Disable SMS 
-                            // try {
-                            //     Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to_client . "&message=" . $msg_c . "&sender_id=GLS");
-                            //     Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to_customer . "&message=" . $msg . "&sender_id=GLS");
-                            // } catch (\Throwable $th) {
-
-                            //     // return back()->with('success', 'Package Has been Activated, Receipt is sent to contact Email but not Phone');
-                            // }
-
-                            $p_info = Package::where('id', '=', $package->id)->with('customer')->with('items')->with('trackings')->get();
                             $res = [
                                 'status' => true,
-                                'data' => $p_info,
+                                'data' => $package
                             ];
                             return response()->json($res);
                         } else {
                             Package::destroy($package->id);
-                            Item::destroy($item->id);
-
                             $res = [
                                 'status' => false,
-                                'data' => 'Shipment tracking Not initiated, Try again.'
+                                'data' => 'Shipment item has not been Created, try again.'
                             ];
                             return response()->json($res);
                         }
-
-                        $res = [
-                            'status' => true,
-                            'data' => $package
-                        ];
-                        return response()->json($res);
                     } else {
-                        Package::destroy($package->id);
                         $res = [
                             'status' => false,
-                            'data' => 'Shipment item has not been Created, try again.'
+                            'data' => 'Shipment Not Created'
                         ];
                         return response()->json($res);
                     }
                 } else {
                     $res = [
                         'status' => false,
-                        'data' => 'Shipment Not Created'
+                        'data' => " 'To field' not found in system, Please check locations Api."
                     ];
                     return response()->json($res);
                 }

@@ -80,7 +80,7 @@ class DeliveryController extends Controller
                             $customer_data = [
                                 'subject' => 'Package Receipt',
                                 'email' => $p->customer->email,
-                                'content' => "Your package has been delivered successfully to " . $p->address_to . "" . $p->to . " \nAnd its been confirmed by Agent [" . $agent->name . "] And received by [" . $request->s_by . "]\n\nAnd your tracking number is " . $p->tracking_id . "",
+                                'content' => "Your package has been delivered successfully to " . $p->address_to . "" . $p->to . " \nAnd its been confirmed by Agent [" . $agent->name . "] And received by [" . $request->sign_by . "]\n\nAnd your tracking number is " . $p->tracking_id . "",
                             ];
                             try {
                                 Mail::send('main.email.c_receipt', $customer_data, function ($message) use ($customer_data) {
@@ -114,7 +114,7 @@ class DeliveryController extends Controller
                             }
 
 
-                            $msg = "Bonjour " . $p->name . "\nVotre colis a été livré avec succès à " . $p->address_to . ", " . $p->to . " Et il a été confirmé par l'agent [" . $agent->name . "] Et reçu par [" . $p->name . "] Et votre numéro de commande est " . $p->tracking_id . " \nPour suivre votre envoi, suivez ce lien : {" . route('main_get_track_info_get', ['t_id' => $p->tracking_id]) . "} ";
+                            $msg = "Bonjour " . $p->name . "\nVotre colis a été livré avec succès à " . $p->address_to . ", " . $p->to . " Et il a été confirmé par l'agent [" . $agent->name . "] Et reçu par [" . $p->s_by . "] Et votre numéro de commande est " . $p->tracking_id . " \nPour suivre votre envoi, suivez ce lien : {" . route('main_get_track_info_get', ['t_id' => $p->tracking_id]) . "} ";
                             $msg = strval($msg);
 
                             $new = substr($p->phone, 0, 1);
