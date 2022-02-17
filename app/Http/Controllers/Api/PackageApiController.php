@@ -156,7 +156,7 @@ class PackageApiController extends Controller
                     $l_from = Location::find($request->from);
                     # code...
                     $arrayToInsert = [
-                        'customer_id' => $request->customer,
+                        'customer_id' => $api[0]->customer,
                         'from' => $l_from->location,
                         'to' => $location[0]->location,
                         'address_to' => $request->address_to,
