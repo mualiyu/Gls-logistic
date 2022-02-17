@@ -150,15 +150,15 @@ class PackageApiController extends Controller
             if ($api[0]->api_key == $request->api_key) {
 
                 // $tracking_id = rand(100000000000, 999999999999);
-                $location = Location::where('location', '=', $request->to)->get();
+                $location = Location::where('id', '=', $request->to)->get();
 
                 if (count($location) > 0) {
+                    $l_from = Location::find($request->from);
                     # code...
                     $arrayToInsert = [
                         'customer_id' => $request->customer,
-                        'from' => $request->from,
-                        'to' => $request->to,
-                        // 'address_from' => $request->address_from,
+                        'from' => $l_from->location,
+                        'to' => $location[0]->location,
                         'address_to' => $request->address_to,
                         'tracking_id' => $request->tracking_id,
                         'adjusted_amount' => 0,
