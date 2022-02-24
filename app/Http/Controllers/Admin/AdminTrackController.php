@@ -7,6 +7,7 @@ use App\Models\Ebulksms;
 use App\Models\Package;
 use App\Models\Region;
 use App\Models\Tracking;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -387,12 +388,51 @@ class AdminTrackController extends Controller
                     $to = $num;
 
                     // Disable SMS 
-                    // // try sending sms to contact phone
-                    // try {
-                    //     Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to . "&message=" . $msg . "&sender_id=GLS");
-                    // } catch (\Throwable $th) {
-                    //     return back()->with('success', 'Package Has been Delivery confirmed to ' . $p->to . ', But Receipt is sent to only contact Email and Not to contact Phone');
-                    // }
+                    // try sending sms to contact phone
+                    try {
+                        Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to . "&message=" . $msg . "&sender_id=GLS");
+                    } catch (\Throwable $th) {
+                        return back()->with('success', 'Package Has been Delivery confirmed to ' . $p->to . ', But Receipt is sent to only contact Email and Not to contact Phone');
+                    }
+
+                    // sending email to Admins (Gls)
+                    $admins = User::where('p', '=', 1)->get();
+                    foreach ($admins as $admin) {
+                        $mss = "Package delivery is confirmed by  " . Auth::user()->name . "(" . Auth::user()->email . ") and it's signed by " . $request->s_by . ". \n\nThe tracking number is " . $p->tracking_id . ". \n\n Thank you! ";
+                        // $mss = "Package is Created by " . $p->customer->name . "(" . $p->customer->email . ") and you need to take action. \n\nThe tracking number is " . $p->tracking_id . ". \n\n" . route('main_get_track_info_get', ['t_id' => $p->tracking_id]) . " Follow this link to make action. ";
+
+                        $new_a = substr($admin->phone, 0, 1);
+                        if ($new_a == 0) {
+                            $d_a = substr($admin->phone, -10);
+                            $num_a = '234' . $d_a;
+                        } elseif ($new_a == 6) {
+                            $d_a = substr($admin->phone, -9);
+                            $num_a = '237' . $d_a;
+                        } else {
+                            $num_a = $admin->phone;
+                        }
+                        $to_a = $num_a;
+
+                        $data_a = [
+                            'subject' => 'Admin Notification',
+                            'email' => $admin->email,
+                            // 'c_email' => $p->customer->email,
+                            'content' => $mss,
+                        ];
+
+                        try {
+                            Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to_a . "&message=" . $mss . "&sender_id=GLS");
+
+                            Mail::send('main.email.receipt', $data_a, function ($message) use ($data_a) {
+                                $message->from('info@gls.com', 'GLS');
+                                $message->sender('info@gls.com', 'GLS');
+                                $message->to($data_a['email']);
+                                $message->subject($data_a['subject']);
+                            });
+                        } catch (\Throwable $th) {
+                            return back()->with('success', 'Package Has been Activated, Receipt is sent to contact Email but not Phone');
+                        }
+                    }
 
                     return back()->with(['success' => "Package delivery has confirmed And notification is sent on both ends, Thank you for using this service."]);
                 }

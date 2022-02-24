@@ -69,11 +69,11 @@ class DeliveryController extends Controller
 
             $to = $num;
             // Disable SMS 
-            // try {
-            //     Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to . "&message=" . $msg . "&sender_id=GLS");
-            // } catch (\Throwable $th) {
-            //     return back()->with('error', 'Failed to send Opt, Try again!');
-            // }
+            try {
+                Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to . "&message=" . $msg . "&sender_id=GLS");
+            } catch (\Throwable $th) {
+                return back()->with('error', 'Failed to send Opt, Try again!');
+            }
 
 
             $info = [

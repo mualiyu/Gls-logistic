@@ -10,6 +10,7 @@ use App\Models\Location;
 use App\Models\Package;
 use App\Models\Region;
 use App\Models\Tracking;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
@@ -278,12 +279,50 @@ class PackageController extends Controller
                     }
 
                     // Disable SMS 
-                    // try {
-                    //     Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to . "&message=" . $msg . "&sender_id=GLS");
-                    // } catch (\Throwable $th) {
+                    try {
+                        Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to . "&message=" . $msg . "&sender_id=GLS");
+                    } catch (\Throwable $th) {
 
-                    //     return back()->with('success', 'Package Has been Activated, Receipt is sent to contact Email but not Phone');
-                    // }
+                        return back()->with('success', 'Package Has been Activated, Receipt is sent to contact Email but not Phone');
+                    }
+
+                    // sending email to Admins (Gls)
+                    $admins = User::where('p', '=', 1)->get();
+                    foreach ($admins as $admin) {
+                        $mss = "Package is Created by " . $tracking->package->customer->name . "(" . $tracking->package->customer->email . ") and you need to take action. \n\nThe tracking number is " . $tracking->package->tracking_id . ". \n\n" . route('main_get_track_info_get', ['t_id' => $tracking->package->tracking_id]) . " Follow this link to make action. ";
+
+                        $new_a = substr($admin->phone, 0, 1);
+                        if ($new_a == 0) {
+                            $d_a = substr($admin->phone, -10);
+                            $num_a = '234' . $d_a;
+                        } elseif ($new_a == 6) {
+                            $d_a = substr($admin->phone, -9);
+                            $num_a = '237' . $d_a;
+                        } else {
+                            $num_a = $admin->phone;
+                        }
+                        $to_a = $num_a;
+
+                        $data_a = [
+                            'subject' => 'Admin Notification',
+                            'email' => $admin->email,
+                            // 'c_email' => $p->customer->email,
+                            'content' => $mss,
+                        ];
+
+                        try {
+                            Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to_a . "&message=" . $mss . "&sender_id=GLS");
+
+                            Mail::send('main.email.receipt', $data_a, function ($message) use ($data_a) {
+                                $message->from('info@gls.com', 'GLS');
+                                $message->sender('info@gls.com', 'GLS');
+                                $message->to($data_a['email']);
+                                $message->subject($data_a['subject']);
+                            });
+                        } catch (\Throwable $th) {
+                            return back()->with('success', 'Package Has been Activated, Receipt is sent to contact Email but not Phone');
+                        }
+                    }
 
 
                     // if Success is on every this
