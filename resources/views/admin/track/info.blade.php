@@ -96,20 +96,17 @@
 					<h4 class="box-title"><b>Contact info</b></h4>
 					<br>
 					<div class="row">
-					    <div class="col-sm-5">
+					    <div class="col-sm-6">
 						<div class="form-group mb-4">
-                                    		    <label for="example-email" class="col-md-12 p-0">Contact Phone: </label>
+                                    		    <label for="example-email" class="col-md-12 p-0">Contact name: </label>
                                     		    <div class="col-md-12 border-bottom p-0">
-                                    		       <span class="form-control px-5 border-0"> {{$package->phone}}</span>
+                                    		       <span class="form-control px-5 border-0"> {{$package->name}}</span>
                                     		    </div>
                                     		</div>
 					    </div>
-					    <div class="col-sm-5">
+					    <div class="col-sm-4">
 						<div class="form-group mb-4">
-                                    		    <label for="example-email" class="col-md-12 p-0">Contact Email: </label>
-                                    		    <div class="col-md-12 border-bottom p-0">
-                                    		        <span class="form-control px-5 border-0"> {{$package->email}}</span>
-                                    		    </div>
+                                    		    <a href="{{route('ship_label', ['t_id'=>$package->tracking_id])}}" class="btn btn-success" style="float: right">Print Shipment Label</a>
                                     		</div>
 					    </div>
 					    <div class="col-sm-2">
@@ -118,6 +115,30 @@
                                             		->size(200)
                                             		->generate($package->tracking_id)) !!}" />
 					    </div>
+				    </div>
+					<div class="row">
+					    <div class="col-sm-6">
+						<div class="form-group mb-4">
+                                    		    <label for="example-email" class="col-md-12 p-0">Contact Phone: </label>
+                                    		    <div class="col-md-12 border-bottom p-0">
+                                    		       <span class="form-control px-5 border-0"> {{$package->phone}}</span>
+                                    		    </div>
+                                    		</div>
+					    </div>
+					    <div class="col-sm-6">
+						<div class="form-group mb-4">
+                                    		    <label for="example-email" class="col-md-12 p-0">Contact Email: </label>
+                                    		    <div class="col-md-12 border-bottom p-0">
+                                    		        <span class="form-control px-5 border-0"> {{$package->email}}</span>
+                                    		    </div>
+                                    		</div>
+					    </div>
+					    {{-- <div class="col-sm-2">
+						<img style="width: 130px; height:130px; float:right;" src="data:image/png;base64, {!! base64_encode(QrCode::format('png')
+                                            		->errorCorrection('H')
+                                            		->size(200)
+                                            		->generate($package->tracking_id)) !!}" />
+					    </div> --}}
 				    </div>
 					<hr>
 					<h4 class="box-title"><b>Package info</b></h4>
@@ -141,7 +162,7 @@
 						<div class="form-group mb-4">
                                     		    <label for="example-email" class="col-md-12 p-0">To: </label>
                                     		    <div class="col-md-12 border-bottom p-0">
-                                    		        <span class="form-control px-5 border-0"> {{$package->address_to}}, {{$package->to}}</span>
+                                    		        <span class="form-control px-5 border-0"> {{$package->address_to}} {{$package->to}}, {{$package->to_location->city}} {{$package->to_location->region}}</span>
                                     		    </div>
                                     		</div>
 					    </div>

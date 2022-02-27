@@ -59,6 +59,7 @@ Route::get('/delivery/excel/shipment', [\App\Http\Controllers\PackageController:
 
 // PDF ROUTE 
 Route::get('/delivery/pdf/search/shipment', [\App\Http\Controllers\PdfController::class, 'main_shipments_search'])->name('main_pdf_shipments_search');
+Route::get('/delivery/pdf/label/{t_id}/shipment', [\App\Http\Controllers\TrackingController::class, 'ship_label'])->name('ship_label');
 
 // confirm delivery otp
 Route::post('/delivery/confirm/delivery', [\App\Http\Controllers\DeliveryController::class, 'index'])->name('main_confirm_delivery_index');
