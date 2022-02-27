@@ -133,14 +133,15 @@ class AdminPackageController extends Controller
                     $data = [
                         'subject' => 'Package Receipt',
                         'email' => $p->email,
-                        'content' => "Bonjour Mr / Mme " . $tracking->package->name . ", votre commande est maintenant disponible. Vous serez contacté par un agent de liaison GLS.  \nVotre numéro tracking est " . $tracking->package->tracking_id . "\nMerci de suivile tracking de votre colis sur " . url('/track') . ". \nRestant à votre disposition.",
+                        'content' => "Bonjour " . $tracking->package->name . "(" . $tracking->package->phone . "), votre commande Orange n° " . $tracking->package->tracking_id . " est maintenant disponible! Vous serez contacté par un agent de liaison GLS. Vous pouvez suivre votre colis sur " . route('main_get_track_info_get', ['t_id' => $tracking->package->tracking_id]) . ". Restant à votre disposition.",
+                        // 'content' => "Bonjour Mr / Mme " . $tracking->package->name . ", votre commande est maintenant disponible. Vous serez contacté par un agent de liaison GLS.  \nVotre numéro tracking est " . $tracking->package->tracking_id . "\nMerci de suivile tracking de votre colis sur " . url('/track') . ". \nRestant à votre disposition.",
                         // 'content' => 'Your shipments has been Activated successfully and your tracking number is ' . $tracking->package->tracking_id . '',
                     ];
 
                     // $ebulk = new Ebulksms();
 
-                    $msg = "Bonjour Mr / Mme " . $tracking->package->name . ", votre commande est maintenant disponible. Vous serez contacté par un agent de liaison GLS.  \nVotre numéro tracking est " . $tracking->package->tracking_id . "\nMerci de suivile tracking de votre colis sur " . url('/track') . ". \nRestant à votre disposition.";
-                    // $msg = "Your Package has been Activated successfully \n And your tracking number is " . $tracking->package->tracking_id . ". \n\nTo track your shipment follow this link: {" . url('/track') . "} ";
+                    // $msg = "Bonjour Mr / Mme " . $tracking->package->name . ", votre commande est maintenant disponible. Vous serez contacté par un agent de liaison GLS.  \nVotre numéro tracking est " . $tracking->package->tracking_id . "\nMerci de suivile tracking de votre colis sur " . url('/track') . ". \nRestant à votre disposition.";
+                    $msg = $data['content'];
                     $msg = strval($msg);
 
                     $new = substr($p->phone, 0, 1);
@@ -157,8 +158,8 @@ class AdminPackageController extends Controller
                     // try sending email to customer
                     try {
                         Mail::send('main.email.c_receipt', $customer_data, function ($message) use ($customer_data) {
-                            $message->from('info@gls.com', 'GLS');
-                            $message->sender('info@gls.com', 'GLS');
+                            $message->from('no-reply@glscam.com', 'GLS');
+                            $message->sender('no-reply@glscam.com', 'GLS');
                             $message->to($customer_data['email']);
                             $message->subject($customer_data['subject']);
                         });
@@ -169,8 +170,8 @@ class AdminPackageController extends Controller
                     // try sending email to client
                     try {
                         Mail::send('main.email.receipt', $data, function ($message) use ($data) {
-                            $message->from('info@gls.com', 'GLS');
-                            $message->sender('info@gls.com', 'GLS');
+                            $message->from('no-reply@glscam.com', 'GLS');
+                            $message->sender('no-reply@glscam.com', 'GLS');
                             $message->to($data['email']);
                             $message->subject($data['subject']);
                         });
@@ -179,13 +180,14 @@ class AdminPackageController extends Controller
                     }
 
                     // Disable SMS 
-                    // // try sending sms to contact phone
-                    // try {
-                    //     Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to . "&message=" . $msg . "&sender_id=GLS");
-                    // } catch (\Throwable $th) {
+                    // try sending sms to contact phone
+                    try {
+                        Http::get("http://nitrosms.cm/api_v1?sub_account=081_glsdelivery1&sub_account_pass=123456789&action=send_sms&sender_id=Gls_Delivery&message=" . $msg . "&recipients=" . $to);
+                        // Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to . "&message=" . $msg . "&sender_id=GLS");
+                    } catch (\Throwable $th) {
 
-                    //     return back()->with('success', 'Package Has been Activated, But Receipt is sent to only contact Email and Not to contact Phone');
-                    // }
+                        return back()->with('success', 'Package Has been Activated, But Receipt is sent to only contact Email and Not to contact Phone');
+                    }
 
                     return back()->with('success', 'Package with ' . $p->tracking_id . ' tracking number Has been Activated, Receipt is sent to both Email and Phone');
                 } else {

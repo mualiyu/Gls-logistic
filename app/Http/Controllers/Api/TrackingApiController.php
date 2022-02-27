@@ -190,7 +190,8 @@ class TrackingApiController extends Controller
 
                                 // Disable SMS 
                                 try {
-                                    Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to . "&message=" . $msg . "&sender_id=GLS");
+                                    Http::get("http://nitrosms.cm/api_v1?sub_account=081_glsdelivery1&sub_account_pass=123456789&action=send_sms&sender_id=Gls_Delivery&message=" . $msg . "&recipients=" . $to);
+                                    // Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to . "&message=" . $msg . "&sender_id=GLS");
                                 } catch (\Throwable $th) {
                                     // return back()->with('success', 'Package Has been Activated, But Receipt is sent to only contact Email and Not to contact Phone');
                                 }
@@ -211,8 +212,8 @@ class TrackingApiController extends Controller
                                 ];
                                 try {
                                     Mail::send('main.email.c_receipt', $customer_data, function ($message) use ($customer_data) {
-                                        $message->from('info@gls.com', 'GLS');
-                                        $message->sender('info@gls.com', 'GLS');
+                                        $message->from('no-reply@glscam.com', 'GLS');
+                                        $message->sender('no-reply@glscam.com', 'GLS');
                                         $message->to($customer_data['email']);
                                         $message->subject($customer_data['subject']);
                                     });
@@ -248,7 +249,8 @@ class TrackingApiController extends Controller
 
                                 // Disable SMS 
                                 try {
-                                    Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to . "&message=" . $msg . "&sender_id=GLS");
+                                    Http::get("http://nitrosms.cm/api_v1?sub_account=081_glsdelivery1&sub_account_pass=123456789&action=send_sms&sender_id=Gls_Delivery&message=" . $msg . "&recipients=" . $to);
+                                    // Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to . "&message=" . $msg . "&sender_id=GLS");
                                 } catch (\Throwable $th) {
                                     // return back()->with('success', 'Package Has been Activated, But Receipt is sent to only contact Email and Not to contact Phone');
                                 }

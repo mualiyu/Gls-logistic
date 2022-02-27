@@ -15,16 +15,17 @@
 	<div class="container-fluid">
 	<div class="row">
 		<div class="" style="border: black 1px solid; padding:20px;">
-			<img src="{{asset('home/img/logo.png')}}" alt="" style="height: 120px; width: 120px; float: left;">
+			<img src="https://glscam.com/main2/img/core-img/logo.png" alt="" style="height: 120px; width: 120px; float: left;">
 			<img alt="" style="width: 120px; height: 120px; float:right; margin:0;" src="data:image/png;base64, {!! base64_encode(QrCode::format('png')
                         ->errorCorrection('H')
                         ->size(200)
                         ->generate($package->tracking_id)) !!}">
-		</div><br><br><br><br><br><br>
+		<br><br><br><br><br><br>
+		</div>
 		<div class="row">
 			<div class="col-12" style="border: black 1px solid;  font-size: 30px; justify-content: center;">
 				<div align="center">
-					<p><b>GLOBE LINE SARL</b></p>
+					<p><b>GLOBE LINE SERVICES SARL</b></p>
 				</div>
 			</div>
 		</div>

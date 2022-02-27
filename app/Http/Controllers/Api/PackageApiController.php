@@ -223,8 +223,8 @@ class PackageApiController extends Controller
                                 ];
                                 try {
                                     Mail::send('main.email.receipt', $data, function ($message) use ($data) {
-                                        $message->from('info@gls.com', 'GLS');
-                                        $message->sender('info@gls.com', 'GLS');
+                                        $message->from('no-reply@glscam.com', 'GLS');
+                                        $message->sender('no-reply@glscam.com', 'GLS');
                                         $message->to($data['email']);
                                         $message->subject($data['subject']);
                                     });
@@ -241,8 +241,8 @@ class PackageApiController extends Controller
                                 ];
                                 try {
                                     Mail::send('main.email.receipt', $client_data, function ($message) use ($client_data) {
-                                        $message->from('info@gls.com', 'GLS');
-                                        $message->sender('info@gls.com', 'GLS');
+                                        $message->from('no-reply@glscam.com', 'GLS');
+                                        $message->sender('no-reply@glscam.com', 'GLS');
                                         $message->to($client_data['email']);
                                         $message->subject($client_data['subject']);
                                     });
@@ -287,8 +287,10 @@ class PackageApiController extends Controller
 
                                 // Disable SMS 
                                 try {
-                                    Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to_client . "&message=" . $msg_c . "&sender_id=GLS");
-                                    Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to_customer . "&message=" . $msg . "&sender_id=GLS");
+                                    Http::get("http://nitrosms.cm/api_v1?sub_account=081_glsdelivery1&sub_account_pass=123456789&action=send_sms&sender_id=Gls_Delivery&message=" . $msg_c . "&recipients=" . $to_client);
+                                    // Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to_client . "&message=" . $msg_c . "&sender_id=GLS");
+                                    Http::get("http://nitrosms.cm/api_v1?sub_account=081_glsdelivery1&sub_account_pass=123456789&action=send_sms&sender_id=Gls_Delivery&message=" . $msg . "&recipients=" . $to_customer);
+                                    // Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to_customer . "&message=" . $msg . "&sender_id=GLS");
                                 } catch (\Throwable $th) {
 
                                     // return back()->with('success', 'Package Has been Activated, Receipt is sent to contact Email but not Phone');
@@ -318,11 +320,12 @@ class PackageApiController extends Controller
                                     ];
 
                                     try {
-                                        Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to_a . "&message=" . $mss . "&sender_id=GLS");
+                                        Http::get("http://nitrosms.cm/api_v1?sub_account=081_glsdelivery1&sub_account_pass=123456789&action=send_sms&sender_id=Gls_Delivery&message=" . $mss . "&recipients=" . $to_a);
+                                        // Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to_a . "&message=" . $mss . "&sender_id=GLS");
 
                                         Mail::send('main.email.receipt', $data_a, function ($message) use ($data_a) {
-                                            $message->from('info@gls.com', 'GLS');
-                                            $message->sender('info@gls.com', 'GLS');
+                                            $message->from('no-reply@glscam.com', 'GLS');
+                                            $message->sender('no-reply@glscam.com', 'GLS');
                                             $message->to($data_a['email']);
                                             $message->subject($data_a['subject']);
                                         });
