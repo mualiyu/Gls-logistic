@@ -151,8 +151,8 @@ class TrackingApiController extends Controller
                                 ];
                                 try {
                                     Mail::send('main.email.c_receipt', $customer_data, function ($message) use ($customer_data) {
-                                        $message->from('info@gls.com', 'GLS');
-                                        $message->sender('info@gls.com', 'GLS');
+                                        $message->from('no-reply@glscam.com', 'GLS');
+                                        $message->sender('no-reply@glscam.com', 'GLS');
                                         $message->to($customer_data['email']);
                                         $message->subject($customer_data['subject']);
                                     });
@@ -173,8 +173,8 @@ class TrackingApiController extends Controller
                                 ];
                                 try {
                                     Mail::send('main.email.receipt', $data, function ($message) use ($data) {
-                                        $message->from('info@gls.com', 'GLS');
-                                        $message->sender('info@gls.com', 'GLS');
+                                        $message->from('no-reply@glscam.com', 'GLS');
+                                        $message->sender('no-reply@glscam.com', 'GLS');
                                         $message->to($data['email']);
                                         $message->subject($data['subject']);
                                     });
