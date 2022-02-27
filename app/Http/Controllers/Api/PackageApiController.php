@@ -236,7 +236,8 @@ class PackageApiController extends Controller
                                 $client_data = [
                                     'subject' => 'Package Receipt',
                                     'email' => $package->email,
-                                    'content' => "Bonjour Mr / Mme " . $tracking->package->name . ", votre commande est maintenant disponible. Vous serez contacté par un agent de liaison GLS.  \nVotre numéro tracking est " . $tracking->package->tracking_id . "\nMerci de suivile tracking de votre colis sur " . route('main_get_track_info_get', ['t_id' => $tracking->package->tracking_id]) . ". \nRestant à votre disposition.",
+                                    'content' => "Bonjour " . $tracking->package->name . "(" . $tracking->package->phone . "), votre commande Orange n° " . $tracking->package->tracking_id . " est maintenant disponible! Vous serez contacté par un agent de liaison GLS. Vous pouvez suivre votre colis sur " . route('main_get_track_info_get', ['t_id' => $tracking->package->tracking_id]) . ". Restant à votre disposition.",
+                                    // 'content' => "Bonjour Mr / Mme " . $tracking->package->name . ", votre commande est maintenant disponible. Vous serez contacté par un agent de liaison GLS.  \nVotre numéro tracking est " . $tracking->package->tracking_id . "\nMerci de suivile tracking de votre colis sur " . route('main_get_track_info_get', ['t_id' => $tracking->package->tracking_id]) . ". \nRestant à votre disposition.",
                                 ];
                                 try {
                                     Mail::send('main.email.receipt', $client_data, function ($message) use ($client_data) {
@@ -252,7 +253,8 @@ class PackageApiController extends Controller
                                 // sms Exit client
 
                                 // client
-                                $msg_c = "Bonjour Mr / Mme " . $tracking->package->name . ", votre commande est maintenant disponible. Vous serez contacté par un agent de liaison GLS.  \nVotre numéro tracking est " . $tracking->package->tracking_id . "\nMerci de suivile tracking de votre colis sur " . route('main_get_track_info_get', ['t_id' => $tracking->package->tracking_id]) . ". \nRestant à votre disposition.";
+                                // $msg_c = "Bonjour Mr / Mme " . $tracking->package->name . ", votre commande est maintenant disponible. Vous serez contacté par un agent de liaison GLS.  \nVotre numéro tracking est " . $tracking->package->tracking_id . "\nMerci de suivile tracking de votre colis sur " . route('main_get_track_info_get', ['t_id' => $tracking->package->tracking_id]) . ". \nRestant à votre disposition.";
+                                $msg_c = $client_data['content'];
                                 $msg_c = strval($msg_c);
                                 $new_c = substr($package->phone, 0, 1);
                                 if ($new_c == 0) {

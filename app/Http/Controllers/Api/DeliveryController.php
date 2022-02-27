@@ -100,7 +100,8 @@ class DeliveryController extends Controller
                             $data = [
                                 'subject' => 'Package Delivery notice',
                                 'email' => $p->email,
-                                'content' => "Bonjour " . $p->name . "\nVotre colis a été livré avec succès à " . $p->address_to . ", " . $p->to . " Et il a été confirmé par l'agent [" . $agent->name . "] Et reçu par [" . $p->s_by . "] Et votre numéro de commande est " . $p->tracking_id . " \nPour suivre votre envoi, suivez ce lien : {" . route('main_get_track_info_get', ['t_id' => $p->tracking_id]) . "} ",
+                                'content' => "Bonjour " . $p->name . ", votre commande Orange n° " . $p->tracking_id . " a été livrée avec succès à " . $p->address_to . "" . $p->to . " comme confirmée par l'agent GLS " . $agent->name . " et reçue par " . $p->s_by . ". Merci de votre confiance.",
+                                // 'content' => "Bonjour " . $p->name . "\nVotre colis a été livré avec succès à " . $p->address_to . ", " . $p->to . " Et il a été confirmé par l'agent [" . $agent->name . "] Et reçu par [" . $p->s_by . "] Et votre numéro de commande est " . $p->tracking_id . " \nPour suivre votre envoi, suivez ce lien : {" . route('main_get_track_info_get', ['t_id' => $p->tracking_id]) . "} ",
                                 // 'content' => "Your package has been delivered successfully to " . $p->address_to . "" . $p->to . " \nAnd its been confirmed by Agent [" . Auth::user()->name . "] And received by [" . $p->email . "]\n\nAnd your tracking number is " . $p->tracking_id . "",
                             ];
                             try {
@@ -115,7 +116,8 @@ class DeliveryController extends Controller
                             }
 
 
-                            $msg = "Bonjour " . $p->name . "\nVotre colis a été livré avec succès à " . $p->address_to . ", " . $p->to . " Et il a été confirmé par l'agent [" . $agent->name . "] Et reçu par [" . $p->s_by . "] Et votre numéro de commande est " . $p->tracking_id . " \nPour suivre votre envoi, suivez ce lien : {" . route('main_get_track_info_get', ['t_id' => $p->tracking_id]) . "} ";
+                            // $msg = "Bonjour " . $p->name . "\nVotre colis a été livré avec succès à " . $p->address_to . ", " . $p->to . " Et il a été confirmé par l'agent [" . $agent->name . "] Et reçu par [" . $p->s_by . "] Et votre numéro de commande est " . $p->tracking_id . " \nPour suivre votre envoi, suivez ce lien : {" . route('main_get_track_info_get', ['t_id' => $p->tracking_id]) . "} ";
+                            $msg = $data['content'];
                             $msg = strval($msg);
 
                             $new = substr($p->phone, 0, 1);

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,6 +67,31 @@ Route::post('/delivery/confirm/delivery', [\App\Http\Controllers\DeliveryControl
 Route::post('/delivery/verify/delivery', [\App\Http\Controllers\DeliveryController::class, 'verify_delivery'])->name('main_verify_delivery_otp');
 
 
+Route::get('test/email', function () {
+
+
+	$data2 = [
+		'subject' => 'test',
+		'email' => "mualiyuoox@gmail.com",
+		// 'c_email' => $p->customer->email,
+		'content' => 'tes info',
+		// 'content' => "Bonjour Mr / Mme " . $tracking->package->name . ", votre commande est maintenant disponible. Vous serez contacté par un agent de liaison GLS.  \nVotre numéro tracking est " . $tracking->package->tracking_id . "\nMerci de suivile tracking de votre colis sur " . url('/') . ". \nRestant à votre disposition.",
+	];
+
+	try {
+		Mail::send('main.email.c_receipt', $data2, function ($message) use ($data2) {
+			$message->from('no-reply@glscam.com', 'GLS');
+			$message->sender('no-reply@glscam.com', 'GLS');
+			$message->to($data2['email']);
+			$message->subject($data2['subject']);
+		});
+
+		return "yes";
+	} catch (\Throwable $th) {
+		return "no";
+		// return back()->with('success', 'Package Has been Activated, Receipt is Not sent to contact Email');
+	}
+});
 
 // 
 // Admin Routes
