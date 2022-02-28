@@ -287,10 +287,10 @@ class PackageApiController extends Controller
 
                                 // Disable SMS 
                                 try {
-                                    Http::get("http://nitrosms.cm/api_v1?sub_account=081_glsdelivery1&sub_account_pass=123456789&action=send_sms&sender_id=Gls_Delivery&message=" . $msg_c . "&recipients=" . $to_client);
-                                    // Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to_client . "&message=" . $msg_c . "&sender_id=GLS");
-                                    Http::get("http://nitrosms.cm/api_v1?sub_account=081_glsdelivery1&sub_account_pass=123456789&action=send_sms&sender_id=Gls_Delivery&message=" . $msg . "&recipients=" . $to_customer);
-                                    // Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to_customer . "&message=" . $msg . "&sender_id=GLS");
+                                    // Http::get("http://nitrosms.cm/api_v1?sub_account=081_glsdelivery1&sub_account_pass=123456789&action=send_sms&sender_id=Gls_Delivery&message=" . $msg_c . "&recipients=" . $to_client);
+                                    Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to_client . "&message=" . $msg_c . "&sender_id=GLS");
+                                    // Http::get("http://nitrosms.cm/api_v1?sub_account=081_glsdelivery1&sub_account_pass=123456789&action=send_sms&sender_id=Gls_Delivery&message=" . $msg . "&recipients=" . $to_customer);
+                                    Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to_customer . "&message=" . $msg . "&sender_id=GLS");
                                 } catch (\Throwable $th) {
 
                                     // return back()->with('success', 'Package Has been Activated, Receipt is sent to contact Email but not Phone');
@@ -320,8 +320,8 @@ class PackageApiController extends Controller
                                     ];
 
                                     try {
-                                        Http::get("http://nitrosms.cm/api_v1?sub_account=081_glsdelivery1&sub_account_pass=123456789&action=send_sms&sender_id=Gls_Delivery&message=" . $mss . "&recipients=" . $to_a);
-                                        // Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to_a . "&message=" . $mss . "&sender_id=GLS");
+                                        // Http::get("http://nitrosms.cm/api_v1?sub_account=081_glsdelivery1&sub_account_pass=123456789&action=send_sms&sender_id=Gls_Delivery&message=" . $mss . "&recipients=" . $to_a);
+                                        Http::get("https://api.sms.to/sms/send?api_key=gHdD8WP3soGaTjDsWTIp9yjgP1egtzIa&bypass_optout=true&to=+" . $to_a . "&message=" . $mss . "&sender_id=GLS");
 
                                         Mail::send('main.email.receipt', $data_a, function ($message) use ($data_a) {
                                             $message->from('no-reply@glscam.com', 'GLS');
