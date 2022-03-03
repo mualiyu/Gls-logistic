@@ -84,6 +84,22 @@
                                 @enderror
                             </div>
                         </div>
+                        <div class="form-group row">
+                            <label for="staff_id" class="col-md-4 col-form-label text-md-right">{{ __('Role') }}</label>
+
+                            <div class="col-md-6">
+                                {{-- <input id="staff_id" type="text" class="form-control @error('staff_id') is-invalid @enderror" name="staff_id" value="{{ old('staff_id') }}" autocomplete="staff_id"> --}}
+                                <select name="role" class="form-control @error('role') is-invalid @enderror"  id="role">
+                                    <option value="0">Agent</option>
+                                    <option value="1">Admin</option>
+                                </select>
+                                @error('role')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
 
                         <div class="form-group row">
                             <label for="unit_location" class="col-md-4 col-form-label text-md-right">{{ __('Unit Location') }}</label>

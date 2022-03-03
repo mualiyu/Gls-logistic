@@ -43,7 +43,7 @@
                                             <td>{{$i}}</td>
                                             <td>{{$m->type}}</td>
                                             <td>
-						    <a href="{{route('admin_show_merchandise', ['id' => $m->id])}}" class="btn btn-primary">Open Location</a>
+						    <a href="{{route('admin_show_merchandise', ['id' => $m->id])}}" class="btn btn-primary">Open Merchandise</a>
 					    </td>
                                         </tr>
 					<?php $i--; ?>

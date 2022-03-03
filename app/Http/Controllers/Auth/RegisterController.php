@@ -56,6 +56,7 @@ class RegisterController extends Controller
             'staff_id' => ['nullable', 'string', 'max:255'],
             'unit_location' => ['nullable', 'string', 'max:255'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'role' => ['required', 'string'],
         ]);
     }
 
@@ -74,6 +75,7 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'unit_location' => $data['unit_location'],
             'password' => Hash::make($data['password']),
+            'p' => $data['role'],
         ]);
     }
 }

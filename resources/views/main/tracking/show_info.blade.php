@@ -86,10 +86,10 @@
                                     </div>
                                     <div class="col-sm-6">
                                         @if ($package[0]->status == 1)
-                                            @if ($tracking[count($tracking)-1]->current_location == $package[0]->from)
+                                            {{-- @if ($tracking[count($tracking)-1]->current_location == $package[0]->from)
                                                 <span>Received By :</span>
                                                 <p>Nill</p>
-                                            @endif
+                                            @endif --}}
                                             @if ($tracking[count($tracking)-1]->current_location !== $package[0]->from && $tracking[count($tracking)-1]->current_location !== $package[0]->to)
                                                 <span>Confirmed By:</span>
                                                 <p>Agent</p>

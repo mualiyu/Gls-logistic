@@ -173,10 +173,10 @@
                         </li>
                         @if (Auth::user() && Auth::user()->p==1)   
                         <li class="sidebar-item">
-                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('register') }}"
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('admin_users') }}"
                                 aria-expanded="false">
                                 <i class="fa fa-users" aria-hidden="true"></i>
-                                <span class="hide-menu">Register User</span>
+                                <span class="hide-menu">Users</span>
                             </a>
                         </li>
                         @endif

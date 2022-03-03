@@ -105,6 +105,10 @@ Route::get('admin/packages', [App\Http\Controllers\Admin\AdminPackageController:
 Route::get('admin/package/{id}', [App\Http\Controllers\Admin\AdminPackageController::class, 'show_info'])->name('admin_package_info');
 Route::get('admin/packages/search', [App\Http\Controllers\Admin\AdminPackageController::class, 'search_package'])->name('admin_package_search');
 Route::post('admin/package/{id}/activate', [\App\Http\Controllers\Admin\AdminPackageController::class, 'activate_package'])->name('admin_activate_package');
+
+// Users
+Route::get('admin/users', [App\Http\Controllers\Admin\AdminUserController::class, 'index'])->name('admin_users');
+
 // customers
 Route::get('admin/customers', [App\Http\Controllers\Admin\AdminCustomerController::class, 'index'])->name('admin_customers');
 // tracking

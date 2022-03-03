@@ -15,7 +15,8 @@
 	<div class="container-fluid">
 	<div class="row">
 		<div class="" style="border: black 1px solid; padding:20px;">
-			<img src="https://glscam.com/main2/img/core-img/logo.png" alt="" style="height: 120px; width: 120px; float: left;">
+			<img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('main2/img/core-img/logo.png'))) }}" alt="" style="height: 120px; width: 120px; float: left;">
+			{{-- {{ public_path("main2/img/logo.svg") }} --}}
 			<img alt="" style="width: 120px; height: 120px; float:right; margin:0;" src="data:image/png;base64, {!! base64_encode(QrCode::format('png')
                         ->errorCorrection('H')
                         ->size(200)
@@ -23,35 +24,38 @@
 		<br><br><br><br><br><br>
 		</div>
 		<div class="row">
-			<div class="col-12" style="border: black 1px solid;  font-size: 30px; justify-content: center;">
+			<div class="col-12" style="border: black 1px solid;  font-size: 20px; justify-content: center;">
 				<div align="center">
 					<p><b>GLOBE LINE SERVICES SARL</b></p>
 				</div>
 			</div>
 		</div>
-		
-		<div class="col-12" style="border: black 1px solid;display: flex;  font-size: 20px;">
-			<div> <p><b>FROM:</b> </p> </div>
+		<div class="col-12" style="border: black 1px solid;display: flex;  font-size: 15px;">
+			<div style="padding-left:10px;"> <p><b>Reciever(Name / Phone):</b> </p> </div>
+			<div style="padding-left:20px;"> <p> {{$package->name}} / {{$package->phone}}</p> </div>
+		</div>
+		<div class="col-12" style="border: black 1px solid;display: flex;  font-size: 15px;">
+			<div style="padding-left:10px;"> <p><b>FROM:</b> </p> </div>
 			<div style="padding-left:20px;"> <p> {{$package->from}}</p> </div>
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-sm-9 col-md-3" style="border: black 1px solid; display: flex; font-size: 20px;" >
-			<div> <p><b>TO:</b> </p> </div>
-			<div style="padding-left:20px;"> <p>{{$package->address_to}}, {{$package->to}}</p> </div>
+		<div class="col-sm-9 col-md-3" style="border: black 1px solid; display: flex; font-size: 15px;" >
+			<div style="padding-left:10px;"> <p><b>TO:</b> </p> </div>
+			<div style="padding-left:20px;"> <p>{{$package->address_to}} {{$package->to}}, {{$package->to_location->city}} {{$package->to_location->region}}</p> </div>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-6" style="border: black 1px solid; height:; float:left; width: 50%;">
-			<div style="margin-left: 20px; padding-left: 10px; font-size: 20px;"> <p><b>TRACKING NO:</b> </p> <p><b>SHIP DATE:</b> </p> </div>
+			<div style="margin-left: 20px; padding-left: 10px; font-size: 15px;"> <p><b>TRACKING NO:</b> </p> <p><b>SHIP DATE:</b> </p> </div>
 		</div>
 		<div class="col-6" style="border: black 1px solid; height:; float:left; width: 50%;">
-			<div style="padding-left:20px; font-size: 20px;"> <p> {{$package->tracking_id}}</p>  <p> {{$package->created_at}}</p> </div>
+			<div style="padding-left:20px; font-size: 15px;"> <p> {{$package->tracking_id}}</p>  <p> {{$package->created_at}}</p> </div>
 		</div>
 	</div>
 	<div class="row" style="position:absolute;">
 		<div class="col-6" style="border: black 1px solid; height: 50px; float:left; width: 50%; position: relative;">
-			<div style="margin-left: 20px; padding-left: 10px; font-size: 20px;"> <p><b>SHIP DATE:</b> </p> </div>
+			<div style="margin-left: 20px; padding-left: 10px; font-size: 15px;"> <p><b>SHIP DATE:</b> </p> </div>
 		</div>
 		<div class="col-6" style="border: black 1px solid; height: 50px; float:right; width: 50%;">
 			<div style="padding-left:20px;"> <p> {{$package->created_at}}</p> </div>
@@ -63,19 +67,19 @@
 				@foreach ($package->items as $item)
 				    {{-- <p style="margin-left: 5px;">{{$item->name}}</p> --}}
 				    <div style="display:flex; margin-left:10px;"> 
-					<div><p><b>Itam Name: </b>{{$item->name}}</p> <p><b>Weight: </b>{{$item->weight}}</p><p><b>Description: </b>{{$item->description}}</p></div>
+					<div><p><b>Item Name: </b>{{$item->name}}</p> <p><b>Weight: </b>{{$item->weight}}</p><p><b>Description: </b>{{$item->description}}</p></div>
 				    </div>
 				@endforeach	
 			</div>
 		{{-- </div> --}}
 		<div class="col-6" style="border: ; width: 100%;">
-			<br><br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<img alt="" style="width: 200px; height: 200px; float:left;" src="data:image/png;base64, {!! base64_encode(QrCode::format('png')
                         ->errorCorrection('H')
                         ->size(200)
                         ->generate($package->tracking_id)) !!}">
 			
-			{{-- <span style="float: right;">{!! DNS1D::getBarcodeHTML($package->tracking_id, 'PHARMA') !!}</span> --}}
+			<span style="float: right;">{!! DNS1D::getBarcodeHTML($package->tracking_id, 'PHARMA') !!}</span>
 			
 		</div>
 	</div>
