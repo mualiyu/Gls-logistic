@@ -64,6 +64,8 @@
                                     <tbody>
 					                    <?php $i = 1; ?>
 					                    @foreach ($users as $u)
+                                        @if ($u->id == 1)
+                                        @else
                                         <tr>
                                             <td>{{$i}}</td>
                                             <td>{{$u->name}}</td>
@@ -91,6 +93,7 @@
 					    </td> --}}
                                         </tr>
 					                    <?php $i++; ?>
+                                        @endif
 					                    @endforeach
                                         
                                     </tbody>
