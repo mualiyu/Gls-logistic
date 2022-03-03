@@ -56,7 +56,7 @@ class RegisterController extends Controller
             'staff_id' => ['nullable', 'string', 'max:255'],
             'unit_location' => ['nullable', 'string', 'max:255'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'role' => ['required', 'string'],
+            'role' => ['required'],
         ]);
     }
 
@@ -68,7 +68,7 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user = User::create([
             'name' => $data['name'],
             'phone' => $data['phone'],
             'staff_id' => $data['staff_id'],
@@ -77,5 +77,11 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
             'p' => $data['role'],
         ]);
+
+        User::where('id', '=', $user->id)->update([
+            'p' => $data['role'],
+        ]);
+
+        return $user;
     }
 }

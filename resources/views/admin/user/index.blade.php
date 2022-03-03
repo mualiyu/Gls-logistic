@@ -58,7 +58,7 @@
 					    <th class="border-top-0">Staff ID</th>
 					    <th class="border-top-0">Unit</th>
 					    <th class="border-top-0">Role</th>
-                                            <th class="border-top-0">Action</th>
+                                            {{-- <th class="border-top-0">Action</th> --}}
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -83,12 +83,12 @@
 					        	<span class="btn btn-secondary">Deliverd</span>
 					            @endif --}}
 					    </td>
-                                            <td>
+                                            {{-- <td>
 						    <span style="cursor: pointer; border:black 1px solid; padding:5px;" id="" onclick="alert('test{{$i}}');"><i class="fa fa-eye" aria-hidden="true"></i></span>
 						 	&nbsp;   
 						    <span style="cursor: pointer; border:black 1px solid; padding:5px;"><i class="fa fa-trash" aria-hidden="true"></i></span>
-						    {{-- <a href="{{route('admin_package_info', ['id' => $u->id])}}" class="btn btn-primary">View Profile</a> --}}
-					    </td>
+						    
+					    </td> --}}
                                         </tr>
 					                    <?php $i++; ?>
 					                    @endforeach
