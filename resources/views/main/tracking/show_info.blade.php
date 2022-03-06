@@ -197,12 +197,12 @@
                                 </div><hr>
                                 <div class="row px-4 py-3">
                                     <div class="col-sm-4">
-                                        <span>--/--/----</span>
-                                        <span>--:--</span>
+                                        <span style="color: #d7d7d8">dd/mm/year</span>
+                                        {{-- <span>--:--</span> --}}
                                     </div>
                                     <div class="col-sm-8">
                                         <p style="margin: 0;">Final Destination:</b></p>
-                                        <p style="margin: 0;">{{$package[0]->to}}</p>
+                                        <p style="margin: 0;">{{$package[0]->address_to}}, {{$package[0]->to}} {{$package[0]->to_location->city}}</p>
                                     </div>
                                 </div><hr>
                                 @endif
@@ -210,6 +210,7 @@
                                 {{-- if sipment Has Arrived  show this--}}
                                 @if ($package[0]->status == 2)    
                                 {{-- @if ($tracking[0]->current_location == $package[0]->to) --}}
+                                <?php $ii = count($tracking); ?>
                                     @foreach ($tracking as $t)
                                      <?php 
                                         $time = explode(' ', $t->created_at);
@@ -225,15 +226,23 @@
                                             </div>
                                             <div style="margin: 0;" class="col-sm-8">
                                                 {{-- <p>Finaly</p> --}}
-                                                @if ($t->a_d == 3 )
-                                                    <p style="margin: 0;"><b>Dispatched from {{$t->current_location}} To:</b></p>
-                                                    <p style="margin: 0;">Address: {{$t->package->address_to}}</p>
+                                                @if ($ii == 1)
+                                                        <p style="margin: 0;"><b>{{$t->a_d==2 ? 'Departed From: ':''}}{{$t->a_d==1 ? 'Finally your package has arrived at: ':''}}</b></p>
+                                                        <p style="margin: 0;">{{$t->package->address_to}} {{$t->current_location}}, {{$t->package->to_location->city}} <span style="color:green;">(Final Destination)</span></p>
+                                                   
                                                 @else
-                                                    <p style="margin: 0;"><b>{{$t->a_d==2 ? 'Departed From: ':''}}{{$t->a_d==1 ? 'Arrived At: ':''}}</b></p>
-                                                    <p style="margin: 0;">{{$t->current_location}}</p>
+                                                    @if ($t->a_d == 3 )
+                                                        <p style="margin: 0;"><b>Dispatched from {{$t->current_location}} To:</b></p>
+                                                        <p style="margin: 0;">Address: {{$t->package->address_to}} {{$t->package->to}}, {{$t->package->to_location->city}}</p>
+                                                    @else
+                                                        <p style="margin: 0;"><b>{{$t->a_d==2 ? 'Departed From: ':''}}{{$t->a_d==1 ? 'Arrived At: ':''}}</b></p>
+                                                        <p style="margin: 0;">{{$t->current_location}}</p>
+                                                    @endif
                                                 @endif
+
                                             </div>
                                         </div><hr>
+                                        <?php $ii--; ?>
                                     @endforeach
                                 {{-- @endif --}}
                                 @endif
@@ -257,7 +266,7 @@
                                             <div style="margin: 0;" class="col-sm-8">
                                                 @if ($t->a_d == 3 )
                                                     <p style="margin: 0;"><b>Dispatched from {{$t->current_location}} To:</b></p>
-                                                    <p style="margin: 0;">Address: {{$t->package->address_to}}</p>
+                                                    <p style="margin: 0;">Address: {{$t->package->address_to}} {{$t->package->to}}, {{$t->package->to_location->city}}</p>
                                                 @else
                                                     <p style="margin: 0;"><b>{{$t->a_d==2 ? 'Departed From: ':''}}{{$t->a_d==1 ? 'Arrived At: ':''}}</b></p>
                                                     <p style="margin: 0;">{{$t->current_location}}</p>
