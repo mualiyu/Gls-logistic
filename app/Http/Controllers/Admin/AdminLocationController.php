@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Imports\CustomersImport;
 use App\Models\Charge;
 use App\Models\Location;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdminLocationController extends Controller
 {
@@ -180,5 +182,21 @@ class AdminLocationController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function import_locations(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            "file" => "required",
+        ]);
+
+        if ($validator->fails()) {
+            return back()->with(['error' => 'Make sure you upload a csv file'])->withInput();
+        }
+
+        $id = $request->agent;
+        Excel::import(new CustomersImport($id), $request->file('file'));
+
+        return back()->with(['success' => "Customers uploaded Successful"]);
     }
 }

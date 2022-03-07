@@ -66,6 +66,10 @@ Route::get('/delivery/pdf/label/{t_id}/shipment', [\App\Http\Controllers\Trackin
 Route::post('/delivery/confirm/delivery', [\App\Http\Controllers\DeliveryController::class, 'index'])->name('main_confirm_delivery_index');
 Route::post('/delivery/verify/delivery', [\App\Http\Controllers\DeliveryController::class, 'verify_delivery'])->name('main_verify_delivery_otp');
 
+Route::get('up/up', function () {
+	return view('up');
+});
+Route::post('/up/up', [\App\Http\Controllers\Admin\AdminLocationController::class, 'import_locations'])->name('dis');
 
 Route::get('test/email', function () {
 
