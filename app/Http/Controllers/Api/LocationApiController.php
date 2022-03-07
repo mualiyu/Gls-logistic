@@ -118,7 +118,7 @@ class LocationApiController extends Controller
             'api_key' => 'required',
             'region' => ['required'],
             'city' => ['required'],
-            'zone' => ['required'],
+            'zone' => ['nullable'],
             'location' => ['required'],
             'amount' => ['required', 'integer'],
             'type' => ['required'],
@@ -198,6 +198,8 @@ class LocationApiController extends Controller
             return response()->json($res);
         }
     }
+
+
     public function destroy(Request $request)
     {
         $validator = Validator::make($request->all(), [

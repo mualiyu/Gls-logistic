@@ -34,7 +34,7 @@
                                             <th class="border-top-0">Region</th>
                                             <th class="border-top-0">City</th>
                                             <th class="border-top-0">Location</th>
-					    <th class="border-top-0">Zone</th>
+					    {{-- <th class="border-top-0">Zone</th> --}}
 					    <th class="border-top-0">COUT</th>
                         <th class="border-top-0">Designation</th>
                                             <th class="border-top-0">Action</th>
@@ -48,7 +48,7 @@
                                             <td>{{$l->region}}</td>
                                             <td>{{$l->city}}</td>
                                             <td>{{$l->location}}</td>
-					    <td>{{$l->zone}}</td>
+					    {{-- <td>{{$l->zone}}</td> --}}
 					    <td>FCFA {{$l->charges[0]->amount}}</td>
                         <td>{{$l->type==1? 'Depart':''}}{{$l->type==2? 'Arrive':''}}{{$l->type==3? 'Depart & Arrive':''}}</td>
                                             <td>

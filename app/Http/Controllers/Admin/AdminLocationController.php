@@ -43,7 +43,7 @@ class AdminLocationController extends Controller
         $validator = Validator::make($request->all(), [
             'region' => ['required'],
             'city' => ['required'],
-            'zone' => ['required'],
+            'zone' => ['nullable'],
             'location' => ['required'],
             'amount' => ['required', 'integer'],
             'desig' => ['required'],
@@ -118,7 +118,7 @@ class AdminLocationController extends Controller
         $validator = Validator::make($request->all(), [
             'region' => ['required'],
             'city' => ['required'],
-            'zone' => ['required'],
+            'zone' => ['nullable'],
             'location' => ['required'],
             'desig' => ['required'],
         ]);
@@ -130,7 +130,7 @@ class AdminLocationController extends Controller
         $location = Location::where('id', '=', $id)->update([
             'region' => $request->region,
             'city' => $request->city,
-            'zone' => $request->zone,
+            // 'zone' => $request->zone,
             'location' => $request->location,
             'type' => $request->desig
         ]);

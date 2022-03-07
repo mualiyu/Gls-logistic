@@ -63,7 +63,7 @@
 					    </div>
 					</div>
 				    <div class="row">
-					    <div class="col-sm-6">
+					    {{-- <div class="col-sm-6">
 						<div class="form-group mb-4">
                                     		    <label for="example-email" class="col-md-12 p-0">zone: </label>
                                     		    <div class="col-md-12 border-bottom p-0">
@@ -72,14 +72,14 @@
                                 			    <option value="a">A</option>
 							    <option value="b">B</option>
                                 			</select>
-                                    		        {{-- <input class="form-control px-5 border-0" name="zone" type="text" value="{{$location->zone}}"> --}}
+                                    		       
                                     		    </div>
 							@error('zone')
                                 			        <p class="help-block text-danger">{{$message}}</p>
                                 			@enderror
                                     		</div>
-					    </div>
-					    <div class="col-sm-6">
+					    </div> --}}
+					    <div class="col-sm-12">
 						<div class="form-group mb-4">
                                     		    <label for="example-email" class="col-md-12 p-0">Location: </label>
                                     		    <div class="col-md-12 p-0">
