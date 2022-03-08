@@ -65,7 +65,7 @@ class DeliveryController extends Controller
 
                 if ($package->way_bill == null || $package->status == 2) {
                     $tracking = Tracking::where('package_id', '=', $package->id)->orderBy("created_at", "desc")->get();
-                    if ($tracking[0]->current_location == $package->to) {
+                    if ($tracking[0]->current_location == $package->to_location->location) {
                         $arrayToUpdate = [
                             "delivery_image" => $imageNameToStore,
                             "way_bill" => $request->way_bill,
