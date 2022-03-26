@@ -48,12 +48,24 @@
                                             <td>{{$l->region}}</td>
                                             <td>{{$l->city}}</td>
                                             <td>{{$l->location}}</td>
-					    {{-- <td>{{$l->zone}}</td> --}}
-					    <td>FCFA {{$l->charges[0]->amount}}</td>
-                        <td>{{$l->type==1? 'Depart':''}}{{$l->type==2? 'Arrive':''}}{{$l->type==3? 'Depart & Arrive':''}}</td>
-                                            <td>
-						    <a href="{{route('admin_show_location', ['id' => $l->id])}}" class="btn btn-primary">Open Location</a>
-					    </td>
+					                        {{-- <td>{{$l->zone}}</td> --}}
+					                        <td>FCFA {{$l->charges[0]->amount}}</td>
+                                            <td>{{$l->type==1? 'Depart':''}}{{$l->type==2? 'Arrive':''}}{{$l->type==3? 'Depart & Arrive':''}}</td>
+                                                                <td>
+						                        <a href="{{route('admin_show_location', ['id' => $l->id])}}" class="btn btn-primary">Open Location</a>
+					                        </td>
+                                            <td>  
+						                        <span style="cursor: pointer; border:black 1px solid; padding:5px;"
+                                                    onclick="
+                                                        if(confirm('Are you sure you want to delete {{$l->location}}? ')){
+                                                            document.getElementById('delete_form[{{$l->id}}]').submit();
+                                                        }
+                                                        event.preventDefault();"
+                                                ><i class="fa fa-trash" aria-hidden="true"></i></span>
+						                        <form action="{{route("admin_delete_location", ['id'=>$l->id])}}" id="delete_form[{{$l->id}}]" method="post">
+                                                @csrf
+                                                </form>
+					                        </td>
                                         </tr>
 					<?php $i--; ?>
 					@endforeach

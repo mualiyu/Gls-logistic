@@ -173,16 +173,6 @@ class AdminLocationController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 
     public function import_locations(Request $request)
     {
@@ -198,5 +188,16 @@ class AdminLocationController extends Controller
         Excel::import(new CustomersImport($id), $request->file('file'));
 
         return back()->with(['success' => "Customers uploaded Successful"]);
+    }
+
+    public function destroy($id)
+    {
+        $m = Location::where('id', '=', $id)->delete();
+
+        if ($m) {
+            return back()->with('success', 'One location has been deleted');
+        } else {
+            return back()->with('error', 'Failed to delete location, Try again.');
+        }
     }
 }

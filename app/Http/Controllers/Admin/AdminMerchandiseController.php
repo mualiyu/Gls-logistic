@@ -118,6 +118,12 @@ class AdminMerchandiseController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $m = Merchandise::where('id', '=', $id)->delete();
+
+        if ($m) {
+            return back()->with('success', 'One Merchandise has been deleted');
+        } else {
+            return back()->with('error', 'Failed to delete merchandise, Try again.');
+        }
     }
 }

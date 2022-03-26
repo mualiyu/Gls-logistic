@@ -37,14 +37,26 @@
                                         </tr>
                                     </thead>
                                     <tbody id="tbody">
-                                         <?php $i = count($merchandises); ?>
-					@foreach ($merchandises as $m)
+                                        <?php $i = count($merchandises); ?>
+					                    @foreach ($merchandises as $m)
                                         <tr>
                                             <td>{{$i}}</td>
                                             <td>{{$m->type}}</td>
                                             <td>
-						    <a href="{{route('admin_show_merchandise', ['id' => $m->id])}}" class="btn btn-primary">Open Merchandise</a>
-					    </td>
+						                        <a href="{{route('admin_show_merchandise', ['id' => $m->id])}}" class="btn btn-primary">Open Merchandise</a>
+					                        </td>
+                                            <td>  
+						                        <span style="cursor: pointer; border:black 1px solid; padding:5px;"
+                                                    onclick="
+                                                        if(confirm('Are you sure you want to delete {{$m->type}}? ')){
+                                                            document.getElementById('delete_form[{{$m->id}}]').submit();
+                                                        }
+                                                        event.preventDefault();"
+                                                ><i class="fa fa-trash" aria-hidden="true"></i></span>
+						                        <form action="{{route("admin_delete_merchandise", ['id'=>$m->id])}}" id="delete_form[{{$m->id}}]" method="post">
+                                                @csrf
+                                                </form>
+					                        </td>
                                         </tr>
 					<?php $i--; ?>
 					@endforeach

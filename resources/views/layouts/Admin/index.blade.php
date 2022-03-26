@@ -18,7 +18,11 @@
     <link href="{{asset('admin_asset/css/style.min.css')}}" rel="stylesheet">
    {{-- <link href="{{asset('admin_asset/bootstrap/dist/css/bootstrap.min.css')}}" rel="stylesheet"> --}}
    <!-- JavaScript Bundle with Popper -->
-   
+   <style>
+       .modal{
+           background: rgba(0, 0, 0, 0.5);
+       }
+   </style>
 {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script> --}}
 </head>
 
@@ -104,7 +108,7 @@
                             </a>
                               <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                 <li>
-                                    {{-- <a class="dropdown-item" href="#">Action</a> --}}
+                                    <a class="dropdown-item" onclick="document.getElementById('moda').style.display = 'block';" href="#">Profile</a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
@@ -127,6 +131,87 @@
             </nav>
         </header>
 
+        <div class="modal" style="display: none;" id="moda" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		  <div class="modal-dialog modal-lg modal-scrollable">
+		    <div class="modal-content">
+		      <div class="modal-header">
+			<h5 class="modal-title" id="staticBackdropLabel">Profile</h5>
+			<button type="button" class="close" onclick="document.getElementById('moda').style.display = 'none';" aria-label="Close">
+			  <span aria-hidden="true">&times;</span>
+			</button>
+		      </div>
+		      <div class="modal-body" style="overflow-y: scroll; height:500px;">
+                    <div class="card">
+                    <form action="{{route("admin_update_user", ['id'=>Auth::user()->id])}}" method="post">
+                      @csrf
+                       @include('layouts.flash')
+                      <div class="card-header pb-1">
+                        <div class="d-flex align-items-center">
+                          <p class="mb-0">Edit Profile</p>
+                          <button class="btn btn-primary btn-sm ms-auto">Update</button>
+                        </div>
+                      </div>
+                      <div class="card-body">
+                        <p class="text-uppercase text-sm">User Information</p>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label for="example-text-input" class="form-control-label">Full Name</label>
+                              <input class="form-control" name="name" type="text" value="{{Auth::user()->name ?? ''}}" onfocus="focused(this)" onfocusout="defocused(this)">
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label for="example-text-input" class="form-control-label">Email address</label>
+                              <input class="form-control" name="email" type="email" value="{{Auth::user()->email ?? ''}}" onfocus="focused(this)" onfocusout="defocused(this)">
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label for="example-text-input" class="form-control-label">Phone</label>
+                              <input class="form-control" name="phone" type="number" value="{{Auth::user()->phone ?? ''}}" onfocus="focused(this)" onfocusout="defocused(this)">
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label for="example-text-input" class="form-control-label">Role</label>
+                              <select class="form-control" name="role" type="number" value="{{Auth::user()->phone ?? ''}}" required>
+                                  @if (Auth::user()->p == 1)
+                                      <option value="1">Admin</option>
+                                  @endif
+                                  @if (Auth::user()->p == 0)
+                                      <option value="0">Regular Agent</option>
+                                  @endif
+                                  {{-- <option>select</option>
+                                  <option value="0">Regular Agent</option>
+                                  <option value="1">Admin</option> --}}
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <hr class="horizontal dark">
+                        <p class="text-uppercase text-sm">Contact Information</p>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label for="example-text-input" class="form-control-label">Unit</label>
+                              <input class="form-control" name="unit_location" type="text" value="{{Auth::user()->unit_location ?? ''}}" onfocus="focused(this)" onfocusout="defocused(this)">
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label for="example-text-input" class="form-control-label">Staff Id</label>
+                              <input class="form-control" name="staff_id" type="text" value="{{Auth::user()->staff_id ?? ''}}" onfocus="focused(this)" onfocusout="defocused(this)">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                        </form>
+                    </div>
+		      </div>
+		    </div>
+		  </div>
+		</div>
 
 
         <aside class="left-sidebar" data-sidebarbg="skin6">

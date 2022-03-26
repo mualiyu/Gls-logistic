@@ -112,6 +112,8 @@ Route::post('admin/package/{id}/activate', [\App\Http\Controllers\Admin\AdminPac
 
 // Users
 Route::get('admin/users', [App\Http\Controllers\Admin\AdminUserController::class, 'index'])->name('admin_users');
+Route::post('admin/users/{id}/update', [App\Http\Controllers\Admin\AdminUserController::class, 'update'])->name('admin_update_user');
+Route::post('admin/users/{id}/delete', [App\Http\Controllers\Admin\AdminUserController::class, 'destroy'])->name('admin_delete_user');
 
 // customers
 Route::get('admin/customers', [App\Http\Controllers\Admin\AdminCustomerController::class, 'index'])->name('admin_customers');
@@ -129,6 +131,8 @@ Route::post('admin/locations/create', [App\Http\Controllers\Admin\AdminLocationC
 Route::get('admin/locations/{id}', [App\Http\Controllers\Admin\AdminLocationController::class, 'show'])->name('admin_show_location');
 Route::post('admin/locations/{id}', [App\Http\Controllers\Admin\AdminLocationController::class, 'update'])->name('admin_update_location');
 Route::post('admin/locations/{id}/charge', [App\Http\Controllers\Admin\AdminLocationController::class, 'update_charge'])->name('admin_update_charge_location');
+Route::post('admin/locations/{id}/delete', [App\Http\Controllers\Admin\AdminLocationController::class, 'destroy'])->name('admin_delete_location');
+
 
 
 // merchandises route
@@ -137,3 +141,4 @@ Route::get('admin/merchandises/create', [App\Http\Controllers\Admin\AdminMerchan
 Route::post('admin/merchandises/create', [App\Http\Controllers\Admin\AdminMerchandiseController::class, 'store'])->name('admin_store_merchandise');
 Route::get('admin/merchandises/{id}', [App\Http\Controllers\Admin\AdminMerchandiseController::class, 'show'])->name('admin_show_merchandise');
 Route::post('admin/merchandises/{id}', [App\Http\Controllers\Admin\AdminMerchandiseController::class, 'update'])->name('admin_update_merchandise');
+Route::post('admin/merchandises/{id}/delete', [App\Http\Controllers\Admin\AdminMerchandiseController::class, 'destroy'])->name('admin_delete_merchandise');
